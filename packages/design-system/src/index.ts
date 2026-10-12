@@ -548,7 +548,11 @@ export {
   type PageActionsProps,
   PageContent,
   type PageContentProps,
+  PageDescription,
+  type PageDescriptionProps,
   PageHeader,
+  PageHeaderGroup,
+  type PageHeaderGroupProps,
   type PageHeaderProps,
   type PageHostContextValue,
   PageHostProvider,
@@ -556,6 +560,8 @@ export {
   type PageProps,
   PageTitle,
   type PageTitleProps,
+  PageToolbar,
+  type PageToolbarProps,
   usePageHost,
 } from './components/Page';
 export {
