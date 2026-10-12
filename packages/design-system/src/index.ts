@@ -548,7 +548,11 @@ export {
   type PageActionsProps,
   PageContent,
   type PageContentProps,
+  PageDescription,
+  type PageDescriptionProps,
   PageHeader,
+  PageHeaderGroup,
+  type PageHeaderGroupProps,
   type PageHeaderProps,
   type PageHostContextValue,
   PageHostProvider,
@@ -556,6 +560,8 @@ export {
   type PageProps,
   PageTitle,
   type PageTitleProps,
+  PageToolbar,
+  type PageToolbarProps,
   usePageHost,
 } from './components/Page';
 export {
@@ -747,22 +753,6 @@ export {
   useSelectionContext,
 } from './components/Selection';
 export { Separator, type SeparatorProps } from './components/Separator';
-export {
-  SettingsHeader,
-  SettingsHeaderActions,
-  type SettingsHeaderActionsProps,
-  SettingsHeaderBreadcrumbs,
-  type SettingsHeaderBreadcrumbsProps,
-  SettingsHeaderDescription,
-  type SettingsHeaderDescriptionProps,
-  SettingsHeaderFilters,
-  type SettingsHeaderFiltersProps,
-  SettingsHeaderHeading,
-  type SettingsHeaderHeadingProps,
-  type SettingsHeaderProps,
-  SettingsHeaderTitle,
-  type SettingsHeaderTitleProps,
-} from './components/SettingsHeader';
 export { Skeleton, type SkeletonProps } from './components/Skeleton';
 export {
   Slider,

@@ -2,11 +2,11 @@ import type { FC, HTMLAttributes, Ref } from 'react';
 import { cn } from '../../utils/cn';
 import { useTestId } from '../../utils/testId';
 
-export interface SettingsHeaderDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {
+export interface PageDescriptionProps extends HTMLAttributes<HTMLParagraphElement> {
   ref?: Ref<HTMLParagraphElement>;
 }
 
-export const SettingsHeaderDescription: FC<SettingsHeaderDescriptionProps> = ({
+export const PageDescription: FC<PageDescriptionProps> = ({
   ref,
   children,
   className,
@@ -19,7 +19,7 @@ export const SettingsHeaderDescription: FC<SettingsHeaderDescriptionProps> = ({
       {...props}
       ref={ref}
       data-testid={testId}
-      data-slot='settings-header-description'
+      data-slot='page-description'
       className={cn('text-sm text-text-secondary', className)}
     >
       {children}
@@ -27,4 +27,4 @@ export const SettingsHeaderDescription: FC<SettingsHeaderDescriptionProps> = ({
   );
 };
 
-SettingsHeaderDescription.displayName = 'SettingsHeaderDescription';
+PageDescription.displayName = 'PageDescription';

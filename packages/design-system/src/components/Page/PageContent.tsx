@@ -21,7 +21,7 @@ export const PageContent: FC<PageContentProps> = ({ ref, children, className, ..
       data-slot='page-content'
       className={cn(
         'flex-1 min-h-0 overflow-auto px-24 pt-8 pb-24',
-        '[:is([data-slot=page-header],[data-slot=settings-header])+&]:pt-6',
+        '[:is([data-slot=page-header],[data-slot=page-toolbar])+&]:pt-6',
         className,
       )}
     >

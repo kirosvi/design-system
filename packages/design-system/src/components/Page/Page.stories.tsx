@@ -1,11 +1,18 @@
+import { useState } from 'react';
 import type { Meta, StoryFn } from 'storybook-react-rsbuild';
 import { Badge } from '../Badge';
 import { Button } from '../Button';
+import { NumericBadge } from '../NumericBadge';
+import { SearchInput } from '../SearchInput';
+import { SegmentedTabs, SegmentedTabsList, SegmentedTabsTrigger } from '../SegmentedTabs';
 import { Page, type PageProps } from './Page';
 import { PageActions } from './PageActions';
 import { PageContent } from './PageContent';
+import { PageDescription } from './PageDescription';
 import { PageHeader } from './PageHeader';
+import { PageHeaderGroup } from './PageHeaderGroup';
 import { PageTitle } from './PageTitle';
+import { PageToolbar } from './PageToolbar';
 
 const DESCRIPTION = [
   'The frame a microfrontend page renders into — a header carrying the title and its actions, then the content below.',
@@ -18,8 +25,11 @@ const meta = {
   subcomponents: {
     PageActions,
     PageContent,
+    PageDescription,
     PageHeader,
+    PageHeaderGroup,
     PageTitle,
+    PageToolbar,
   },
   parameters: {
     layout: 'fullscreen',
@@ -92,6 +102,55 @@ export const StickyHeader: StoryFn<PageProps> = () => {
             Content row {i + 1}
           </p>
         ))}
+      </PageContent>
+    </Page>
+  );
+};
+
+/** `PageHeaderGroup` stacks the title over a `PageDescription`; `PageToolbar` adds a filter row between the header and the content. */
+export const WithDescriptionAndToolbar: StoryFn<PageProps> = () => {
+  const [search, setSearch] = useState('');
+
+  return (
+    <Page name='with-description-and-toolbar' fixedHeight>
+      <PageHeader>
+        <PageHeaderGroup>
+          <PageTitle>Service accounts</PageTitle>
+          <PageDescription>
+            Identities for automation and API access — they sign in with keys or tokens instead of a
+            password.
+          </PageDescription>
+        </PageHeaderGroup>
+
+        <PageActions>
+          <Button size='medium'>Create service account</Button>
+        </PageActions>
+      </PageHeader>
+
+      <PageToolbar>
+        <SearchInput
+          value={search}
+          onChange={setSearch}
+          placeholder='Search name'
+          className='w-[320px]'
+        />
+        <SegmentedTabs defaultValue='all'>
+          <SegmentedTabsList>
+            <SegmentedTabsTrigger value='all'>
+              All <NumericBadge>2</NumericBadge>
+            </SegmentedTabsTrigger>
+            <SegmentedTabsTrigger value='active'>
+              Active <NumericBadge>1</NumericBadge>
+            </SegmentedTabsTrigger>
+            <SegmentedTabsTrigger value='deactivated'>
+              Deactivated <NumericBadge>1</NumericBadge>
+            </SegmentedTabsTrigger>
+          </SegmentedTabsList>
+        </SegmentedTabs>
+      </PageToolbar>
+
+      <PageContent>
+        <p>Table goes here.</p>
       </PageContent>
     </Page>
   );
