@@ -91,7 +91,8 @@
     "e2e:docker": "playwright test --config=playwright.config.docker.ts",
     "e2e:docker:ui": "playwright test --config=playwright.config.docker.ts --ui",
     "e2e:docker:failed": "playwright test --config=playwright.config.docker.ts --last-failed",
-    "e2e:docker:report": "playwright show-report ./playwright-report --port=9323"
+    "e2e:docker:report": "playwright show-report ./playwright-report --port=9323",
+    "icons:sync": "tsx scripts/icons/sync.ts"
   },
   "devDependencies": {
     "@babel/core": "7.29.7",
