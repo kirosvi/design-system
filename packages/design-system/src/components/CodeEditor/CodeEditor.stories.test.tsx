@@ -107,6 +107,8 @@ const STORY_ROOTS: Record<StoryName, StoryRoots> = {
   EditingWorkflow: { editors: ['editing'] },
   TabsKeepHistory: { editors: ['tabs-editor'] },
   LongDocument: { editors: ['long-document'] },
+  // The editor mounts only once the drawer is opened (covered in CodeEditor.test.tsx).
+  FullscreenInsideDrawer: { editors: [] },
 };
 
 /** The engine chunk is a dynamic import; the first load in a worker can take a few seconds. */

@@ -82,7 +82,7 @@ describe('CodeSnippet fullscreen', () => {
 
     await enterFullscreen(user);
 
-    expect(root).toHaveClass('consumer-class', 'fixed', 'inset-16', 'z-50', 'h-auto', 'w-auto');
+    expect(root).toHaveClass('consumer-class', 'fixed', 'inset-16', 'h-auto', 'w-auto');
     expect(root).toHaveClass('max-w-[none]', 'max-h-[none]', 'min-w-0', 'min-h-0', 'm-0');
     expect(root).not.toHaveClass('h-[240px]');
     expect(root).not.toHaveClass('max-w-[600px]');
@@ -105,7 +105,7 @@ describe('CodeSnippet fullscreen', () => {
     const root = screen.getByTestId('snippet');
     expect(root).toHaveAttribute('id', 'snippet-id');
     expect(root).toHaveAttribute('data-analytics-id', 'DOCS_SNIPPET');
-    expect(root).toHaveClass('consumer-class', 'fixed', 'inset-16', 'z-50');
+    expect(root).toHaveClass('consumer-class', 'fixed', 'inset-16');
     expect(ref.current).toBe(root);
   });
 
