@@ -2,18 +2,11 @@ import type { FC } from 'react';
 import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const Mails: FC<SvgIconProps> = props => (
-  <SvgIcon
-    {...props}
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth={2}
-    strokeLinecap='round'
-    strokeLinejoin='round'
-  >
-    <path d='M17 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 1-1.732' />
-    <path d='m22 5.5-6.419 4.179a2 2 0 0 1-2.162 0L7 5.5' />
-    <rect x='7' y='3' width='15' height='12' rx='2' />
+  <SvgIcon {...props} viewBox='0 0 24 24'>
+    <path
+      d='M1 19V8C1 7.44772 1.44772 7 2 7C2.55228 7 3 7.44772 3 8V19C3 19.5477 3.45228 20 4 20H18C18.5523 20 19 20.4477 19 21C19 21.5523 18.5523 22 18 22H4C2.34772 22 1 20.6523 1 19ZM21 8.66504L15.3701 11.6631L15.3662 11.665C14.5047 12.1185 13.4953 12.1185 12.6338 11.665L12.6299 11.6631L7 8.66504V15C7 15.5523 7.44772 16 8 16H20C20.5523 16 21 15.5523 21 15V8.66504ZM21 6C21 5.44772 20.5523 5 20 5H8C7.44772 5 7 5.44772 7 6V6.39941L13.5703 9.89746H13.5693C13.8453 10.0412 14.1537 10.041 14.4297 9.89746L21 6.39941V6ZM23 15C23 16.6569 21.6569 18 20 18H8C6.34315 18 5 16.6569 5 15V6C5 4.34315 6.34315 3 8 3H20C21.6569 3 23 4.34315 23 6V15Z'
+      fill='currentColor'
+    />
   </SvgIcon>
 );
 

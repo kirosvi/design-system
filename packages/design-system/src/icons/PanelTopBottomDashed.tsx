@@ -2,24 +2,11 @@ import type { FC } from 'react';
 import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const PanelTopBottomDashed: FC<SvgIconProps> = props => (
-  <SvgIcon
-    {...props}
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth={2}
-    strokeLinecap='round'
-    strokeLinejoin='round'
-  >
-    <path d='M14 15h1' />
-    <path d='M14 9h1' />
-    <path d='M19 15h2' />
-    <path d='M19 9h2' />
-    <path d='M3 15h2' />
-    <path d='M3 9h2' />
-    <path d='M9 15h1' />
-    <path d='M9 9h1' />
-    <rect x='3' y='3' width='18' height='18' rx='2' />
+  <SvgIcon {...props} viewBox='0 0 24 24'>
+    <path
+      d='M20 5C20 4.44771 19.5523 4 19 4H5C4.44772 4 4 4.44772 4 5V8H5C5.55228 8 6 8.44772 6 9C6 9.55228 5.55228 10 5 10H4V19C4 19.5523 4.44771 20 5 20H19C19.5523 20 20 19.5523 20 19V10H19C18.4477 10 18 9.55228 18 9C18 8.44772 18.4477 8 19 8H20V5ZM10 8C10.5523 8 11 8.44772 11 9C11 9.55228 10.5523 10 10 10H9C8.44772 10 8 9.55228 8 9C8 8.44772 8.44772 8 9 8H10ZM15 8C15.5523 8 16 8.44772 16 9C16 9.55228 15.5523 10 15 10H14C13.4477 10 13 9.55228 13 9C13 8.44772 13.4477 8 14 8H15ZM22 19C22 20.6569 20.6569 22 19 22H5C3.34315 22 2 20.6569 2 19V5C2 3.34315 3.34315 2 5 2H19C20.6569 2 22 3.34315 22 5V19Z'
+      fill='currentColor'
+    />
   </SvgIcon>
 );
 

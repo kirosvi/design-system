@@ -2,18 +2,11 @@ import type { FC } from 'react';
 import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const PanelTopOpen: FC<SvgIconProps> = props => (
-  <SvgIcon
-    {...props}
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth={2}
-    strokeLinecap='round'
-    strokeLinejoin='round'
-  >
-    <rect width='18' height='18' x='3' y='3' rx='2' />
-    <path d='M3 9h18' />
-    <path d='m15 14-3 3-3-3' />
+  <SvgIcon {...props} viewBox='0 0 24 24'>
+    <path
+      d='M20 10H4V19C4 19.5523 4.44771 20 5 20H19C19.5523 20 20 19.5523 20 19V10ZM14.293 13.293C14.6835 12.9024 15.3165 12.9024 15.707 13.293C16.0976 13.6835 16.0976 14.3165 15.707 14.707L12.707 17.707C12.3165 18.0976 11.6835 18.0976 11.293 17.707L8.29297 14.707C7.90244 14.3165 7.90244 13.6835 8.29297 13.293C8.68349 12.9024 9.31651 12.9024 9.70703 13.293L12 15.5859L14.293 13.293ZM20 5C20 4.44771 19.5523 4 19 4H5C4.44772 4 4 4.44772 4 5V8H20V5ZM22 19C22 20.6569 20.6569 22 19 22H5C3.34315 22 2 20.6569 2 19V5C2 3.34315 3.34315 2 5 2H19C20.6569 2 22 3.34315 22 5V19Z'
+      fill='currentColor'
+    />
   </SvgIcon>
 );
 

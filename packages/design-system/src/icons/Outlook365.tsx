@@ -3,269 +3,215 @@ import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const Outlook365: FC<SvgIconProps> = props => (
   <SvgIcon {...props} viewBox='0 0 24 24'>
-    <>
-      <g transform='translate(1.2648, 0.6408)'>
-        <defs>
-          <linearGradient
-            id='provider-outlook365-0-paint0_linear_0_16'
-            x1='1.32178'
-            y1='8.39067'
-            x2='14.5491'
-            y2='0.18647'
-            gradientUnits='userSpaceOnUse'
-          >
-            <stop stopColor='#20A7FA' />
-            <stop offset='0.4' stopColor='#3BD5FF' />
-            <stop offset='1' stopColor='#C4B0FF' />
-          </linearGradient>
-        </defs>
-        <path
-          d='M15.7453 2.09297L1.24687 11.2852L0 9.31641V7.61953C0 7.00078 0.314063 6.42891 0.829688 6.09141L9.25781 0.625781C10.5422 -0.208594 12.1969 -0.208594 13.4813 0.625781L15.7453 2.09297Z'
-          fill='url(#provider-outlook365-0-paint0_linear_0_16)'
-        />
-      </g>
-      <g transform='translate(2.508, 1.1808)'>
-        <defs>
-          <linearGradient
-            id='provider-outlook365-1-paint0_linear_0_15'
-            x1='6.14391'
-            y1='12.7716'
-            x2='13.5075'
-            y2='0.980766'
-            gradientUnits='userSpaceOnUse'
-          >
-            <stop stopColor='#165AD9' />
-            <stop offset='0.501' stopColor='#1880E5' />
-            <stop offset='1' stopColor='#8587FF' />
-          </linearGradient>
-        </defs>
-        <path
-          d='M12.1078 0C12.15 0.028125 12.1969 0.0515624 12.2391 0.0796874L18.8156 4.34531L2.50313 14.6859L0 10.7391L11.9719 3.13594C13.1062 2.41875 13.1531 0.796875 12.1078 0Z'
-          fill='url(#provider-outlook365-1-paint0_linear_0_15)'
-        />
-      </g>
-      <g transform='translate(2.508, 1.1808)'>
-        <defs>
-          <linearGradient
-            id='provider-outlook365-2-paint0_linear_0_14'
-            x1='12.558'
-            y1='11.0649'
-            x2='4.38131'
-            y2='4.40241'
-            gradientUnits='userSpaceOnUse'
-          >
-            <stop offset='0.237' stopColor='#448AFF' stopOpacity='0' />
-            <stop offset='0.792' stopColor='#0032B1' />
-          </linearGradient>
-        </defs>
-        <path
-          d='M12.1078 0C12.15 0.028125 12.1969 0.0515624 12.2391 0.0796874L18.8156 4.34531L2.50313 14.6859L0 10.7391L11.9719 3.13594C13.1062 2.41875 13.1531 0.796875 12.1078 0Z'
-          fill='url(#provider-outlook365-2-paint0_linear_0_14)'
-          fillOpacity='0.2'
-        />
-      </g>
-      <g transform='translate(5.016, 3.8856)'>
-        <defs>
-          <linearGradient
-            id='provider-outlook365-3-paint0_linear_0_5'
-            x1='5.8313'
-            y1='9.75338'
-            x2='18.7513'
-            y2='1.48458'
-            gradientUnits='userSpaceOnUse'
-          >
-            <stop stopColor='#1A43A6' />
-            <stop offset='0.492' stopColor='#2052CB' />
-            <stop offset='1' stopColor='#5F20CB' />
-          </linearGradient>
-        </defs>
-        <path
-          d='M6.50625 13.9547L0 11.9813L13.8328 3.21094C15 2.47031 14.9953 0.773437 13.8281 0.0374998L13.7672 0L13.9453 0.1125L18.1547 2.84531C18.6703 3.18281 18.9844 3.75469 18.9844 4.37344V6.01406L6.50625 13.9547Z'
-          fill='url(#provider-outlook365-3-paint0_linear_0_5)'
-        />
-      </g>
-      <g transform='translate(5.016, 3.8856)'>
-        <defs>
-          <linearGradient
-            id='provider-outlook365-4-paint0_linear_0_13'
-            x1='12.6712'
-            y1='10.5124'
-            x2='4.8202'
-            y2='3.71874'
-            gradientUnits='userSpaceOnUse'
-          >
-            <stop stopColor='#0045B9' stopOpacity='0' />
-            <stop offset='0.67' stopColor='#0D1F69' />
-          </linearGradient>
-        </defs>
-        <path
-          d='M6.50625 13.9547L0 11.9813L13.8328 3.21094C15 2.47031 14.9953 0.773437 13.8281 0.0374998L13.7672 0L13.9453 0.1125L18.1547 2.84531C18.6703 3.18281 18.9844 3.75469 18.9844 4.37344V6.01406L6.50625 13.9547Z'
-          fill='url(#provider-outlook365-4-paint0_linear_0_13)'
-          fillOpacity='0.2'
-        />
-      </g>
-      <g transform='translate(1.2648, 0.6408)'>
-        <defs>
-          <radialGradient
-            id='provider-outlook365-5-paint0_radial_0_12'
-            cx='0'
-            cy='0'
-            r='1'
-            gradientUnits='userSpaceOnUse'
-            gradientTransform='translate(11.3669 0.498054) rotate(-90) scale(17.0535 18.4577)'
-          >
-            <stop offset='0.568' stopColor='#275FF0' stopOpacity='0' />
-            <stop offset='0.992' stopColor='#002177' />
-          </radialGradient>
-        </defs>
-        <path
-          d='M13.4813 0.625781C12.1969 -0.208594 10.5422 -0.208594 9.25781 0.625781L0.829688 6.09141C0.314063 6.42891 0 7.00078 0 7.61953V7.70391C0.01875 8.32266 0.346875 8.89453 0.871875 9.22734L11.3531 15.832L21.8578 9.23672C22.4016 8.89453 22.7344 8.29453 22.7344 7.65234V9.26016V7.61953C22.7344 7.00078 22.4203 6.42891 21.9047 6.09141L13.4813 0.625781Z'
-          fill='url(#provider-outlook365-5-paint0_radial_0_12)'
-        />
-      </g>
-      <g transform='translate(8.1192, 8.292)'>
-        <defs>
-          <linearGradient
-            id='provider-outlook365-6-paint0_linear_0_10'
-            x1='15.8801'
-            y1='7.53361'
-            x2='4.41923'
-            y2='7.53361'
-            gradientUnits='userSpaceOnUse'
-          >
-            <stop stopColor='#4DC4FF' />
-            <stop offset='0.196' stopColor='#0FAFFF' />
-          </linearGradient>
-        </defs>
-        <path
-          d='M2.64844 15.0703H11.9297C14.1094 15.0703 15.8766 13.3031 15.8766 11.1234V0C15.8766 0.642187 15.5438 1.24219 15 1.58438L1.19531 10.2516C0.45 10.7203 0 11.5359 0 12.4172C0 13.8844 1.18594 15.0703 2.64844 15.0703Z'
-          fill='url(#provider-outlook365-6-paint0_linear_0_10)'
-        />
-      </g>
-      <g transform='translate(8.1192, 8.292)'>
-        <defs>
-          <radialGradient
-            id='provider-outlook365-7-paint0_radial_0_11'
-            cx='0'
-            cy='0'
-            r='1'
-            gradientUnits='userSpaceOnUse'
-            gradientTransform='translate(7.10037 12.4847) rotate(-45) scale(7.3088)'
-          >
-            <stop offset='0.26' stopColor='#0060D1' />
-            <stop offset='0.908' stopColor='#0383F1' stopOpacity='0' />
-          </radialGradient>
-        </defs>
-        <path
-          d='M2.64844 15.0703H11.9297C14.1094 15.0703 15.8766 13.3031 15.8766 11.1234V0C15.8766 0.642187 15.5438 1.24219 15 1.58438L1.19531 10.2516C0.45 10.7203 0 11.5359 0 12.4172C0 13.8844 1.18594 15.0703 2.64844 15.0703Z'
-          fill='url(#provider-outlook365-7-paint0_radial_0_11)'
-          fillOpacity='0.4'
-        />
-      </g>
-      <g transform='translate(8.1192, 8.292)'>
-        <defs>
-          <radialGradient
-            id='provider-outlook365-8-paint0_radial_0_9'
-            cx='0'
-            cy='0'
-            r='1'
-            gradientUnits='userSpaceOnUse'
-            gradientTransform='translate(-3.93281 17.895) rotate(-52.658) scale(24.8099 22.4345)'
-          >
-            <stop offset='0.732' stopColor='#F4A7F7' stopOpacity='0' />
-            <stop offset='1' stopColor='#F4A7F7' />
-          </radialGradient>
-        </defs>
-        <path
-          d='M2.64844 15.0703H11.9297C14.1094 15.0703 15.8766 13.3031 15.8766 11.1234V0C15.8766 0.642187 15.5438 1.24219 15 1.58438L1.19531 10.2516C0.45 10.7203 0 11.5359 0 12.4172C0 13.8844 1.18594 15.0703 2.64844 15.0703Z'
-          fill='url(#provider-outlook365-8-paint0_radial_0_9)'
-          fillOpacity='0.5'
-        />
-      </g>
-      <g transform='translate(1.26, 8.2824)'>
-        <defs>
-          <radialGradient
-            id='provider-outlook365-9-paint0_radial_0_7'
-            cx='0'
-            cy='0'
-            r='1'
-            gradientUnits='userSpaceOnUse'
-            gradientTransform='translate(7.9407 5.93873) rotate(123.339) scale(13.0903 33.9708)'
-          >
-            <stop stopColor='#49DEFF' />
-            <stop offset='0.724' stopColor='#29C3FF' />
-          </radialGradient>
-        </defs>
-        <path
-          d='M13.2844 15.075H3.94687C1.76719 15.075 0 13.3078 0 11.1281V0C0 0.642187 0.328125 1.24219 0.871875 1.58438L14.6672 10.2797C15.4219 10.7578 15.8813 11.5875 15.8813 12.4781C15.8813 13.9125 14.7187 15.075 13.2844 15.075Z'
-          fill='url(#provider-outlook365-9-paint0_radial_0_7)'
-        />
-      </g>
-      <g transform='translate(1.26, 8.2824)'>
-        <defs>
-          <linearGradient
-            id='provider-outlook365-10-paint0_linear_0_6'
-            x1='-1.60598'
-            y1='7.54458'
-            x2='9.42872'
-            y2='7.53666'
-            gradientUnits='userSpaceOnUse'
-          >
-            <stop offset='0.206' stopColor='#6CE0FF' />
-            <stop offset='0.535' stopColor='#50D5FF' stopOpacity='0' />
-          </linearGradient>
-        </defs>
-        <path
-          d='M13.2844 15.075H3.94687C1.76719 15.075 0 13.3078 0 11.1281V0C0 0.642187 0.328125 1.24219 0.871875 1.58438L14.6672 10.2797C15.4219 10.7578 15.8813 11.5875 15.8813 12.4781C15.8813 13.9125 14.7187 15.075 13.2844 15.075Z'
-          fill='url(#provider-outlook365-10-paint0_linear_0_6)'
-        />
-      </g>
-      <g transform='translate(0, 11.3568)'>
-        <defs>
-          <radialGradient
-            id='provider-outlook365-11-paint0_radial_0_8'
-            cx='0'
-            cy='0'
-            r='1'
-            gradientUnits='userSpaceOnUse'
-            gradientTransform='translate(-0.0385377 0.385666) rotate(46.924) scale(13.3025)'
-          >
-            <stop offset='0.039' stopColor='#0091FF' />
-            <stop offset='0.919' stopColor='#183DAD' />
-          </radialGradient>
-        </defs>
-        <path
-          d='M2.05313 0H8.05313C9.1875 0 10.1063 0.91875 10.1063 2.05313V8.05313C10.1063 9.1875 9.1875 10.1062 8.05313 10.1062H2.05313C0.91875 10.1062 0 9.1875 0 8.05313V2.05313C0 0.91875 0.91875 0 2.05313 0Z'
-          fill='url(#provider-outlook365-11-paint0_radial_0_8)'
-        />
-      </g>
-      <g transform='translate(0, 11.3568)'>
-        <defs>
-          <radialGradient
-            id='provider-outlook365-12-paint0_radial_0_4'
-            cx='0'
-            cy='0'
-            r='1'
-            gradientUnits='userSpaceOnUse'
-            gradientTransform='translate(5.05288 6.15499) rotate(90) scale(7.07385 8.15943)'
-          >
-            <stop offset='0.558' stopColor='#0FA5F7' stopOpacity='0' />
-            <stop offset='1' stopColor='#74C6FF' />
-          </radialGradient>
-        </defs>
-        <path
-          d='M2.05313 0H8.05313C9.1875 0 10.1063 0.91875 10.1063 2.05313V8.05313C10.1063 9.1875 9.1875 10.1062 8.05313 10.1062H2.05313C0.91875 10.1062 0 9.1875 0 8.05313V2.05313C0 0.91875 0.91875 0 2.05313 0Z'
-          fill='url(#provider-outlook365-12-paint0_radial_0_4)'
-          fillOpacity='0.5'
-        />
-      </g>
-      <g transform='translate(2.16, 13.4256)'>
-        <path
-          d='M5.77969 2.94844C5.77969 2.5125 5.70938 2.11875 5.57344 1.76719C5.44219 1.40625 5.24531 1.08281 4.97813 0.810938C4.45781 0.271876 3.78281 0 2.95312 0C2.07656 0 1.36406 0.28125 0.820312 0.84375C0.529688 1.14844 0.31875 1.50938 0.1875 1.9125C0.065625 2.25938 0 2.63438 0 3.05625C0 3.44063 0.0609375 3.7875 0.173438 4.10625C0.304688 4.50469 0.510938 4.86094 0.80625 5.15625C1.34063 5.69531 2.025 5.9625 2.85469 5.9625C3.70781 5.9625 4.40625 5.68594 4.94531 5.13281C5.21719 4.85156 5.42344 4.52813 5.55937 4.15781C5.70937 3.80156 5.77969 3.39844 5.77969 2.94844ZM4.39687 3.01875C4.39687 3.3 4.36406 3.55313 4.29375 3.77344C4.22344 3.98438 4.125 4.1625 3.98906 4.31719C3.7125 4.62656 3.34687 4.78594 2.8875 4.78594C2.44687 4.78594 2.08125 4.62656 1.8 4.30781C1.62188 4.10625 1.50469 3.85312 1.43906 3.55781C1.40156 3.38437 1.37813 3.20156 1.37813 2.99531C1.37813 2.81719 1.39688 2.65313 1.425 2.49844C1.48594 2.17969 1.60781 1.90781 1.8 1.6875C2.08125 1.35469 2.45625 1.19062 2.92031 1.19062C3.37031 1.19062 3.73125 1.35 3.99844 1.67344C4.12969 1.82813 4.22812 2.01563 4.29375 2.23594C4.36406 2.46094 4.39687 2.72344 4.39687 3.01875Z'
-          fill='white'
-        />
-      </g>
-    </>
+    <path
+      d='M17.0109 2.7328L2.5125 11.925L1.26562 9.95624V8.25936C1.26562 7.64061 1.57969 7.06874 2.09531 6.73124L10.5234 1.26561C11.8078 0.431238 13.4625 0.431238 14.7469 1.26561L17.0109 2.7328Z'
+      fill='url(#outlook365-paint0_linear_6885_451)'
+    />
+    <path
+      d='M14.6156 1.18127C14.6578 1.2094 14.7047 1.23284 14.7469 1.26096L21.3234 5.52659L5.01094 15.8672L2.50781 11.9203L14.4797 4.31721C15.6141 3.60002 15.6609 1.97815 14.6156 1.18127Z'
+      fill='url(#outlook365-paint1_linear_6885_451)'
+    />
+    <path
+      d='M14.6156 1.18127C14.6578 1.2094 14.7047 1.23284 14.7469 1.26096L21.3234 5.52659L5.01094 15.8672L2.50781 11.9203L14.4797 4.31721C15.6141 3.60002 15.6609 1.97815 14.6156 1.18127Z'
+      fill='url(#outlook365-paint2_linear_6885_451)'
+      fillOpacity='0.2'
+    />
+    <path
+      d='M11.5219 17.8406L5.01562 15.8672L18.8484 7.09686C20.0156 6.35624 20.0109 4.65936 18.8438 3.92343L18.7828 3.88593L18.9609 3.99843L23.1703 6.73124C23.6859 7.06874 24 7.64061 24 8.25936V9.89999L11.5219 17.8406Z'
+      fill='url(#outlook365-paint3_linear_6885_451)'
+    />
+    <path
+      d='M11.5219 17.8406L5.01562 15.8672L18.8484 7.09686C20.0156 6.35624 20.0109 4.65936 18.8438 3.92343L18.7828 3.88593L18.9609 3.99843L23.1703 6.73124C23.6859 7.06874 24 7.64061 24 8.25936V9.89999L11.5219 17.8406Z'
+      fill='url(#outlook365-paint4_linear_6885_451)'
+      fillOpacity='0.2'
+    />
+    <path
+      d='M14.7469 1.26561C13.4625 0.431238 11.8078 0.431238 10.5234 1.26561L2.09531 6.73124C1.57969 7.06874 1.26562 7.64061 1.26562 8.25936V8.34374C1.28438 8.96249 1.6125 9.53436 2.1375 9.86718L12.6188 16.4719L23.1234 9.87655C23.6672 9.53436 24 8.93436 24 8.29218V9.89999V8.25936C24 7.64061 23.6859 7.06874 23.1703 6.73124L14.7469 1.26561Z'
+      fill='url(#outlook365-paint5_radial_6885_451)'
+    />
+    <path
+      d='M10.7672 23.3625H20.0485C22.2282 23.3625 23.9953 21.5953 23.9953 19.4156V8.29218C23.9953 8.93436 23.6625 9.53436 23.1188 9.87655L9.31409 18.5437C8.56877 19.0125 8.11877 19.8281 8.11877 20.7094C8.11877 22.1765 9.30471 23.3625 10.7672 23.3625Z'
+      fill='url(#outlook365-paint6_linear_6885_451)'
+    />
+    <path
+      d='M10.7672 23.3625H20.0485C22.2282 23.3625 23.9953 21.5953 23.9953 19.4156V8.29218C23.9953 8.93436 23.6625 9.53436 23.1188 9.87655L9.31409 18.5437C8.56877 19.0125 8.11877 19.8281 8.11877 20.7094C8.11877 22.1765 9.30471 23.3625 10.7672 23.3625Z'
+      fill='url(#outlook365-paint7_radial_6885_451)'
+      fillOpacity='0.4'
+    />
+    <path
+      d='M10.7672 23.3625H20.0485C22.2282 23.3625 23.9953 21.5953 23.9953 19.4156V8.29218C23.9953 8.93436 23.6625 9.53436 23.1188 9.87655L9.31409 18.5437C8.56877 19.0125 8.11877 19.8281 8.11877 20.7094C8.11877 22.1765 9.30471 23.3625 10.7672 23.3625Z'
+      fill='url(#outlook365-paint8_radial_6885_451)'
+      fillOpacity='0.5'
+    />
+    <path
+      d='M14.5454 23.3578H5.20786C3.02817 23.3578 1.26099 21.5906 1.26099 19.411V8.28284C1.26099 8.92502 1.58911 9.52502 2.13286 9.86721L15.9282 18.5625C16.6829 19.0406 17.1422 19.8703 17.1422 20.761C17.1422 22.1953 15.9797 23.3578 14.5454 23.3578Z'
+      fill='url(#outlook365-paint9_radial_6885_451)'
+    />
+    <path
+      d='M14.5454 23.3578H5.20786C3.02817 23.3578 1.26099 21.5906 1.26099 19.411V8.28284C1.26099 8.92502 1.58911 9.52502 2.13286 9.86721L15.9282 18.5625C16.6829 19.0406 17.1422 19.8703 17.1422 20.761C17.1422 22.1953 15.9797 23.3578 14.5454 23.3578Z'
+      fill='url(#outlook365-paint10_linear_6885_451)'
+    />
+    <path
+      d='M2.05313 11.3578H8.05313C9.1875 11.3578 10.1063 12.2765 10.1063 13.4109V19.4109C10.1063 20.5453 9.1875 21.464 8.05313 21.464H2.05313C0.91875 21.464 0 20.5453 0 19.4109V13.4109C0 12.2765 0.91875 11.3578 2.05313 11.3578Z'
+      fill='url(#outlook365-paint11_radial_6885_451)'
+    />
+    <path
+      d='M2.05313 11.3578H8.05313C9.1875 11.3578 10.1063 12.2765 10.1063 13.4109V19.4109C10.1063 20.5453 9.1875 21.464 8.05313 21.464H2.05313C0.91875 21.464 0 20.5453 0 19.4109V13.4109C0 12.2765 0.91875 11.3578 2.05313 11.3578Z'
+      fill='url(#outlook365-paint12_radial_6885_451)'
+      fillOpacity='0.5'
+    />
+    <path
+      d='M7.94058 16.3734C7.94058 15.9375 7.87026 15.5437 7.73433 15.1922C7.60308 14.8312 7.4062 14.5078 7.13901 14.2359C6.6187 13.6969 5.9437 13.425 5.11401 13.425C4.23745 13.425 3.52495 13.7062 2.9812 14.2687C2.69058 14.5734 2.47964 14.9344 2.34839 15.3375C2.22651 15.6844 2.16089 16.0594 2.16089 16.4812C2.16089 16.8656 2.22183 17.2125 2.33433 17.5312C2.46558 17.9297 2.67183 18.2859 2.96714 18.5812C3.50151 19.1203 4.18589 19.3875 5.01558 19.3875C5.8687 19.3875 6.56714 19.1109 7.1062 18.5578C7.37808 18.2766 7.58433 17.9531 7.72026 17.5828C7.87026 17.2266 7.94058 16.8234 7.94058 16.3734ZM6.55776 16.4437C6.55776 16.725 6.52495 16.9781 6.45464 17.1984C6.38433 17.4094 6.28589 17.5875 6.14995 17.7422C5.87339 18.0516 5.50776 18.2109 5.04839 18.2109C4.60776 18.2109 4.24214 18.0515 3.96089 17.7328C3.78276 17.5312 3.66558 17.2781 3.59995 16.9828C3.56245 16.8094 3.53901 16.6265 3.53901 16.4203C3.53901 16.2422 3.55776 16.0781 3.58589 15.9234C3.64683 15.6047 3.7687 15.3328 3.96089 15.1125C4.24214 14.7797 4.61714 14.6156 5.0812 14.6156C5.5312 14.6156 5.89214 14.775 6.15933 15.0984C6.29058 15.2531 6.38901 15.4406 6.45464 15.6609C6.52495 15.8859 6.55776 16.1484 6.55776 16.4437Z'
+      fill='white'
+    />
+    <defs>
+      <linearGradient
+        id='outlook365-paint0_linear_6885_451'
+        x1='2.58741'
+        y1='9.0305'
+        x2='15.8147'
+        y2='0.826301'
+        gradientUnits='userSpaceOnUse'
+      >
+        <stop stopColor='#20A7FA' />
+        <stop offset='0.4' stopColor='#3BD5FF' />
+        <stop offset='1' stopColor='#C4B0FF' />
+      </linearGradient>
+      <linearGradient
+        id='outlook365-paint1_linear_6885_451'
+        x1='8.65172'
+        y1='13.9529'
+        x2='16.0153'
+        y2='2.16204'
+        gradientUnits='userSpaceOnUse'
+      >
+        <stop stopColor='#165AD9' />
+        <stop offset='0.501' stopColor='#1880E5' />
+        <stop offset='1' stopColor='#8587FF' />
+      </linearGradient>
+      <linearGradient
+        id='outlook365-paint2_linear_6885_451'
+        x1='15.0659'
+        y1='12.2462'
+        x2='6.88913'
+        y2='5.58368'
+        gradientUnits='userSpaceOnUse'
+      >
+        <stop offset='0.237' stopColor='#448AFF' stopOpacity='0' />
+        <stop offset='0.792' stopColor='#0032B1' />
+      </linearGradient>
+      <linearGradient
+        id='outlook365-paint3_linear_6885_451'
+        x1='10.8469'
+        y1='13.6393'
+        x2='23.7669'
+        y2='5.3705'
+        gradientUnits='userSpaceOnUse'
+      >
+        <stop stopColor='#1A43A6' />
+        <stop offset='0.492' stopColor='#2052CB' />
+        <stop offset='1' stopColor='#5F20CB' />
+      </linearGradient>
+      <linearGradient
+        id='outlook365-paint4_linear_6885_451'
+        x1='17.6868'
+        y1='14.3983'
+        x2='9.83583'
+        y2='7.60466'
+        gradientUnits='userSpaceOnUse'
+      >
+        <stop stopColor='#0045B9' stopOpacity='0' />
+        <stop offset='0.67' stopColor='#0D1F69' />
+      </linearGradient>
+      <radialGradient
+        id='outlook365-paint5_radial_6885_451'
+        cx='0'
+        cy='0'
+        r='1'
+        gradientUnits='userSpaceOnUse'
+        gradientTransform='translate(12.6326 1.13789) rotate(-90) scale(17.0535 18.4577)'
+      >
+        <stop offset='0.568' stopColor='#275FF0' stopOpacity='0' />
+        <stop offset='0.992' stopColor='#002177' />
+      </radialGradient>
+      <linearGradient
+        id='outlook365-paint6_linear_6885_451'
+        x1='23.9989'
+        y1='15.8258'
+        x2='12.538'
+        y2='15.8258'
+        gradientUnits='userSpaceOnUse'
+      >
+        <stop stopColor='#4DC4FF' />
+        <stop offset='0.196' stopColor='#0FAFFF' />
+      </linearGradient>
+      <radialGradient
+        id='outlook365-paint7_radial_6885_451'
+        cx='0'
+        cy='0'
+        r='1'
+        gradientUnits='userSpaceOnUse'
+        gradientTransform='translate(15.2191 20.7769) rotate(-45) scale(7.3088)'
+      >
+        <stop offset='0.26' stopColor='#0060D1' />
+        <stop offset='0.908' stopColor='#0383F1' stopOpacity='0' />
+      </radialGradient>
+      <radialGradient
+        id='outlook365-paint8_radial_6885_451'
+        cx='0'
+        cy='0'
+        r='1'
+        gradientUnits='userSpaceOnUse'
+        gradientTransform='translate(4.18597 26.1872) rotate(-52.658) scale(24.8099 22.4345)'
+      >
+        <stop offset='0.732' stopColor='#F4A7F7' stopOpacity='0' />
+        <stop offset='1' stopColor='#F4A7F7' />
+      </radialGradient>
+      <radialGradient
+        id='outlook365-paint9_radial_6885_451'
+        cx='0'
+        cy='0'
+        r='1'
+        gradientUnits='userSpaceOnUse'
+        gradientTransform='translate(9.20169 14.2216) rotate(123.339) scale(13.0903 33.9708)'
+      >
+        <stop stopColor='#49DEFF' />
+        <stop offset='0.724' stopColor='#29C3FF' />
+      </radialGradient>
+      <linearGradient
+        id='outlook365-paint10_linear_6885_451'
+        x1='-0.344998'
+        y1='15.8274'
+        x2='10.6897'
+        y2='15.8195'
+        gradientUnits='userSpaceOnUse'
+      >
+        <stop offset='0.206' stopColor='#6CE0FF' />
+        <stop offset='0.535' stopColor='#50D5FF' stopOpacity='0' />
+      </linearGradient>
+      <radialGradient
+        id='outlook365-paint11_radial_6885_451'
+        cx='0'
+        cy='0'
+        r='1'
+        gradientUnits='userSpaceOnUse'
+        gradientTransform='translate(-0.0385377 11.7435) rotate(46.924) scale(13.3025)'
+      >
+        <stop offset='0.039' stopColor='#0091FF' />
+        <stop offset='0.919' stopColor='#183DAD' />
+      </radialGradient>
+      <radialGradient
+        id='outlook365-paint12_radial_6885_451'
+        cx='0'
+        cy='0'
+        r='1'
+        gradientUnits='userSpaceOnUse'
+        gradientTransform='translate(5.05288 17.5128) rotate(90) scale(7.07385 8.15943)'
+      >
+        <stop offset='0.558' stopColor='#0FA5F7' stopOpacity='0' />
+        <stop offset='1' stopColor='#74C6FF' />
+      </radialGradient>
+    </defs>
   </SvgIcon>
 );
 

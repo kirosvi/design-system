@@ -2,20 +2,11 @@ import type { FC } from 'react';
 import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const ListTree: FC<SvgIconProps> = props => (
-  <SvgIcon
-    {...props}
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth={2}
-    strokeLinecap='round'
-    strokeLinejoin='round'
-  >
-    <path d='M8 5h13' />
-    <path d='M13 12h8' />
-    <path d='M13 19h8' />
-    <path d='M3 10a2 2 0 0 0 2 2h3' />
-    <path d='M3 5v12a2 2 0 0 0 2 2h3' />
+  <SvgIcon {...props} viewBox='0 0 24 24'>
+    <path
+      d='M2 16V6C2 5.44772 2.44772 5 3 5C3.55228 5 4 5.44772 4 6V10C4 10.5477 4.45228 11 5 11H8C8.55228 11 9 11.4477 9 12C9 12.5523 8.55228 13 8 13H5C4.64919 13 4.31336 12.9357 4 12.8242V16C4 16.5477 4.45228 17 5 17H8C8.55228 17 9 17.4477 9 18C9 18.5523 8.55228 19 8 19H5C3.34772 19 2 17.6523 2 16ZM21 17C21.5523 17 22 17.4477 22 18C22 18.5523 21.5523 19 21 19H13C12.4477 19 12 18.5523 12 18C12 17.4477 12.4477 17 13 17H21ZM21 11C21.5523 11 22 11.4477 22 12C22 12.5523 21.5523 13 21 13H13C12.4477 13 12 12.5523 12 12C12 11.4477 12.4477 11 13 11H21ZM21 5C21.5523 5 22 5.44772 22 6C22 6.55228 21.5523 7 21 7H8C7.44772 7 7 6.55228 7 6C7 5.44772 7.44772 5 8 5H21Z'
+      fill='currentColor'
+    />
   </SvgIcon>
 );
 

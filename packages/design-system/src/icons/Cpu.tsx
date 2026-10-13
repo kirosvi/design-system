@@ -2,29 +2,11 @@ import type { FC } from 'react';
 import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const Cpu: FC<SvgIconProps> = props => (
-  <SvgIcon
-    {...props}
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth={2}
-    strokeLinecap='round'
-    strokeLinejoin='round'
-  >
-    <path d='M12 20v2' />
-    <path d='M12 2v2' />
-    <path d='M17 20v2' />
-    <path d='M17 2v2' />
-    <path d='M2 12h2' />
-    <path d='M2 17h2' />
-    <path d='M2 7h2' />
-    <path d='M20 12h2' />
-    <path d='M20 17h2' />
-    <path d='M20 7h2' />
-    <path d='M7 20v2' />
-    <path d='M7 2v2' />
-    <rect x='4' y='4' width='16' height='16' rx='2' />
-    <rect x='8' y='8' width='8' height='8' rx='1' />
+  <SvgIcon {...props} viewBox='0 0 24 24'>
+    <path
+      d='M19 6C19 5.44772 18.5523 5 18 5H6C5.44772 5 5 5.44772 5 6V18C5 18.5523 5.44772 19 6 19H18C18.5523 19 19 18.5523 19 18V6ZM10 10V14H14V10H10ZM16 14C16 15.1046 15.1046 16 14 16H10C8.89543 16 8 15.1046 8 14V10C8 8.89543 8.89543 8 10 8H14C15.1046 8 16 8.89543 16 10V14ZM21 8H22C22.5523 8 23 8.44772 23 9C23 9.55229 22.5523 10 22 10H21V14H22C22.5523 14 23 14.4477 23 15C23 15.5523 22.5523 16 22 16H21V18C21 19.6569 19.6569 21 18 21H16V22C16 22.5523 15.5523 23 15 23C14.4477 23 14 22.5523 14 22V21H10V22C10 22.5523 9.55229 23 9 23C8.44772 23 8 22.5523 8 22V21H6C4.34315 21 3 19.6569 3 18V16H2C1.44772 16 1 15.5523 1 15C1 14.4477 1.44772 14 2 14H3V10H2C1.44772 10 1 9.55229 1 9C1 8.44772 1.44772 8 2 8H3V6C3 4.34315 4.34315 3 6 3H8V2C8 1.44772 8.44772 1 9 1C9.55229 1 10 1.44772 10 2V3H14V2C14 1.44772 14.4477 1 15 1C15.5523 1 16 1.44772 16 2V3H18C19.6569 3 21 4.34315 21 6V8Z'
+      fill='currentColor'
+    />
   </SvgIcon>
 );
 

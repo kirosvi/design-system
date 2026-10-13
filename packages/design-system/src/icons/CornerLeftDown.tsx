@@ -2,17 +2,11 @@ import type { FC } from 'react';
 import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const CornerLeftDown: FC<SvgIconProps> = props => (
-  <SvgIcon
-    {...props}
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth={2}
-    strokeLinecap='round'
-    strokeLinejoin='round'
-  >
-    <path d='m14 15-5 5-5-5' />
-    <path d='M20 4h-7a4 4 0 0 0-4 4v12' />
+  <SvgIcon {...props} viewBox='0 0 24 24'>
+    <path
+      d='M7.99999 8C7.99999 6.67392 8.52715 5.40253 9.46483 4.46484C10.4025 3.52716 11.6739 3 13 3H20C20.5523 3 21 3.44772 21 4C21 4.55228 20.5523 5 20 5H13C12.2043 5 11.4415 5.3163 10.8789 5.87891C10.3163 6.44152 9.99999 7.20435 9.99999 8V17.5859L13.293 14.293C13.6835 13.9024 14.3165 13.9024 14.707 14.293C15.0975 14.6835 15.0975 15.3165 14.707 15.707L9.70702 20.707C9.31649 21.0976 8.68348 21.0976 8.29295 20.707L3.29295 15.707C2.90243 15.3165 2.90243 14.6835 3.29295 14.293C3.68348 13.9024 4.31649 13.9024 4.70702 14.293L7.99999 17.5859V8Z'
+      fill='currentColor'
+    />
   </SvgIcon>
 );
 

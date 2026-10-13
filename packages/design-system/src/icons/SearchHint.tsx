@@ -2,17 +2,11 @@ import type { FC } from 'react';
 import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const SearchHint: FC<SvgIconProps> = props => (
-  <SvgIcon
-    {...props}
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth={2}
-    strokeLinecap='round'
-    strokeLinejoin='round'
-  >
-    <rect width='18' height='18' x='3' y='3' rx='2' />
-    <line x1='9' x2='15' y1='15' y2='9' />
+  <SvgIcon {...props} viewBox='0 0 24 24'>
+    <path
+      d='M18 2C20.2091 2 22 3.79086 22 6V18C22 20.2091 20.2091 22 18 22H6L5.79395 21.9951C3.68056 21.8879 2 20.14 2 18V6C2 3.79086 3.79086 2 6 2H18ZM6 4C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V6C20 4.89543 19.1046 4 18 4H6ZM14.1426 6.48535C14.4268 6.01188 15.0411 5.85846 15.5146 6.14258C15.9881 6.42676 16.1415 7.04112 15.8574 7.51465L9.85742 17.5146C9.57324 17.9881 8.95888 18.1415 8.48535 17.8574C8.01188 17.5732 7.85846 16.9589 8.14258 16.4854L14.1426 6.48535Z'
+      fill='currentColor'
+    />
   </SvgIcon>
 );
 
