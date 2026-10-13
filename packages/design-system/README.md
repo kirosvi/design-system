@@ -92,7 +92,17 @@ pnpm test
 pnpm build
 ```
 
-## 📖 Resources
+### Icons from Figma
+
+Icons in `src/icons/` are generated from the [WADS-Iconography](https://www.figma.com/design/ezgUqbCqEBXqC4ViRausYIAN/WADS-Iconography?node-id=5702-845) Figma page — don't edit them by hand. Put a Figma personal access token (scope "File content: read") into the repo-root `.env.local` as `FIGMA_TOKEN=…`, then:
+
+```bash
+pnpm --filter @wallarm-org/design-system icons:sync --dry-run             # what's new in Figma
+pnpm --filter @wallarm-org/design-system icons:sync --category 'Edit & Text'  # add new icons, refresh the rest
+pnpm --filter @wallarm-org/design-system icons:sync --only Bell,BellOff    # refresh just these
+```
+
+The command writes the component files, `src/icons/index.ts`, the gallery category (`module/const.ts`) and Code Connect (`module/Icons.figma.tsx`). `scripts/icons/manifest.json` maps Figma nodes to component names, and also holds excluded nodes and the `keep` list of hand-maintained icons. When a new layer's name collides with an existing icon, map it there. Brand icons without a Neutral variant in Figma get a generated `*Neutral` twin. Commit with `[update-screenshots]` so CI refreshes the icon gallery baselines.
 
 - [Storybook](https://wallarm.github.io/design-system/) - Interactive examples
 - [NPM](https://www.npmjs.com/package/@wallarm-org/design-system) - NPM package

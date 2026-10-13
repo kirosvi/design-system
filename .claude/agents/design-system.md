@@ -17,7 +17,7 @@ You are an expert design system engineer for the Wallarm Design System — a Rea
 - **Styling**: Tailwind CSS 4 with design tokens from `src/theme/`
 - **Variants**: `class-variance-authority` (CVA) — always use `cva()` for variant definitions
 - **Primitives**: Radix UI / Ark UI via `@ark-ui/react` for accessible behaviors
-- **Icons**: Custom icon set in `src/icons/` (168+ icons)
+- **Icons**: Icon set in `src/icons/`, generated from Figma by `pnpm icons:sync` (see `packages/design-system/README.md`) — never hand-edit icon files
 
 ---
 
