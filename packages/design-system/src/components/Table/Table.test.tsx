@@ -1427,6 +1427,99 @@ describe('TableSettingsMenu: deferColumnVisibility', () => {
 
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  const InitialHarness: FC<{
+    initial: Record<string, boolean>;
+    onChange: (v: Record<string, boolean>) => void;
+    defer?: boolean;
+  }> = ({ initial, onChange, defer = true }) => {
+    const [visibility, setVisibility] = useState<Record<string, boolean>>(initial);
+    return (
+      <Table
+        data={data}
+        columns={baseColumns}
+        columnVisibility={visibility}
+        onColumnVisibilityChange={updater => {
+          const next = typeof updater === 'function' ? updater(visibility) : updater;
+          setVisibility(next);
+          onChange(next);
+        }}
+        defaultColumnVisibility={{}}
+        deferColumnVisibility={defer}
+        data-testid='table'
+      />
+    );
+  };
+
+  const openMenu = async () => {
+    await userEvent.click(screen.getByRole('button', { name: 'Table settings' }));
+    await waitFor(() => expect(screen.getByRole('menu')).toHaveFocus());
+  };
+  const menuItem = (id: string) => screen.getByTestId(`table--settings-menu-item-${id}`);
+
+  it('writes nothing for a reset of a table already at its default', async () => {
+    const onChange = rs.fn();
+    render(<DeferHarness onChange={onChange} />);
+    await openMenu();
+    await userEvent.click(menuItem('status'));
+    await userEvent.click(screen.getByRole('button', { name: 'Reset to default' }));
+    await userEvent.keyboard('{Escape}');
+
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('writes what the same steps write without deferral: reset, then hide', async () => {
+    const steps = async () => {
+      await openMenu();
+      await userEvent.click(screen.getByRole('button', { name: 'Reset to default' }));
+      await userEvent.click(menuItem('status'));
+      await userEvent.keyboard('{Escape}');
+    };
+    const deferred = rs.fn();
+    const { unmount } = render(
+      <InitialHarness initial={{ status: false, category: true }} onChange={deferred} />,
+    );
+    await steps();
+    unmount();
+    const immediate = rs.fn();
+    render(
+      <InitialHarness
+        initial={{ status: false, category: true }}
+        onChange={immediate}
+        defer={false}
+      />,
+    );
+    await steps();
+
+    expect(deferred).toHaveBeenCalledTimes(1);
+    expect(deferred.mock.lastCall?.[0]).toEqual(immediate.mock.lastCall?.[0]);
+  });
+
+  it('keeps Reset enabled after a toggle is switched back, as without deferral', async () => {
+    // An explicit entry the default lacks: the table is not at its default object.
+    render(<InitialHarness initial={{ name: true }} onChange={rs.fn()} />);
+    await openMenu();
+    const reset = screen.getByRole('button', { name: 'Reset to default' });
+    expect(reset).toBeEnabled();
+    await userEvent.click(menuItem('status'));
+    await userEvent.click(menuItem('status'));
+    expect(reset).toBeEnabled();
+  });
+
+  it('applies on an outside click and on the trigger, not only on Escape', async () => {
+    const onChange = rs.fn();
+    render(<DeferHarness onChange={onChange} />);
+    await openMenu();
+    await userEvent.click(menuItem('status'));
+    await userEvent.click(document.body);
+    await waitFor(() => expect(statusHeader()).not.toBeInTheDocument());
+
+    await openMenu();
+    await userEvent.click(menuItem('status'));
+    await userEvent.click(screen.getByRole('button', { name: 'Table settings' }));
+    await waitFor(() => expect(statusHeader()).toBeInTheDocument());
+    expect(onChange).toHaveBeenCalledTimes(2);
+  });
 });
 
 describe('Last row bottom border (container frame owns the bottom edge)', () => {

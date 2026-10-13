@@ -27,6 +27,7 @@ import {
 } from '@dnd-kit/sortable';
 import { Settings } from '../../../icons';
 import { cn } from '../../../utils/cn';
+import { isEqual } from '../../../utils/isEqual';
 import { type TestableProps, useTestId } from '../../../utils/testId';
 import { Button } from '../../Button';
 import {
@@ -49,6 +50,7 @@ import {
 import { useTableContext } from '../TableContext';
 import {
   EMPTY_VISIBILITY_DRAFT,
+  resolveVisibilityDraft,
   TableSettingsMenuContentProvider,
   type VisibilityDraft,
 } from './TableSettingsMenuContentContext';
@@ -122,17 +124,13 @@ export const TableSettingsMenu: FC<TableSettingsMenuProps> = ({
     onSettingsOpenChange?.(open);
   };
 
-  // Only what actually changed is written: a column switched off and back on, or
-  // a reset that is undone, leaves the consumer's visibility object untouched —
-  // the same object a non-deferred reset would leave (`defaultColumnVisibility`).
+  // Written only when the result differs from what the table holds: a column
+  // switched off and back on, or a reset of an already-default table, writes
+  // nothing (see `resolveVisibilityDraft`).
   const applyVisibilityDraft = () => {
-    const { fromDefault, toggles } = visibilityDraft;
-    const base = fromDefault ? (defaultColumnVisibility ?? {}) : table.atoms.columnVisibility.get();
-    const changed = Object.entries(toggles).filter(
-      ([id, visible]) => (base[id] !== false) !== visible,
-    );
-    if (!fromDefault && changed.length === 0) return;
-    table.setColumnVisibility({ ...base, ...Object.fromEntries(changed) });
+    const current = table.atoms.columnVisibility.get();
+    const next = resolveVisibilityDraft(visibilityDraft, current, defaultColumnVisibility);
+    if (!isEqual(next, current)) table.setColumnVisibility(next);
   };
 
   // Measure the natural (full-list) width once the portaled content has mounted,

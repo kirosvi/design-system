@@ -1149,6 +1149,32 @@ export const SettingsMenu: StoryFn<typeof meta> = () => {
 };
 
 /**
+ * `deferColumnVisibility` holds switch toggles and "Reset to default" while the
+ * settings menu is open and applies them as one `columnVisibility` change on
+ * close — for consumers that fetch a column's data only once the menu closes,
+ * so a new column never sits empty behind the open menu.
+ */
+export const SettingsMenuDeferred: StoryFn<typeof meta> = () => {
+  const [columnVisibility, setColumnVisibility] = useState<TableVisibilityState>({});
+  const [columnOrder, setColumnOrder] = useState<string[]>([]);
+
+  return (
+    <Table
+      data={securityEvents}
+      columns={securityColumns}
+      getRowId={row => row.id}
+      columnVisibility={columnVisibility}
+      onColumnVisibilityChange={setColumnVisibility}
+      columnOrder={columnOrder}
+      onColumnOrderChange={setColumnOrder}
+      defaultColumnVisibility={{}}
+      defaultColumnOrder={securityColumnIds}
+      deferColumnVisibility
+    />
+  );
+};
+
+/**
  * `columnGroups` turns the settings menu into labeled, non-reorderable sections
  * (the FilterInput field-menu pattern): no drag handle, columns rendered under
  * their group header in the given order. Column ids absent from every group

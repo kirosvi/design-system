@@ -31,8 +31,25 @@ const renderInDrawer = (onCopy = rs.fn()) =>
     </Drawer>,
   );
 
+/**
+ * Both focus traps activate in a requestAnimationFrame: the drawer's on open,
+ * the fullscreen frame's on entering fullscreen. focus-trap puts the one
+ * activated last on top, so on a loaded runner the drawer's could land after
+ * the frame's and pull Tab back to the dialog. Each wait below lets one trap
+ * activate before the next step, as a user's pace does:
+ * - the drawer's trap moves focus into the dialog when it activates;
+ * - the frame's trap does not move focus (the button keeps it), and frames run
+ *   in order, so one frame after entering fullscreen it is in place.
+ */
+const nextFrame = () => new Promise<void>(resolve => requestAnimationFrame(() => resolve()));
+
 /** The modal drawer sets `pointer-events: none` on <body> in a microtask after opening. */
-const waitForModal = () => waitFor(() => expect(document.body.style.pointerEvents).toBe('none'));
+const waitForModal = async () => {
+  await waitFor(() => expect(document.body.style.pointerEvents).toBe('none'));
+  await waitFor(() =>
+    expect(screen.getByRole('dialog')).toContainElement(document.activeElement as HTMLElement),
+  );
+};
 
 describe('CodeSnippet fullscreen inside a modal Drawer', () => {
   it('keeps the header buttons clickable (user-event refuses pointer-events: none)', async () => {
@@ -70,6 +87,7 @@ describe('CodeSnippet fullscreen inside a modal Drawer', () => {
     await waitForModal();
 
     await user.click(screen.getByTestId('snippet--fullscreen-button'));
+    await nextFrame();
     const frame = screen.getByTestId('snippet');
     for (let i = 0; i < 4; i++) {
       await user.tab();
