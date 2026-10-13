@@ -273,6 +273,7 @@ export const iconCategories: Record<string, string[]> = {
     'Sheet',
     'LibraryBig',
     'Paperclip',
+    'Film',
   ],
   'Data & Charts': [
     'ChartArea',

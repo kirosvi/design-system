@@ -175,6 +175,7 @@ export { File } from './File';
 export { FileDown } from './FileDown';
 export { FilePlus } from './FilePlus';
 export { FileText } from './FileText';
+export { Film } from './Film';
 export { Filter } from './Filter';
 export { FilterX } from './FilterX';
 export { FingerprintPattern } from './FingerprintPattern';

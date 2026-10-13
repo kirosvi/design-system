@@ -2,21 +2,11 @@ import type { FC } from 'react';
 import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const GripHorizontal: FC<SvgIconProps> = props => (
-  <SvgIcon
-    {...props}
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth={2}
-    strokeLinecap='round'
-    strokeLinejoin='round'
-  >
-    <circle cx='12' cy='9' r='1' />
-    <circle cx='19' cy='9' r='1' />
-    <circle cx='5' cy='9' r='1' />
-    <circle cx='12' cy='15' r='1' />
-    <circle cx='19' cy='15' r='1' />
-    <circle cx='5' cy='15' r='1' />
+  <SvgIcon {...props} viewBox='0 0 24 24'>
+    <path
+      d='M3 15C3 13.8954 3.89543 13 5 13C6.10457 13 7 13.8954 7 15C7 16.1046 6.10457 17 5 17C3.89543 17 3 16.1046 3 15ZM10 15C10 13.8954 10.8954 13 12 13C13.1046 13 14 13.8954 14 15C14 16.1046 13.1046 17 12 17C10.8954 17 10 16.1046 10 15ZM17 15C17 13.8954 17.8954 13 19 13C20.1046 13 21 13.8954 21 15C21 16.1046 20.1046 17 19 17C17.8954 17 17 16.1046 17 15ZM3 9C3 7.89543 3.89543 7 5 7C6.10457 7 7 7.89543 7 9C7 10.1046 6.10457 11 5 11C3.89543 11 3 10.1046 3 9ZM10 9C10 7.89543 10.8954 7 12 7C13.1046 7 14 7.89543 14 9C14 10.1046 13.1046 11 12 11C10.8954 11 10 10.1046 10 9ZM17 9C17 7.89543 17.8954 7 19 7C20.1046 7 21 7.89543 21 9C21 10.1046 20.1046 11 19 11C17.8954 11 17 10.1046 17 9Z'
+      fill='currentColor'
+    />
   </SvgIcon>
 );
 

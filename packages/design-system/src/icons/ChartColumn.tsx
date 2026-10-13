@@ -2,19 +2,11 @@ import type { FC } from 'react';
 import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const ChartColumn: FC<SvgIconProps> = props => (
-  <SvgIcon
-    {...props}
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth={2}
-    strokeLinecap='round'
-    strokeLinejoin='round'
-  >
-    <path d='M3 3v16a2 2 0 0 0 2 2h16' />
-    <path d='M18 17V9' />
-    <path d='M13 17V5' />
-    <path d='M8 17v-3' />
+  <SvgIcon {...props} viewBox='0 0 24 24'>
+    <path
+      d='M3 2C3.55228 2 4 2.44772 4 3V19C4 19.2652 4.10543 19.5195 4.29297 19.707C4.48051 19.8946 4.73478 20 5 20H21C21.5523 20 22 20.4477 22 21C22 21.5523 21.5523 22 21 22H5C4.20435 22 3.44152 21.6837 2.87891 21.1211C2.3163 20.5585 2 19.7957 2 19V3C2 2.44772 2.44772 2 3 2ZM8 13C8.55228 13 9 13.4477 9 14V17C9 17.5523 8.55228 18 8 18C7.44772 18 7 17.5523 7 17V14C7 13.4477 7.44772 13 8 13ZM13 4C13.5523 4 14 4.44772 14 5V17C14 17.5523 13.5523 18 13 18C12.4477 18 12 17.5523 12 17V5C12 4.44772 12.4477 4 13 4ZM18 8C18.5523 8 19 8.44772 19 9V17C19 17.5523 18.5523 18 18 18C17.4477 18 17 17.5523 17 17V9C17 8.44772 17.4477 8 18 8Z'
+      fill='currentColor'
+    />
   </SvgIcon>
 );
 

@@ -3,26 +3,9 @@ import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const Copy: FC<SvgIconProps> = props => (
   <SvgIcon {...props} viewBox='0 0 24 24'>
-    <rect
-      width='14'
-      height='14'
-      x='8'
-      y='8'
-      rx='2'
-      ry='2'
-      stroke='currentColor'
-      strokeWidth='2'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      fill='none'
-    />
     <path
-      d='M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2'
-      stroke='currentColor'
-      strokeWidth='2'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      fill='none'
+      d='M21 10C21 9.44771 20.5523 9 20 9H10C9.44771 9 9 9.44771 9 10V20C9 20.5523 9.44771 21 10 21H20C20.5523 21 21 20.5523 21 20V10ZM15 4C15 3.45228 14.5477 3 14 3H4C3.45228 3 3 3.45228 3 4V14C3 14.5477 3.45228 15 4 15C4.55228 15 5 15.4477 5 16C5 16.5523 4.55228 17 4 17C2.34772 17 1 15.6523 1 14V4C1 2.34772 2.34772 1 4 1H14C15.6523 1 17 2.34772 17 4C17 4.55228 16.5523 5 16 5C15.4477 5 15 4.55228 15 4ZM23 20C23 21.6569 21.6569 23 20 23H10C8.34315 23 7 21.6569 7 20V10C7 8.34315 8.34315 7 10 7H20C21.6569 7 23 8.34315 23 10V20Z'
+      fill='currentColor'
     />
   </SvgIcon>
 );

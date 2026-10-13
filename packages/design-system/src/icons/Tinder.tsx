@@ -3,27 +3,25 @@ import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const Tinder: FC<SvgIconProps> = props => (
   <SvgIcon {...props} viewBox='0 0 24 24'>
-    <g transform='translate(3.5, 2)'>
-      <defs>
-        <radialGradient
-          id='tinder-original-0-paint0_radial_0_3'
-          cx='0'
-          cy='0'
-          r='1'
-          gradientUnits='userSpaceOnUse'
-          gradientTransform='translate(8.5 20) scale(17 20)'
-        >
-          <stop stopColor='#FF7854' />
-          <stop offset='1' stopColor='#FD267D' />
-        </radialGradient>
-      </defs>
-      <path
-        fillRule='evenodd'
-        clipRule='evenodd'
-        d='M5.07402 8.06597C8.88709 6.74992 9.53612 3.3217 9.04935 0.169695C9.04935 0.0559627 9.1467 -0.0252747 9.24406 0.00722027C12.8949 1.79444 17 5.69384 17 11.5429C17 16.0272 13.5277 19.9916 8.48144 19.9916C6.6808 20.0736 4.90417 19.5528 3.43195 18.5114C1.95974 17.47 0.875795 15.9674 0.351198 14.2406C-0.1734 12.5138 -0.10877 10.6613 0.534885 8.97536C1.17854 7.28945 2.36456 5.86618 3.90576 4.9302C4.00312 4.86521 4.13292 4.9302 4.13292 5.04394C4.1816 5.64509 4.34386 7.15611 5.00912 8.06597H5.07402Z'
-        fill='url(#tinder-original-0-paint0_radial_0_3)'
-      />
-    </g>
+    <path
+      fillRule='evenodd'
+      clipRule='evenodd'
+      d='M8.57402 10.066C12.3871 8.74992 13.0361 5.3217 12.5493 2.1697C12.5493 2.05596 12.6467 1.97473 12.7441 2.00722C16.3949 3.79444 20.5 7.69384 20.5 13.5429C20.5 18.0272 17.0277 21.9916 11.9814 21.9916C10.1808 22.0736 8.40417 21.5528 6.93195 20.5114C5.45974 19.47 4.3758 17.9674 3.8512 16.2406C3.3266 14.5138 3.39123 12.6613 4.03488 10.9754C4.67854 9.28945 5.86456 7.86618 7.40576 6.9302C7.50312 6.86521 7.63292 6.9302 7.63292 7.04394C7.6816 7.64509 7.84386 9.15611 8.50912 10.066H8.57402Z'
+      fill='url(#tinder-paint0_radial_6830_409)'
+    />
+    <defs>
+      <radialGradient
+        id='tinder-paint0_radial_6830_409'
+        cx='0'
+        cy='0'
+        r='1'
+        gradientUnits='userSpaceOnUse'
+        gradientTransform='translate(12 22) scale(17 20)'
+      >
+        <stop stopColor='#FF7854' />
+        <stop offset='1' stopColor='#FD267D' />
+      </radialGradient>
+    </defs>
   </SvgIcon>
 );
 

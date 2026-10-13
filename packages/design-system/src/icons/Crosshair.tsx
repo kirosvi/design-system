@@ -2,20 +2,11 @@ import type { FC } from 'react';
 import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const Crosshair: FC<SvgIconProps> = props => (
-  <SvgIcon
-    {...props}
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth={2}
-    strokeLinecap='round'
-    strokeLinejoin='round'
-  >
-    <circle cx='12' cy='12' r='10' />
-    <line x1='22' x2='18' y1='12' y2='12' />
-    <line x1='6' x2='2' y1='12' y2='12' />
-    <line x1='12' x2='12' y1='6' y2='2' />
-    <line x1='12' x2='12' y1='22' y2='18' />
+  <SvgIcon {...props} viewBox='0 0 24 24'>
+    <path
+      d='M12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1 18.0751 1 12C1 5.92487 5.92487 1 12 1ZM13 6C13 6.55228 12.5523 7 12 7C11.4477 7 11 6.55228 11 6V3.05664C6.82853 3.51786 3.51786 6.82853 3.05664 11H6C6.55228 11 7 11.4477 7 12C7 12.5523 6.55228 13 6 13H3.05664C3.51786 17.1714 6.82858 20.4811 11 20.9424V18C11 17.4477 11.4477 17 12 17C12.5523 17 13 17.4477 13 18V20.9424C17.1714 20.4811 20.4821 17.1714 20.9434 13H18C17.4477 13 17 12.5523 17 12C17 11.4477 17.4477 11 18 11H20.9434C20.4821 6.82853 17.1715 3.51786 13 3.05664V6Z'
+      fill='currentColor'
+    />
   </SvgIcon>
 );
 

@@ -4,28 +4,8 @@ import { SvgIcon, type SvgIconProps } from './SvgIcon';
 export const MoveVertical: FC<SvgIconProps> = props => (
   <SvgIcon {...props} viewBox='0 0 24 24'>
     <path
-      d='M12 2v20'
-      stroke='currentColor'
-      strokeWidth='2'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      fill='none'
-    />
-    <path
-      d='m8 18 4 4 4-4'
-      stroke='currentColor'
-      strokeWidth='2'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      fill='none'
-    />
-    <path
-      d='m8 6 4-4 4 4'
-      stroke='currentColor'
-      strokeWidth='2'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      fill='none'
+      d='M11.3691 1.22462C11.7619 0.904269 12.3409 0.926863 12.707 1.29298L16.707 5.29298C17.0976 5.6835 17.0976 6.31652 16.707 6.70704C16.3165 7.09757 15.6835 7.09757 15.293 6.70704L13 4.41407V19.5859L15.293 17.293C15.6835 16.9025 16.3165 16.9025 16.707 17.293C17.0976 17.6835 17.0976 18.3165 16.707 18.707L12.707 22.707C12.3165 23.0976 11.6835 23.0976 11.293 22.707L7.29297 18.707C6.90245 18.3165 6.90245 17.6835 7.29297 17.293C7.68349 16.9025 8.31651 16.9025 8.70703 17.293L11 19.5859V4.41407L8.70703 6.70704C8.31651 7.09757 7.68349 7.09757 7.29297 6.70704C6.90245 6.31652 6.90245 5.6835 7.29297 5.29298L11.293 1.29298L11.3691 1.22462Z'
+      fill='currentColor'
     />
   </SvgIcon>
 );

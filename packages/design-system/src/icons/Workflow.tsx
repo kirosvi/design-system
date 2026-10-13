@@ -2,18 +2,11 @@ import type { FC } from 'react';
 import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const Workflow: FC<SvgIconProps> = props => (
-  <SvgIcon
-    {...props}
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth={2}
-    strokeLinecap='round'
-    strokeLinejoin='round'
-  >
-    <rect width='8' height='8' x='3' y='3' rx='2' />
-    <path d='M7 11v4a2 2 0 0 0 2 2h4' />
-    <rect width='8' height='8' x='13' y='13' rx='2' />
+  <SvgIcon {...props} viewBox='0 0 24 24'>
+    <path
+      d='M9 2C10.6569 2 12 3.34315 12 5V9C12 10.6569 10.6569 12 9 12H8V15C8 15.2652 8.10543 15.5195 8.29297 15.707C8.48051 15.8946 8.73478 16 9 16H12V15C12 13.3431 13.3431 12 15 12H19C20.6569 12 22 13.3431 22 15V19C22 20.6569 20.6569 22 19 22H15C13.3431 22 12 20.6569 12 19V18H9C8.20435 18 7.44151 17.6837 6.87891 17.1211C6.3163 16.5585 6 15.7956 6 15V12H5C3.34315 12 2 10.6569 2 9V5C2 3.34315 3.34315 2 5 2H9ZM15 14C14.4477 14 14 14.4477 14 15V19C14 19.5523 14.4477 20 15 20H19C19.5523 20 20 19.5523 20 19V15C20 14.4477 19.5523 14 19 14H15ZM5 4C4.44772 4 4 4.44772 4 5V9C4 9.55228 4.44772 10 5 10H9C9.55228 10 10 9.55228 10 9V5C10 4.44772 9.55228 4 9 4H5Z'
+      fill='currentColor'
+    />
   </SvgIcon>
 );
 

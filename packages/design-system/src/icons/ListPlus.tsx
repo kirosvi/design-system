@@ -2,20 +2,11 @@ import type { FC } from 'react';
 import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const ListPlus: FC<SvgIconProps> = props => (
-  <SvgIcon
-    {...props}
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth={2}
-    strokeLinecap='round'
-    strokeLinejoin='round'
-  >
-    <path d='M16 5H3' />
-    <path d='M11 12H3' />
-    <path d='M16 19H3' />
-    <path d='M18 9v6' />
-    <path d='M21 12h-6' />
+  <SvgIcon {...props} viewBox='0 0 24 24'>
+    <path
+      d='M16 17C16.5523 17 17 17.4477 17 18C17 18.5523 16.5523 19 16 19H3C2.44772 19 2 18.5523 2 18C2 17.4477 2.44772 17 3 17H16ZM17 15V13H15C14.4477 13 14 12.5523 14 12C14 11.4477 14.4477 11 15 11H17V9C17 8.44772 17.4477 8 18 8C18.5523 8 19 8.44772 19 9V11H21C21.5523 11 22 11.4477 22 12C22 12.5523 21.5523 13 21 13H19V15C19 15.5523 18.5523 16 18 16C17.4477 16 17 15.5523 17 15ZM11 11C11.5523 11 12 11.4477 12 12C12 12.5523 11.5523 13 11 13H3C2.44772 13 2 12.5523 2 12C2 11.4477 2.44772 11 3 11H11ZM16 5C16.5523 5 17 5.44772 17 6C17 6.55228 16.5523 7 16 7H3C2.44772 7 2 6.55228 2 6C2 5.44772 2.44772 5 3 5H16Z'
+      fill='currentColor'
+    />
   </SvgIcon>
 );
 

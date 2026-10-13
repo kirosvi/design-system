@@ -2,24 +2,11 @@ import type { FC } from 'react';
 import { SvgIcon, type SvgIconProps } from './SvgIcon';
 
 export const NotebookTabs: FC<SvgIconProps> = props => (
-  <SvgIcon
-    {...props}
-    viewBox='0 0 24 24'
-    fill='none'
-    stroke='currentColor'
-    strokeWidth={2}
-    strokeLinecap='round'
-    strokeLinejoin='round'
-  >
-    <path d='M2 6h4' />
-    <path d='M2 10h4' />
-    <path d='M2 14h4' />
-    <path d='M2 18h4' />
-    <rect width='16' height='20' x='4' y='2' rx='2' />
-    <path d='M15 2v20' />
-    <path d='M15 7h5' />
-    <path d='M15 12h5' />
-    <path d='M15 17h5' />
+  <SvgIcon {...props} viewBox='0 0 24 24'>
+    <path
+      d='M19 18H16V21H18C18.5523 21 19 20.5523 19 20V18ZM16 16H19V13H16V16ZM16 11H19V8H16V11ZM19 4C19 3.44772 18.5523 3 18 3H16V6H19V4ZM5 5H6C6.55228 5 7 5.44772 7 6C7 6.55228 6.55228 7 6 7H5V9H6C6.55228 9 7 9.44771 7 10C7 10.5523 6.55228 11 6 11H5V13H6C6.55228 13 7 13.4477 7 14C7 14.5523 6.55228 15 6 15H5V17H6C6.55228 17 7 17.4477 7 18C7 18.5523 6.55228 19 6 19H5V20C5 20.5523 5.44771 21 6 21H14V3H6C5.44772 3 5 3.44772 5 4V5ZM21 20C21 21.6569 19.6569 23 18 23H6C4.34315 23 3 21.6569 3 20V19H2C1.44772 19 1 18.5523 1 18C1 17.4477 1.44772 17 2 17H3V15H2C1.44772 15 1 14.5523 1 14C1 13.4477 1.44772 13 2 13H3V11H2C1.44772 11 1 10.5523 1 10C1 9.44771 1.44772 9 2 9H3V7H2C1.44772 7 1 6.55228 1 6C1 5.44772 1.44772 5 2 5H3V4C3 2.34315 4.34315 1 6 1H18C19.6569 1 21 2.34315 21 4V20Z'
+      fill='currentColor'
+    />
   </SvgIcon>
 );
 
