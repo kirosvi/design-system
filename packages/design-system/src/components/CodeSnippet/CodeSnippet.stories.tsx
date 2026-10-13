@@ -1,6 +1,15 @@
 import { useState } from 'react';
 import type { Meta, StoryFn } from 'storybook-react-rsbuild';
 import { Info, Skull, TriangleAlert } from '../../icons';
+import { Button } from '../Button';
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '../Drawer';
 import { VStack } from '../Stack';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../Tooltip';
 import { loadHighlightJsAdapter, loadPrismAdapter, loadShikiAdapter } from './adapters';
@@ -941,4 +950,37 @@ export const WithFoldingAndShowMore: StoryFn<typeof meta> = () => (
       </CodeSnippetContent>
     </CodeSnippetRoot>
   </CodeSnippetAdapterProvider>
+);
+
+/**
+ * Fullscreen opened from a modal `Drawer` stacks above it as a nested layer: its buttons stay
+ * clickable, and Escape or a backdrop click leaves fullscreen while the drawer stays open.
+ */
+export const FullscreenInsideDrawer: StoryFn<typeof meta> = () => (
+  <Drawer>
+    <DrawerTrigger asChild>
+      <Button variant='outline' color='neutral'>
+        Open Drawer
+      </Button>
+    </DrawerTrigger>
+    <DrawerContent>
+      <DrawerHeader>
+        <DrawerTitle>Request</DrawerTitle>
+      </DrawerHeader>
+      <DrawerBody>
+        <CodeSnippetRoot code={jsonCode} language='json'>
+          <CodeSnippetHeader>
+            <CodeSnippetTitle>package.json</CodeSnippetTitle>
+            <CodeSnippetActions>
+              <CodeSnippetFullscreenButton />
+              <CodeSnippetCopyButton />
+            </CodeSnippetActions>
+          </CodeSnippetHeader>
+          <CodeSnippetContent>
+            <CodeSnippetCode />
+          </CodeSnippetContent>
+        </CodeSnippetRoot>
+      </DrawerBody>
+    </DrawerContent>
+  </Drawer>
 );

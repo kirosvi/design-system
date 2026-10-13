@@ -1,6 +1,7 @@
 import { type ReactNode, useState } from 'react';
 import type { Meta, StoryFn } from 'storybook-react-rsbuild';
 import { Info, Skull, TriangleAlert } from '../../icons';
+import { Button } from '../Button';
 import {
   CodeSnippetActions,
   CodeSnippetAdapterProvider,
@@ -23,6 +24,14 @@ import {
   loadPrismAdapter,
   loadShikiAdapter,
 } from '../CodeSnippet';
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '../Drawer';
 import { VStack } from '../Stack';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../Tooltip';
 import { CodeEditorContent } from './CodeEditorContent';
@@ -1284,3 +1293,38 @@ export const TabsKeepHistory: StoryFn<typeof meta> = () => <TabsKeepHistoryDemo 
  * built for, where `readOnly` still lets the text be selected, searched and copied.
  */
 export const LongDocument: StoryFn<typeof meta> = () => <LongDocumentDemo />;
+
+/**
+ * Fullscreen opened from a modal `Drawer` stacks above it: the editor and its buttons take
+ * pointer and keyboard input, and Escape leaves fullscreen while the drawer stays open.
+ */
+export const FullscreenInsideDrawer: StoryFn<typeof meta> = () => {
+  const [value, setValue] = useState(jsonCode);
+
+  return (
+    <Drawer>
+      <DrawerTrigger asChild>
+        <Button variant='outline' color='neutral'>
+          Open Drawer
+        </Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Rule</DrawerTitle>
+        </DrawerHeader>
+        <DrawerBody>
+          <CodeEditorRoot value={value} onChange={setValue} language='json'>
+            <CodeSnippetHeader>
+              <CodeSnippetTitle>rule.json</CodeSnippetTitle>
+              <CodeSnippetActions>
+                <CodeSnippetFullscreenButton />
+                <CodeSnippetCopyButton />
+              </CodeSnippetActions>
+            </CodeSnippetHeader>
+            <CodeEditorContent lineNumbers aria-label='Rule JSON' />
+          </CodeEditorRoot>
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
+  );
+};

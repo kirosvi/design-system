@@ -13,6 +13,7 @@ import {
   CodeSnippetWrapButton,
   useCodeSnippetFrame,
 } from '../CodeSnippet';
+import { Drawer, DrawerBody, DrawerContent } from '../Drawer';
 import { type CodeEditorApi, CodeEditorContent, CodeEditorRoot, useCodeEditor } from './index';
 import { loadEngine } from './lib/loadEngine';
 
@@ -324,6 +325,36 @@ describe('CodeEditor', () => {
 
       expect(onWrapLinesChange).toHaveBeenCalledWith(true);
       expect(screen.getByTestId('wrap-probe')).toHaveTextContent('false');
+    });
+
+    it('fullscreen inside a modal Drawer takes pointer input and Escape leaves the drawer open', async () => {
+      render(
+        <Drawer open>
+          <DrawerContent>
+            <DrawerBody>
+              <CodeEditorRoot data-testid='ed' defaultValue='x'>
+                <CodeSnippetHeader>
+                  <CodeSnippetActions>
+                    <CodeSnippetFullscreenButton />
+                  </CodeSnippetActions>
+                </CodeSnippetHeader>
+                <CodeEditorContent aria-label='Code' />
+              </CodeEditorRoot>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>,
+      );
+      await screen.findByTestId('ed--editor');
+      await waitFor(() => expect(document.body.style.pointerEvents).toBe('none'));
+
+      await userEvent.click(screen.getByTestId('ed--fullscreen-button'));
+      await userEvent.click(screen.getByTestId('ed--fullscreen-button'));
+      expect(screen.getByTestId('ed--fullscreen-button')).toHaveAccessibleName('Enter full screen');
+
+      await userEvent.click(screen.getByTestId('ed--fullscreen-button'));
+      await userEvent.keyboard('{Escape}');
+      expect(screen.getByTestId('ed--fullscreen-button')).toHaveAccessibleName('Enter full screen');
+      expect(screen.getByRole('dialog')).toHaveAttribute('data-state', 'open');
     });
 
     it('keeps the same editor instance when entering and leaving fullscreen', async () => {

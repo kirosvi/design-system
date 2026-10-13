@@ -375,7 +375,13 @@ importers:
       '@zag-js/cascade-select':
         specifier: 1.43.3
         version: 1.43.3
+      '@zag-js/dismissable':
+        specifier: 1.43.3
+        version: 1.43.3
       '@zag-js/file-utils':
+        specifier: 1.43.3
+        version: 1.43.3
+      '@zag-js/focus-trap':
         specifier: 1.43.3
         version: 1.43.3
       '@zag-js/react':

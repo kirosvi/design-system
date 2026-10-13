@@ -1,6 +1,8 @@
 import type { FC, HTMLAttributes, ReactNode, Ref } from 'react';
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
+import { type DismissableElementOptions, trackDismissableElement } from '@zag-js/dismissable';
+import { trapFocus } from '@zag-js/focus-trap';
 import { cn } from '../../../utils/cn';
 import { useTestId } from '../../../utils/testId';
 
@@ -14,10 +16,19 @@ export interface CodeSnippetFrameProps extends Omit<HTMLAttributes<HTMLDivElemen
 /**
  * Fullscreen fills the viewport inset: the sizing/margin resets make `cn` drop conflicting
  * consumer utilities (e.g. `h-[240px]`, `max-w-[600px]`, `mx-auto`) while fullscreen is on.
+ *
+ * z-index follows the drawer/dialog formula (overlay 40, content 50, +20 per layer): the host
+ * is a zag layer while fullscreen, so `--layer-index` stacks the frame above the drawer or
+ * dialog it was opened from (standalone: layer 0, i.e. 40/50).
  */
-const FULLSCREEN_CLASSES =
-  'fixed inset-16 z-50 m-0 w-auto h-auto min-w-0 min-h-0 max-w-[none] max-h-[none]';
-const BACKDROP_CLASSES = 'fixed inset-0 z-40 backdrop-blur-xs bg-component-dialog-overlay';
+const FULLSCREEN_CLASSES = cn(
+  'fixed inset-16 m-0 w-auto h-auto min-w-0 min-h-0 max-w-[none] max-h-[none]',
+  'z-[calc(var(--drawer-positioner-z-index)+(var(--layer-index,0)*var(--drawer-level-ratio)))]',
+);
+const BACKDROP_CLASSES = cn(
+  'fixed inset-0 backdrop-blur-xs bg-component-dialog-overlay',
+  'z-[calc(var(--drawer-overlay-z-index)+(var(--layer-index,0)*var(--drawer-level-ratio)))]',
+);
 const HOST_CLASSES = 'contents';
 
 const noop = () => {
@@ -81,6 +92,36 @@ export const CodeSnippetFrame: FC<CodeSnippetFrameProps> = ({
       refocus.focus({ preventScroll: true });
     }
   }, [portalReady, host, isFullscreen]);
+
+  // While fullscreen the host (backdrop + frame) sits on document.body, outside any open
+  // modal drawer/dialog. Registering it as a nested zag dismissable layer makes the parent
+  // treat it as its child: the host gets `pointer-events: auto` despite the parent's
+  // `pointer-events: none` on <body>, a pointerdown here is not "outside" the parent, the
+  // parent ignores Escape (it is no longer the top-most layer), and `--layer-index` lifts the
+  // z-index above the parent. Outside interactions never exit (the backdrop's onClick does).
+  // Focus is trapped in the frame while fullscreen (the backdrop covers everything else).
+  useEffect(() => {
+    if (!isFullscreen || !host) return;
+    // No `onDismiss` on purpose: zag would then exit on Escape in its document capture phase,
+    // before inner handlers (editor autocomplete/search) can claim the key. Escape stays with
+    // the bubble listener below.
+    const options = {
+      onRequestDismiss: event => {
+        // The parent layer closed: leave fullscreen instead of zag calling a missing onDismiss.
+        event.preventDefault();
+        setIsFullscreen(false);
+      },
+    } satisfies Omit<DismissableElementOptions, 'onDismiss'>;
+    const untrack = trackDismissableElement(host, options as DismissableElementOptions);
+    // A modal parent's focus trap would pull Tab back into the parent. Trapping focus in the
+    // frame pauses that trap (zag keeps one trap stack) and resumes it on exit, returning
+    // focus to the element focused on entry (the fullscreen button).
+    const untrap = trapFocus(host);
+    return () => {
+      untrap();
+      untrack();
+    };
+  }, [isFullscreen, host, setIsFullscreen]);
 
   // Escape exits fullscreen unless something inside already handled the key.
   useEffect(() => {

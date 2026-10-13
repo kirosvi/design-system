@@ -66,7 +66,7 @@ describe('CodeSnippetFrame', () => {
     await user.click(screen.getByTestId('toggle'));
     const frame = screen.getByTestId('frame');
     expect(screen.getByTestId('parent')).not.toContainElement(frame);
-    expect(frame).toHaveClass('fixed', 'inset-16', 'z-50');
+    expect(frame).toHaveClass('fixed', 'inset-16');
     expect(screen.getByTestId('counter')).toHaveTextContent('2');
 
     await user.click(screen.getByTestId('counter'));
@@ -86,7 +86,7 @@ describe('CodeSnippetFrame', () => {
     expect(frame).toHaveAttribute('id', 'consumer-id');
     expect(frame).toHaveAttribute('data-analytics-id', 'SNIPPET');
     expect(frame).toHaveAttribute('aria-label', 'Example');
-    expect(frame).toHaveClass('consumer-class', 'fixed', 'inset-16', 'z-50');
+    expect(frame).toHaveClass('consumer-class', 'fixed', 'inset-16');
     expect(frameRef.current).toBe(frame);
   });
 

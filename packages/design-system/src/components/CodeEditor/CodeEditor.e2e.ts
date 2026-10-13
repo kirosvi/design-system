@@ -35,13 +35,23 @@ const COLOURED_STORIES = new Set([
 /** Stories whose editors all show at least one diagnostic underline once linting settles. */
 const DIAGNOSTIC_STORIES = new Set(['Syntax Errors', 'Editing Workflow']);
 
-const everyStory = createStoryHelper(COMPONENT_ID, STORY_NAMES);
+/**
+ * Stories with nothing to screenshot until they are interacted with: the editor sits in a
+ * closed drawer behind a trigger button. Covered by an interaction test instead.
+ */
+const INTERACTION_ONLY_STORIES = new Set(['Fullscreen Inside Drawer']);
+
+const VISUAL_STORY_NAMES = STORY_NAMES.filter(name => !INTERACTION_ONLY_STORIES.has(name));
+
+const everyStory = createStoryHelper(COMPONENT_ID, VISUAL_STORY_NAMES);
 
 const interactionStory = createStoryHelper(COMPONENT_ID, [
   'Editing Workflow',
   'Tabs Keep History',
   'Long Document',
 ] as const);
+
+const drawerStory = createStoryHelper(COMPONENT_ID, ['Fullscreen Inside Drawer'] as const);
 
 const MOD = 'ControlOrMeta';
 
@@ -201,7 +211,7 @@ const editorText = (editor: Locator): Promise<string> =>
 
 test.describe('Component: CodeEditor', () => {
   test.describe('Visual', () => {
-    for (const storyName of STORY_NAMES) {
+    for (const storyName of VISUAL_STORY_NAMES) {
       test(`Should render ${storyName.toLowerCase()} correctly`, async ({ page }) => {
         // Multi-editor stories wait up to 15s per editor for colours / underlines: allow 3x the
         // per-test timeout so the waits cannot add up past it.
@@ -440,6 +450,32 @@ test.describe('Component: CodeEditor', () => {
       await page.keyboard.press('Escape');
       await expect(completions).toHaveCount(0);
       await expect(fullscreenButton).toHaveAccessibleName('Exit full screen');
+    });
+
+    test('Should keep full screen usable inside an open drawer', async ({ page }) => {
+      await drawerStory.goto(page, 'Fullscreen Inside Drawer');
+      await page.getByRole('button', { name: 'Open Drawer' }).click();
+      const drawer = page.getByRole('dialog', { name: 'Rule' });
+      await expect(drawer).toBeVisible();
+      await expect(drawer.getByRole('textbox', { name: 'Rule JSON' })).toBeVisible({
+        timeout: 15_000,
+      });
+
+      // A real pointer click: before the fix the full screen frame had `pointer-events: none`
+      // (inherited from the drawer-blocked body), so the click landed on the drawer instead.
+      await page.getByRole('button', { name: 'Enter full screen' }).click();
+      const exitButton = page.getByRole('button', { name: 'Exit full screen' });
+      await expect(exitButton).toBeVisible();
+      await exitButton.click();
+      await expect(page.getByRole('button', { name: 'Enter full screen' })).toBeVisible();
+      await expect(drawer).toBeVisible();
+
+      // Escape leaves full screen only; the drawer underneath stays open.
+      await page.getByRole('button', { name: 'Enter full screen' }).click();
+      await expect(exitButton).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(page.getByRole('button', { name: 'Enter full screen' })).toBeVisible();
+      await expect(drawer).toBeVisible();
     });
 
     test('Should copy the edited value when the copy button is clicked', async ({ page }) => {
