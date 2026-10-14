@@ -378,7 +378,7 @@ export interface TableProps<T> extends TestableProps {
   onRowReorder?: (event: TableRowReorderEvent) => void;
   /**
    * Per-row drag control for `onRowReorder`. A row for which it returns
-   * `false` shows no grip, cannot be dragged and is not a drop target — the
+   * `false` shows a disabled grip (none on a full-width row), cannot be dragged and is not a drop target — the
    * other rows of its group move around it. Group rows never move regardless.
    *
    * Default: every non-group row can be dragged.

@@ -1706,7 +1706,7 @@ describe('Row reordering inside sub-row groups', () => {
   // Two data columns (Name, Status) behind the drag-handle system column.
   const DATA_COLUMN_COUNT = 2;
 
-  it('locks a row for which getRowCanDrag returns false: no grip, not sortable', () => {
+  it('locks a row for which getRowCanDrag returns false: disabled grip, not sortable', () => {
     render(
       <Table<GroupedRow>
         data={groupedData}
@@ -1722,10 +1722,10 @@ describe('Row reordering inside sub-row groups', () => {
 
     const locked = rowById('a');
     expect(isSortable(locked)).toBe(false);
-    expect(locked.querySelector('svg')).toBeNull();
+    expect(locked.querySelector('svg')).toHaveClass('cursor-not-allowed', 'opacity-50');
     expect(locked.querySelector('.cursor-grab')).toBeNull();
     expect(isSortable(rowById('b'))).toBe(true);
-    expect(rowById('b').querySelector('svg')).not.toBeNull();
+    expect(rowById('b').querySelector('svg')).not.toHaveClass('opacity-50');
   });
 
   it("renders renderGroupRow across the data columns with groupRowSpan 'full'", () => {
@@ -1807,5 +1807,26 @@ describe('Row reordering inside sub-row groups', () => {
     expect(cell).toHaveAttribute('colspan', String(DATA_COLUMN_COUNT));
     expect(rowById('a').querySelectorAll('td')).toHaveLength(2);
     expect(rowById('b').querySelectorAll('td')).toHaveLength(1 + DATA_COLUMN_COUNT);
+  });
+
+  it('shows no grip on a locked full-width row, a disabled one on a locked regular row', () => {
+    render(
+      <Table<GroupedRow>
+        data={groupedData}
+        columns={baseColumns as never}
+        getRowId={row => row.id}
+        getSubRows={row => row.children}
+        renderGroupRow={row => row.original.name}
+        expanded={true}
+        onRowReorder={rs.fn()}
+        renderFullWidthRow={row => (row.original.id === 'a' ? 'Banner' : undefined)}
+        getRowCanDrag={() => false}
+        data-testid='tbl'
+      />,
+    );
+
+    expect(rowById('a').querySelectorAll('td')).toHaveLength(2);
+    expect(rowById('a').querySelector('svg')).toBeNull();
+    expect(rowById('b').querySelector('svg')).toHaveClass('cursor-not-allowed');
   });
 });

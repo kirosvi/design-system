@@ -204,7 +204,7 @@ Enabled by passing `onRowReorder` (auto-injects a drag-handle column). Under `ge
 | Prop | Type | Description |
 |------|------|-------------|
 | `onRowReorder` | `(event: TableRowReorderEvent) => void` | Called with `{ activeRowId, overRowId }` on drop |
-| `getRowCanDrag` | `(row: TableRow<T>) => boolean` | Per-row lock: `false` → no grip, not draggable, not a drop target. Default: every non-group row |
+| `getRowCanDrag` | `(row: TableRow<T>) => boolean` | Per-row lock: `false` → disabled grip (none on a `renderFullWidthRow` banner), not draggable, not a drop target. Default: every non-group row |
 
 ### Row Expanding
 

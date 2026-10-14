@@ -226,11 +226,14 @@ const TableRowInner = <T extends RowData>({
         style={dndStyle}
       >
         {(isFullWidth ? cells.filter(c => SYSTEM_COLUMN_IDS.has(c.column.id)) : cells).map(cell => {
-          const isDragHandle = canDnd && cell.column.id === TABLE_DRAG_HANDLE_COLUMN_ID;
+          const isDragHandleColumn = cell.column.id === TABLE_DRAG_HANDLE_COLUMN_ID;
+          const isDragHandle = canDnd && isDragHandleColumn;
           return (
             <TableBodyCell
               key={cell.id}
               cell={cell}
+              // A locked banner shows no grip — not even the disabled one.
+              empty={isFullWidth && isDragHandleColumn && !canDnd}
               dragListeners={isDragHandle ? listeners : undefined}
               dragAttributes={isDragHandle ? attributes : undefined}
               disablePinnedShadow={isFullWidth}
