@@ -5,7 +5,7 @@ This project follows [Semantic Versioning 2.0.0](https://semver.org/) (SemVer) f
 ## Overview
 
 - **Production releases**: Published from the `main` branch with stable version tags
-- **RC (release candidate) releases**: Published automatically from `feature/*` and `fix/*` branches, tagged per-branch (e.g. `rc-button`)
+- **RC (release candidate) releases**: Published automatically from `feature/*`, `feat/*` and `fix/*` branches, tagged per-branch (e.g. `rc-button`)
 - **Version management**: Fully automated by [semantic-release](https://semantic-release.gitbook.io/) — there is no manual version-bump step and no changelog file to hand-edit. See [RELEASE.md](./RELEASE.md) for the full branch strategy and worked examples.
 
 ## Package Publishing
@@ -96,7 +96,7 @@ Releases are driven entirely by `semantic-release` reading the commit history �
 
 ### Production Releases
 
-1. Develop on a `feature/*` or `fix/*` branch using Conventional Commits
+1. Develop on a `feature/*`, `feat/*` or `fix/*` branch using Conventional Commits
 2. Open a PR to `main` (PR title must also be a valid conventional commit — checked by `pr-title.yml`)
 3. When merged, the `release` job in `.github/workflows/main.yml` runs `semantic-release`, which:
    - Analyzes every commit since the last release
@@ -107,9 +107,9 @@ Releases are driven entirely by `semantic-release` reading the commit history �
 
 ### RC (Release Candidate) Versions
 
-RC versions are published automatically on every push to a `feature/*` or `fix/*` branch — no manual trigger needed:
+RC versions are published automatically on every push to a `feature/*`, `feat/*` or `fix/*` branch — no manual trigger needed:
 
-1. Push to `feature/my-branch` or `fix/my-branch`
+1. Push to `feature/my-branch`, `feat/my-branch` or `fix/my-branch`
 2. CI runs quality checks and builds
 3. `semantic-release` publishes a prerelease version tagged with the branch name, e.g. `1.0.0-rc.my-branch.1`, under the npm dist-tag `rc-my-branch`
 4. Install and test it: `npm install @wallarm-org/design-system@rc-my-branch`

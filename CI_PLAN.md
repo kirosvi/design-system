@@ -142,7 +142,7 @@ Production deployment to GitHub Pages.
 
 ### 9. Release (`release`)
 
-Runs `semantic-release` for `@wallarm-org/design-system` and, conditionally, `@wallarm-org/mcp` — analyzes commits since the last release, publishes to npm with `NPM_TOKEN`, creates a GitHub release, and (on `feature/*`/`fix/*` branches) publishes an RC-tagged prerelease. See [RELEASE.md](./RELEASE.md) for the full branch strategy.
+Runs `semantic-release` for `@wallarm-org/design-system` and, conditionally, `@wallarm-org/mcp` — analyzes commits since the last release, publishes to npm with `NPM_TOKEN`, creates a GitHub release, and (on `feature/*`/`feat/*`/`fix/*` branches) publishes an RC-tagged prerelease. See [RELEASE.md](./RELEASE.md) for the full branch strategy.
 
 ## 🔧 Configuration Files
 

@@ -30,6 +30,8 @@ interface TableBodyCellProps<T extends RowData> {
   dragAttributes?: ReturnType<typeof useSortable>['attributes'];
   /** Orange line indicator for row drag-and-drop placement */
   dropIndicator?: 'above' | 'below';
+  /** Keep the cell (column alignment, borders) but render no content */
+  empty?: boolean;
 }
 
 export const TableBodyCell = <T extends RowData>({
@@ -41,6 +43,7 @@ export const TableBodyCell = <T extends RowData>({
   dragListeners,
   dragAttributes,
   dropIndicator,
+  empty,
 }: TableBodyCellProps<T>) => {
   const { masterColumnId } = useTableContext<T>();
   const testId = useTestId('body-cell');
@@ -134,7 +137,7 @@ export const TableBodyCell = <T extends RowData>({
       {...dragListeners}
       {...dragAttributes}
     >
-      {renderContent()}
+      {!empty && renderContent()}
     </Td>
   );
 };

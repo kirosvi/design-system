@@ -37,6 +37,10 @@ export function defineConfig({
         prerelease: "rc-${name.replace(/[\\/_]/g, '-')}",
       },
       {
+        name: 'feat/*',
+        prerelease: "rc-${name.replace(/[\\/_]/g, '-')}",
+      },
+      {
         name: 'fix/*',
         prerelease: "rc-${name.replace(/[\\/_]/g, '-')}",
       },

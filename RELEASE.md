@@ -17,7 +17,7 @@ graph LR
 
 **Feature-to-Production Flow**:
 
-- `feature/*` and `fix/*` branches automatically create RC versions for testing
+- `feature/*`, `feat/*` and `fix/*` branches automatically create RC versions for testing
 - `main` branch creates production versions after PR merge
 
 ## Automatic Versioning
@@ -229,7 +229,7 @@ npm install modal-rc@npm:@wallarm-org/design-system@rc-modal
 ### Naming Conventions
 
 - Feature branches: `feature/descriptive-name`
-- Fix branches: `fix/descriptive-name` (also produce RC versions, same as `feature/*`)
+- Fix branches: `fix/descriptive-name` (`feat/*` and `fix/*` also produce RC versions, same as `feature/*`)
 - Use lowercase and hyphens
 - Keep names short but descriptive
 - Examples:
@@ -261,7 +261,7 @@ npm install modal-rc@npm:@wallarm-org/design-system@rc-modal
 
 ### RC Version Not Created
 
-- Verify branch name starts with `feature/`
+- Verify branch name starts with `feature/`, `feat/` or `fix/`
 - Check GitHub Actions for errors
 - Ensure NPM_TOKEN is configured
 
