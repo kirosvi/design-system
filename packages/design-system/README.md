@@ -94,7 +94,17 @@ pnpm build
 
 ### Icons from Figma
 
-Icons in `src/icons/` are generated from the [WADS-Iconography](https://www.figma.com/design/ezgUqbCqEBXqC4ViRausYIAN/WADS-Iconography?node-id=5702-845) Figma page — don't edit them by hand. Put a Figma personal access token (scope "File content: read") into the repo-root `.env.local` as `FIGMA_TOKEN=…`, then:
+Icons in `src/icons/` are generated from the [WADS-Iconography](https://www.figma.com/design/ezgUqbCqEBXqC4ViRausYIAN/WADS-Iconography?node-id=5702-845) Figma page — don't edit them by hand.
+
+To get a `FIGMA_TOKEN`:
+
+1. Sign in to Figma with the account that can open WADS-Iconography (your Wallarm account, not a personal one).
+2. Account menu (top left) → **Settings** → **Security** → **Personal access tokens** → **Generate new token**.
+3. Name it (e.g. `wallarm-icons-sync`), pick an expiration, and set the scopes: **File content → Read-only**. Leave every other scope at **No access** — the sync only reads the page and exports SVGs.
+4. Copy the token right away — Figma shows it only once.
+5. Add `FIGMA_TOKEN=figd_…` to the repo-root `.env.local` (git-ignored). Never commit it or paste it into chats or PRs. If it leaks, revoke it on the same Settings page.
+
+Then:
 
 ```bash
 pnpm --filter @wallarm-org/design-system icons:sync --dry-run             # what's new in Figma
