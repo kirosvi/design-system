@@ -15,7 +15,7 @@
 `@wallarm-org/design-system` is released by `semantic-release`, driven entirely by
 Conventional Commits — there is no manual changeset or version-bump step:
 
-- Push to a `feature/*` or `fix/*` branch → an RC version is published automatically,
+- Push to a `feature/*`, `feat/*` or `fix/*` branch → an RC version is published automatically,
   e.g. `1.0.0-rc.my-branch.1` under the npm dist-tag `rc-my-branch`
 - Merge to `main` → the `release` job in `.github/workflows/main.yml` runs
   `semantic-release`, which determines the version bump from commit types and

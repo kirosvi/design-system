@@ -61,7 +61,7 @@ function main(): void {
   if (!hasAnyRc) {
     console.log(chalk.yellow('No RC versions currently available.'));
     console.log(
-      chalk.dim('RC versions are created when you push to feature/* branches.'),
+      chalk.dim('RC versions are created when you push to feature/*, feat/* or fix/* branches.'),
     );
   } else {
     console.log(chalk.dim('─'.repeat(60)));

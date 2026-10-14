@@ -202,7 +202,7 @@ pnpm semantic-release:dry-run  # Preview the next release without publishing
 Versions are determined automatically from Conventional Commits by
 [semantic-release](https://semantic-release.gitbook.io/) — there is no manual
 version-bump or changeset step. See [RELEASE.md](./RELEASE.md) for the full
-branch strategy (RC versions on `feature/*`/`fix/*`, production releases on
+branch strategy (RC versions on `feature/*`/`feat/*`/`fix/*`, production releases on
 `main`).
 
 ## 🐳 Docker
