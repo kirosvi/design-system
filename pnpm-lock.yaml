@@ -431,8 +431,8 @@ importers:
         specifier: 7.29.7
         version: 7.29.7(@babel/core@7.29.7)
       '@figma/code-connect':
-        specifier: 1.5.3
-        version: 1.5.3
+        specifier: 2.0.2
+        version: 2.0.2
       '@internationalized/date':
         specifier: 3.12.4
         version: 3.12.4
@@ -1362,8 +1362,8 @@ packages:
       '@noble/hashes':
         optional: true
 
-  '@figma/code-connect@1.5.3':
-    resolution: {integrity: sha512-rQ3cBKVK0z5n8oNW0ypojcLm0rrmTm1y8W0IUHQdlhyf/STnz7eCsIdCRZ6k5iXRW4D6PF0IHPKK7V+6bTa7RQ==}
+  '@figma/code-connect@2.0.2':
+    resolution: {integrity: sha512-67qTEIb2dmqKE8HQ1tz/TJlveD5gfD/yfT9jgmUj0dAdazl92zHaeMmQ88CJD4qtZHxTMcodMh5MeEeyd7Cv3w==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -4454,8 +4454,8 @@ packages:
   es-toolkit@1.50.0:
     resolution: {integrity: sha512-OyZKhUVvEep9ITEiwHn8GKnMRQIVqoSIX7WnRbkWgJkllCujilqP2rD0u979tkl8wqyc8ICwlc1UBVv/Sl1G6w==}
 
-  esbuild-wasm@0.27.3:
-    resolution: {integrity: sha512-AUXuOxZ145/5Az+lIqk6TdJbxKTyDGkXMJpTExmBdbnHR6n6qAFx+F4oG9ORpVYJ9dQYeQAqzv51TO4DFKsbXw==}
+  esbuild-wasm@0.27.5:
+    resolution: {integrity: sha512-WUn5wiXTHMHAuWmxEpm582wtDb5wFFdW1o5z1pZDSlOtvSOcOFIX82WZIfwKyqXUBy7lpzBU06vik65PwDAgGQ==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -7190,8 +7190,8 @@ packages:
     peerDependencies:
       zod: ^3.24.4
 
-  zod@3.25.58:
-    resolution: {integrity: sha512-DVLmMQzSZwNYzQoMaM3MQWnxr2eq+AtM9Hx3w1/Yl0pH8sLTSjN4jGP7w6f7uand6Hw44tsnSu1hz1AOA6qI2Q==}
+  zod@3.25.76:
+    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
   zod@4.6.5:
     resolution: {integrity: sha512-v5l/aFXZQeai4awLbOpSoHecE9UiMrnfx75tEXLjNonXVARxQ5mOeipTjROUchszUNCqnE+hqAMujRsRHsut2Q==}
@@ -8088,7 +8088,7 @@ snapshots:
 
   '@exodus/bytes@1.15.1': {}
 
-  '@figma/code-connect@1.5.3':
+  '@figma/code-connect@2.0.2':
     dependencies:
       boxen: 5.1.1
       chalk: 4.1.2
@@ -8096,7 +8096,7 @@ snapshots:
       compare-versions: 6.1.1
       cross-spawn: 7.0.6
       dotenv: 16.6.1
-      esbuild-wasm: 0.27.3
+      esbuild-wasm: 0.27.5
       fast-fuzzy: 1.12.0
       find-up: 5.0.0
       glob: 11.1.0
@@ -8111,8 +8111,8 @@ snapshots:
       ts-morph: 27.0.2
       typescript: 6.0.3
       undici: 7.29.0
-      zod: 3.25.58
-      zod-validation-error: 3.5.4(zod@3.25.58)
+      zod: 3.25.76
+      zod-validation-error: 3.5.4(zod@3.25.76)
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -11431,7 +11431,7 @@ snapshots:
 
   es-toolkit@1.50.0: {}
 
-  esbuild-wasm@0.27.3: {}
+  esbuild-wasm@0.27.5: {}
 
   esbuild@0.28.1:
     optionalDependencies:
@@ -14440,11 +14440,11 @@ snapshots:
     dependencies:
       zod: 4.6.5
 
-  zod-validation-error@3.5.4(zod@3.25.58):
+  zod-validation-error@3.5.4(zod@3.25.76):
     dependencies:
-      zod: 3.25.58
+      zod: 3.25.76
 
-  zod@3.25.58: {}
+  zod@3.25.76: {}
 
   zod@4.6.5: {}
 

@@ -3,8 +3,8 @@
   "extends": "@wallarm-org/typescript-config/react-library.json",
   "compilerOptions": {
     "noEmit": true,
-    "types": ["node"]
+    "types": ["@figma/code-connect/figma-types"]
   },
-  "include": ["src/**/*.figma.tsx"],
+  "include": ["src/**/*.figma.ts"],
   "exclude": ["node_modules", "dist", "storybook-static"]
 }

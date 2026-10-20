@@ -92,12 +92,14 @@
     "e2e:docker:ui": "playwright test --config=playwright.config.docker.ts --ui",
     "e2e:docker:failed": "playwright test --config=playwright.config.docker.ts --last-failed",
     "e2e:docker:report": "playwright show-report ./playwright-report --port=9323",
-    "icons:sync": "tsx scripts/icons/sync.ts"
+    "icons:sync": "tsx scripts/icons/sync.ts",
+    "code-connect:preview": "node --env-file-if-exists=../../.env.local node_modules/@figma/code-connect/bin/figma connect preview",
+    "code-connect:publish": "node --env-file-if-exists=../../.env.local node_modules/@figma/code-connect/bin/figma connect publish --exit-on-unreadable-files"
   },
   "devDependencies": {
     "@babel/core": "7.29.7",
     "@babel/preset-typescript": "7.29.7",
-    "@figma/code-connect": "1.5.3",
+    "@figma/code-connect": "2.0.2",
     "@internationalized/date": "3.12.4",
     "@lezer/generator": "1.8.1",
     "@rsbuild/core": "catalog:",

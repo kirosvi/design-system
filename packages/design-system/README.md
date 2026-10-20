@@ -96,13 +96,13 @@ pnpm build
 
 Icons in `src/icons/` are generated from the [WADS-Iconography](https://www.figma.com/design/ezgUqbCqEBXqC4ViRausYIAN/WADS-Iconography?node-id=5702-845) Figma page — don't edit them by hand.
 
-To get a `FIGMA_TOKEN`:
+To get a `FIGMA_ACCESS_TOKEN`:
 
 1. Sign in to Figma with the account that can open WADS-Iconography (your Wallarm account, not a personal one).
 2. Account menu (top left) → **Settings** → **Security** → **Personal access tokens** → **Generate new token**.
 3. Name it (e.g. `wallarm-icons-sync`), pick an expiration, and set the scopes: **File content → Read-only**. Leave every other scope at **No access** — the sync only reads the page and exports SVGs.
 4. Copy the token right away — Figma shows it only once.
-5. Add `FIGMA_TOKEN=figd_…` to the repo-root `.env.local` (git-ignored). Never commit it or paste it into chats or PRs. If it leaks, revoke it on the same Settings page.
+5. Add `FIGMA_ACCESS_TOKEN=figd_…` to the repo-root `.env.local` (git-ignored). Never commit it or paste it into chats or PRs. If it leaks, revoke it on the same Settings page.
 
 Then:
 
@@ -112,7 +112,7 @@ pnpm --filter @wallarm-org/design-system icons:sync --category 'Edit & Text'  # 
 pnpm --filter @wallarm-org/design-system icons:sync --only Bell,BellOff    # refresh just these
 ```
 
-The command writes the component files, `src/icons/index.ts`, the gallery category (`module/const.ts`) and Code Connect (`module/Icons.figma.tsx`). `scripts/icons/manifest.json` maps Figma nodes to component names, and also holds excluded nodes and the `keep` list of hand-maintained icons. When a new layer's name collides with an existing icon, map it there. Brand icons without a Neutral variant in Figma get a generated `*Neutral` twin. Commit with `[update-screenshots]` so CI refreshes the icon gallery baselines.
+The command writes the component files, `src/icons/index.ts`, the gallery category (`module/const.ts`) and Code Connect (`module/Icons.figma.batch.json` + its `Icons.figma.batch.ts` template). `scripts/icons/manifest.json` maps Figma nodes to component names, and also holds excluded nodes and the `keep` list of hand-maintained icons. When a new layer's name collides with an existing icon, map it there. Brand icons without a Neutral variant in Figma get a generated `*Neutral` twin. Commit with `[update-screenshots]` so CI refreshes the icon gallery baselines.
 
 - [Storybook](https://wallarm.github.io/design-system/) - Interactive examples
 - [NPM](https://www.npmjs.com/package/@wallarm-org/design-system) - NPM package
