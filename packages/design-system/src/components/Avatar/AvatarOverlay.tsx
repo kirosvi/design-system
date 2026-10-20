@@ -2,7 +2,8 @@ import type { FC, HTMLAttributes, Ref } from 'react';
 import { RefreshCcw } from '../../icons';
 import { cn } from '../../utils/cn';
 import { useTestId } from '../../utils/testId';
-import { avatarOverlayClassNames } from './classes';
+import { useAvatarSize } from './AvatarContext';
+import { avatarOverlayClassNames, avatarPlateVariants } from './classes';
 
 export interface AvatarOverlayProps extends HTMLAttributes<HTMLSpanElement> {
   ref?: Ref<HTMLSpanElement>;
@@ -22,6 +23,7 @@ export const AvatarOverlay: FC<AvatarOverlayProps> = ({
   ...props
 }) => {
   const testId = useTestId('overlay');
+  const size = useAvatarSize();
 
   return (
     <span
@@ -31,7 +33,7 @@ export const AvatarOverlay: FC<AvatarOverlayProps> = ({
       data-slot='avatar-overlay'
       data-visible={visible ? '' : undefined}
       data-testid={testId}
-      className={cn(avatarOverlayClassNames, className)}
+      className={cn(avatarPlateVariants({ size }), avatarOverlayClassNames, className)}
     >
       {children ?? <RefreshCcw size='md' />}
     </span>

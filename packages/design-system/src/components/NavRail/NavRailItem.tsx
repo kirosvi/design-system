@@ -72,7 +72,7 @@ export const NavRailItem: FC<NavRailItemProps> = ({
       <span className='flex shrink-0 items-center justify-center'>
         {hasPlate ? (
           // The plate overhangs the 16px icon slot by 4px on every side, so labels stay aligned.
-          <Avatar size='xs' data-slot='nav-rail-item-avatar' className='-m-4'>
+          <Avatar size='md' data-slot='nav-rail-item-avatar' className='-m-4'>
             <AvatarImage src={avatarSrc} />
             <AvatarFallback icon={Icon} />
           </Avatar>

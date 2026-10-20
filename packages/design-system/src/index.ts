@@ -94,10 +94,16 @@ export {
 } from './components/Attribute';
 export {
   Avatar,
+  AvatarContent,
+  type AvatarContentProps,
+  AvatarDescription,
+  type AvatarDescriptionProps,
   AvatarFallback,
   type AvatarFallbackProps,
   AvatarImage,
   type AvatarImageProps,
+  AvatarName,
+  type AvatarNameProps,
   AvatarOverlay,
   type AvatarOverlayProps,
   type AvatarProps,

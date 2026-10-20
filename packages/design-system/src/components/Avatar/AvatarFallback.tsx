@@ -4,17 +4,18 @@ import { type SvgIconProps, UserRound } from '../../icons';
 import { cn } from '../../utils/cn';
 import { getInitials } from '../../utils/getInitials';
 import { useTestId } from '../../utils/testId';
-import { avatarFallbackClassNames } from './classes';
+import { useAvatarSize } from './AvatarContext';
+import { avatarFallbackVariants, avatarPlateVariants } from './classes';
 
 export interface AvatarFallbackProps extends HTMLAttributes<HTMLSpanElement> {
   ref?: Ref<HTMLSpanElement>;
-  /** Initials are taken from this: first letter of the first and of the last word. */
+  /** Initials are taken from this: first letter of the first and of the last word (first word only at `sm`). */
   name?: string;
   /** Shown when there are no children and `name` gives no initials. */
   icon?: ComponentType<SvgIconProps>;
 }
 
-/** Shown while the photo loads, when it fails, and when there is none. */
+/** The plate: shown while the photo loads, when it fails, and when there is none. */
 export const AvatarFallback: FC<AvatarFallbackProps> = ({
   ref,
   name,
@@ -24,7 +25,13 @@ export const AvatarFallback: FC<AvatarFallbackProps> = ({
   ...props
 }) => {
   const testId = useTestId('fallback');
-  const initials = name ? getInitials(name) : '';
+  const size = useAvatarSize();
+  // A 20px plate fits one letter only (Figma 12336:5504): the first word's initial.
+  const initials = !name
+    ? ''
+    : size === 'sm'
+      ? (name.trim().split(/\s+/).map(getInitials).find(Boolean) ?? '')
+      : getInitials(name);
   const showsInitials = children == null && initials !== '';
 
   return (
@@ -36,8 +43,13 @@ export const AvatarFallback: FC<AvatarFallbackProps> = ({
       ref={ref}
       data-slot='avatar-fallback'
       data-testid={testId}
-      // Initials are text (spec §6), not an icon — they stay text-primary even in the Branded frame.
-      className={cn(avatarFallbackClassNames, showsInitials && 'text-text-primary', className)}
+      // The fallback is the plate (tint + stroke). Initials are text (text-primary), the icon is an
+      // icon (icon-primary); in the Branded frame both take the brand colour (Figma 12336:5504).
+      className={cn(
+        avatarPlateVariants({ size }),
+        avatarFallbackVariants({ initials: showsInitials }),
+        className,
+      )}
     >
       {children ?? (initials || <Icon size='md' />)}
     </ArkAvatar.Fallback>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@rstest/core';
 import { render, screen } from '@testing-library/react';
-import { Avatar, AvatarFallback, AvatarImage } from '.';
+import { Avatar, AvatarContent, AvatarFallback, AvatarImage, AvatarName } from '.';
 
 describe('Avatar — accessibility', () => {
   it('is decorative by default: empty alt, hidden fallback, no role', () => {
@@ -27,6 +27,19 @@ describe('Avatar — accessibility', () => {
     );
   });
 
+  it('does not become an image when it shows a name (user item)', () => {
+    render(
+      <Avatar data-testid='av' aria-label='Artem Miskevich'>
+        <AvatarFallback name='Artem Miskevich' />
+        <AvatarContent>
+          <AvatarName>Artem Miskevich</AvatarName>
+        </AvatarContent>
+      </Avatar>,
+    );
+    expect(screen.getByTestId('av')).not.toHaveAttribute('role');
+    expect(screen.queryByRole('img')).toBeNull();
+  });
+
   it('does not force role=img on an asChild root', () => {
     render(
       <Avatar asChild aria-label='Change avatar'>
@@ -46,6 +59,22 @@ describe('Avatar — accessibility', () => {
       </Avatar>,
     );
     expect(screen.getByTestId('av--fallback')).toHaveAttribute('aria-hidden', 'false');
+  });
+
+  it('in a user item the visible name is the text; the plate stays decorative', () => {
+    render(
+      <Avatar data-testid='av'>
+        <AvatarImage src='/me.png' />
+        <AvatarFallback name='Ada Lovelace' />
+        <AvatarContent>
+          <AvatarName>Ada Lovelace</AvatarName>
+        </AvatarContent>
+      </Avatar>,
+    );
+    expect(screen.getByTestId('av')).not.toHaveAttribute('role');
+    expect(screen.getByTestId('av--fallback')).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByTestId('av--name')).not.toHaveAttribute('aria-hidden');
+    expect(screen.getByText('Ada Lovelace')).toBeVisible();
   });
 
   it('keeps a consumer alt', () => {
