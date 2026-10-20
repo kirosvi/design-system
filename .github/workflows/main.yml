@@ -739,3 +739,70 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  # Runs alongside `release`, only on main and only when semantic-release will
+  # cut a stable version (RC branches would overwrite the shared Figma mappings)
+  publish-code-connect:
+    name: Publish Code Connect
+    runs-on: ubuntu-latest
+    needs: [setup, build, e2e]
+    if: |
+      always() &&
+      github.ref == 'refs/heads/main' &&
+      needs.build.result == 'success' &&
+      (needs.e2e.result == 'success' || needs.e2e.result == 'skipped') &&
+      needs.setup.outputs.should-update-screenshots != 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for a releasable commit
+        id: check
+        run: |
+          # Mirrors releaseRules in packages/configs/publishing/releaserc.mjs
+          LAST_TAG=$(git describe --tags --abbrev=0 --match 'v*' --exclude '*-*' 2>/dev/null || true)
+          RANGE=${LAST_TAG:+$LAST_TAG..}HEAD
+          if git log "$RANGE" --format='%s%n%b' \
+            | grep -qE '^(feat|fix|perf|revert)(\(.+\))?!?:|^[a-z]+(\(.+\))?!:|^BREAKING CHANGES?:'; then
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No releasable commits since ${LAST_TAG:-the first commit}, skipping"
+          fi
+
+      - name: Setup pnpm
+        if: steps.check.outputs.release == 'true'
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        if: steps.check.outputs.release == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Cache node_modules
+        if: steps.check.outputs.release == 'true'
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+            packages/configs/*/node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
+
+      - name: Install dependencies
+        if: steps.check.outputs.release == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Publish Code Connect
+        if: steps.check.outputs.release == 'true'
+        working-directory: packages/design-system
+        run: pnpm code-connect:publish --skip-update-check
+        env:
+          FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }}

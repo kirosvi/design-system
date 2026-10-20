@@ -146,6 +146,10 @@ Runs `semantic-release` for `@wallarm-org/design-system` and, conditionally, `@w
 
 ## 🔧 Configuration Files
 
+### 10. Publish Code Connect (`publish-code-connect`)
+
+Runs in parallel with `release` (same `needs` and gate), on `main` only. It first checks for a releasable commit since the last stable `v*` tag using the same rules as `releaseRules` in `packages/configs/publishing/releaserc.mjs` (`feat`/`fix`/`perf`/`revert`/breaking) and does nothing otherwise. When a release is due, it runs `pnpm code-connect:publish` in `packages/design-system` to push the `*.figma.ts` / `*.figma.batch.json` templates to Figma Dev Mode. RC branches never publish, because there is a single set of Figma mappings per label and an RC branch would overwrite it.
+
 ### Main Workflow (`.github/workflows/main.yml`)
 
 ```yaml
@@ -229,6 +233,7 @@ FROM node:24-alpine AS base
 Required GitHub Secrets:
 
 - `GITHUB_TOKEN`: Auto-provided by GitHub Actions
+- `FIGMA_ACCESS_TOKEN`: Figma personal access token (scopes: File content read, Code Connect write) used by `publish-code-connect`
 - `NPM_TOKEN`: Required by the `release` job to publish `@wallarm-org/design-system` and `@wallarm-org/mcp` to npm
 - `DEPLOY_KEY`: Private half of a write deploy key. `main` is guarded by a repository ruleset (restrict updates, deletion, force push) that only repo admins and deploy keys bypass — `GITHUB_TOKEN` cannot bypass it — so the `release` job (semantic-release, over SSH via `repositoryUrl` in `packages/configs/publishing/releaserc.mjs`) and `commit-screenshots` (on `main` only) push with this key
 

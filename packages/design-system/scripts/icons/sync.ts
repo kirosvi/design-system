@@ -5,8 +5,9 @@
  *   pnpm icons:sync --dry-run                # only report what Figma has that the repo doesn't
  *   pnpm icons:sync --only Bell,BellOff      # limit to these components
  *   pnpm icons:sync --category 'Edit & Text' # gallery category for icons added in this run
+ *   pnpm icons:sync --code-connect          # only rewrite the Code Connect batch (no SVG fetch)
  *
- * Needs FIGMA_TOKEN (personal access token with read access to the file) in the
+ * Needs FIGMA_ACCESS_TOKEN (personal access token with read access to the file) in the
  * environment or in the repo-root `.env.local`. `manifest.json` is the registry:
  * Figma node id → component name, plus excluded nodes and hand-kept icons.
  */
@@ -37,6 +38,8 @@ interface Component {
   id: string;
   layer: string;
   group: string;
+  /** Parent COMPONENT_SET id — Code Connect can only target the set, not its variants. */
+  set?: string;
 }
 
 interface Target {
@@ -53,11 +56,13 @@ const iconsDir = path.join(pkgRoot, 'src/icons');
 const manifestPath = path.join(here, 'manifest.json');
 const indexPath = path.join(iconsDir, 'index.ts');
 const categoriesPath = path.join(iconsDir, 'module/const.ts');
-const codeConnectPath = path.join(iconsDir, 'module/Icons.figma.tsx');
+const codeConnectPath = path.join(iconsDir, 'module/Icons.figma.batch.json');
+const codeConnectTemplatePath = path.join(iconsDir, 'module/Icons.figma.batch.ts');
 
 const { values: opts } = parseArgs({
   options: {
     'dry-run': { type: 'boolean', default: false },
+    'code-connect': { type: 'boolean', default: false },
     only: { type: 'string' },
     category: { type: 'string' },
     help: { type: 'boolean', short: 'h', default: false },
@@ -74,15 +79,15 @@ if (opts.help) {
 try {
   process.loadEnvFile(path.join(repoRoot, '.env.local'));
 } catch {
-  // optional — FIGMA_TOKEN may come from the shell
+  // optional — FIGMA_ACCESS_TOKEN may come from the shell
 }
-const token = process.env.FIGMA_TOKEN;
+const token = process.env.FIGMA_ACCESS_TOKEN;
 if (!token) {
   console.error(
-    'FIGMA_TOKEN is not set. Create one at Figma → Settings → Security → Personal access tokens',
+    'FIGMA_ACCESS_TOKEN is not set. Create one at Figma → Settings → Security → Personal access tokens',
   );
   console.error(
-    '(scope "File content: read") and put FIGMA_TOKEN=… into the repo-root .env.local.',
+    '(scope "File content: read") and put FIGMA_ACCESS_TOKEN=… into the repo-root .env.local.',
   );
   process.exit(1);
 }
@@ -132,11 +137,15 @@ const listComponents = async (): Promise<Component[]> => {
   if (!page) throw new Error(`Page ${manifest.pageId} not found in ${manifest.fileKey}`);
 
   const out: Component[] = [];
-  const visit = (node: FigmaNode, group: string) => {
-    if (node.type === 'COMPONENT') out.push({ id: node.id, layer: node.name, group });
+  const visit = (node: FigmaNode, group: string, set?: string) => {
+    if (node.type === 'COMPONENT') out.push({ id: node.id, layer: node.name, group, set });
     else
       for (const child of node.children ?? [])
-        visit(child, node.type === 'CANVAS' ? '' : node.name);
+        visit(
+          child,
+          node.type === 'CANVAS' ? '' : node.name,
+          node.type === 'COMPONENT_SET' ? node.id : undefined,
+        );
   };
   visit(page, '');
   return out;
@@ -274,32 +283,65 @@ const addToCategory = (category: string, names: string[]) => {
   writeFileSync(categoriesPath, source.slice(0, bodyStart) + body + source.slice(bodyEnd));
 };
 
-/** Every Figma-sourced icon is Code-Connected to its node; regenerated whole so it can't drift. */
-const writeCodeConnect = () => {
-  const entries = Object.entries(manifest.icons)
+/**
+ * Every Figma-sourced icon is Code-Connected; regenerated whole so it can't drift. Variants of a
+ * component set (brand marks) can't be connected one by one, so each set gets a single entry whose
+ * `variants` map (variant layer name → icon) the template resolves against the selected instance.
+ */
+const writeCodeConnect = (figmaComponents: Component[]) => {
+  const byId = new Map(figmaComponents.map(c => [c.id, c]));
+  const url = (id: string) =>
+    `https://www.figma.com/design/${manifest.fileKey}/ICONS?node-id=${id.replace(':', '-')}`;
+  const plain: Record<string, string>[] = [];
+  const sets = new Map<string, { group: string; variants: Record<string, string> }>();
+  for (const [id, name] of Object.entries(manifest.icons)
     .filter(([, name]) => existsSync(path.join(iconsDir, `${name}.tsx`)))
-    .sort(([, a], [, b]) => a.localeCompare(b));
-  const names = entries.map(([, name]) => name);
-  const connects = entries.map(
-    ([id, name]) => `figma.connect(
-  ${name},
-  'https://www.figma.com/design/${manifest.fileKey}/ICONS?node-id=${id.replace(':', '-')}',
-  {
-    example: () => <${name} />,
-  },
-);
-`,
-  );
+    .sort(([, a], [, b]) => a.localeCompare(b))) {
+    const c = byId.get(id);
+    if (!c?.set) {
+      plain.push({ url: url(id), component: name, id: name, componentName: name });
+      continue;
+    }
+    const entry = sets.get(c.set) ?? { group: c.group, variants: {} };
+    entry.variants[c.layer] = name;
+    sets.set(c.set, entry);
+  }
+  const components = [
+    ...plain,
+    ...[...sets].map(([setId, { group, variants }]) => ({
+      url: url(setId),
+      component: group,
+      id: `icons-${group}`,
+      variants,
+    })),
+  ];
   writeFileSync(
     codeConnectPath,
-    `// Generated by \`pnpm icons:sync\` — do not edit by hand.
-import React from 'react';
-import figma from '@figma/code-connect';
-import {
-${names.map(n => `${shadowIgnore(n, '  ')}  ${n},`).join('\n')}
-} from '../index';
+    `${JSON.stringify({ templateFile: `./${path.basename(codeConnectTemplatePath)}`, components }, null, 2)}\n`,
+  );
+  writeFileSync(
+    codeConnectTemplatePath,
+    `// Generated by \`pnpm icons:sync\` — do not edit by hand. Rendered once per entry of Icons.figma.batch.json.
+import figma from 'figma';
 
-${connects.join('\n')}`,
+const instance = figma.selectedInstance;
+const variants: Record<string, string> | undefined = figma.batch.variants;
+const name: string | undefined = variants
+  ? Object.entries(variants).find(([layer]) =>
+      layer.split(', ').every(pair => {
+        const [prop, value] = pair.split('=');
+        return instance.getPropertyValue(prop) === value;
+      }),
+    )?.[1]
+  : figma.batch.componentName;
+
+export default {
+  id: figma.batch.id,
+  imports: name ? [\`import { \${name} } from '@wallarm-org/design-system/icons';\`] : [],
+  example: name ? figma.code\`<\${name} />\` : figma.code\`{/* No icon component for this variant */}\`,
+  metadata: { nestable: true },
+};
+`,
   );
 };
 
@@ -319,6 +361,15 @@ const main = async () => {
       (newTargets.length ? `, new: ${newTargets.map(t => t.name).join(', ')}` : ', nothing new'),
   );
   if (opts['dry-run']) return;
+  if (opts['code-connect']) {
+    writeCodeConnect(components);
+    execFileSync(
+      'pnpm',
+      ['exec', 'biome', 'check', '--write', codeConnectPath, codeConnectTemplatePath],
+      { cwd: repoRoot, stdio: 'inherit' },
+    );
+    return;
+  }
 
   const only = opts.only?.split(',').map(s => s.trim());
   const selected = targets.filter(
@@ -352,9 +403,16 @@ const main = async () => {
   const added = newTargets.map(t => t.name);
   addExports(added);
   if (added.length && opts.category) addToCategory(opts.category, added);
-  writeCodeConnect();
+  writeCodeConnect(components);
 
-  const touched = [...written, indexPath, categoriesPath, codeConnectPath, manifestPath];
+  const touched = [
+    ...written,
+    indexPath,
+    categoriesPath,
+    codeConnectPath,
+    codeConnectTemplatePath,
+    manifestPath,
+  ];
   execFileSync('pnpm', ['exec', 'biome', 'check', '--write', ...touched], {
     cwd: repoRoot,
     stdio: 'inherit',

@@ -191,6 +191,7 @@ For complex domain-specific tasks, use specialized agents through routing in [AG
 7. **commit-screenshots** - Commits updated screenshots back to the branch
 8. **deploy-storybook** - Deploys the Storybook static artifact to GitHub Pages
 9. **release** - Runs `semantic-release` to publish `@wallarm-org/design-system`/`@wallarm-org/mcp` to npm (see [VERSIONING.md](./VERSIONING.md))
+10. **publish-code-connect** - In parallel with `release`, on `main` only when a stable release is due: publishes Figma Code Connect templates (`pnpm code-connect:publish`, needs `FIGMA_ACCESS_TOKEN`)
 
 Full detail: [CI_PLAN.md](./CI_PLAN.md).
 
