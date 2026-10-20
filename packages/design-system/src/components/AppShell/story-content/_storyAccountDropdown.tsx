@@ -1,6 +1,14 @@
 import { Fragment } from 'react';
-import { LogOut, PanelLeftDashed, PencilRuler, Settings, User, UserRound } from '../../../icons';
+import { LogOut, PanelLeftDashed, PencilRuler, Settings, UserRound } from '../../../icons';
 import { cn } from '../../../utils/cn';
+import {
+  Avatar,
+  AvatarContent,
+  AvatarDescription,
+  AvatarFallback,
+  AvatarImage,
+  AvatarName,
+} from '../../Avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,7 +23,6 @@ import {
   DropdownMenuTriggerItem,
 } from '../../DropdownMenu';
 import { NavRailItem, type NavRailMode } from '../../NavRail';
-import { HStack, VStack } from '../../Stack';
 import { Text } from '../../Text';
 import { type FrameStyle, type Theme, useTheme } from '../../ThemeProvider';
 
@@ -80,19 +87,14 @@ export const AccountDropdown = ({
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-256'>
         <div className='rounded-6 border border-border-primary-light bg-states-primary-hover px-8 py-8 mb-4'>
-          <HStack gap={8} align='start'>
-            <div>
-              <User />
-            </div>
-            <VStack gap={0}>
-              <Text size='sm' color='primary'>
-                {USER_NAME}
-              </Text>
-              <Text size='xs' color='secondary'>
-                {USER_EMAIL}
-              </Text>
-            </VStack>
-          </HStack>
+          <Avatar size='md'>
+            <AvatarImage />
+            <AvatarFallback name={USER_NAME} />
+            <AvatarContent>
+              <AvatarName>{USER_NAME}</AvatarName>
+              <AvatarDescription>{USER_EMAIL}</AvatarDescription>
+            </AvatarContent>
+          </Avatar>
         </div>
         <DropdownMenuItem>
           <DropdownMenuItemIcon>
