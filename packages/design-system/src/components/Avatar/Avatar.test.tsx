@@ -4,7 +4,15 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { SvgIconProps } from '../../icons';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../Tooltip';
-import { Avatar, AvatarFallback, AvatarImage, AvatarOverlay } from '.';
+import {
+  Avatar,
+  AvatarContent,
+  AvatarDescription,
+  AvatarFallback,
+  AvatarImage,
+  AvatarName,
+  AvatarOverlay,
+} from '.';
 
 const renderAvatar = (props: { src?: string; name?: string; onStatusChange?: () => void } = {}) =>
   render(
@@ -15,21 +23,34 @@ const renderAvatar = (props: { src?: string; name?: string; onStatusChange?: () 
   );
 
 describe('Avatar', () => {
-  it('renders a span root with the default size', () => {
+  it('renders a span root with the default (lg) size on the plate layers', () => {
     renderAvatar();
     const root = screen.getByTestId('av');
     expect(root.tagName).toBe('SPAN');
     expect(root).toHaveAttribute('data-slot', 'avatar');
-    expect(root).toHaveClass('size-32', 'rounded-12');
+    expect(root).toHaveClass('rounded-12');
+    expect(root).not.toHaveClass('size-32');
+    expect(screen.getByTestId('av--image')).toHaveClass('size-32', 'rounded-12');
+    expect(screen.getByTestId('av--fallback')).toHaveClass('size-32', 'rounded-12', 'text-xs');
   });
 
-  it('applies the xs size', () => {
+  it.each([
+    ['sm', 'size-20', 'rounded-8'],
+    ['md', 'size-24', 'rounded-8'],
+    ['lg', 'size-32', 'rounded-12'],
+  ] as const)('applies the %s size to every plate layer', (size, box, radius) => {
     render(
-      <Avatar data-testid='av' size='xs'>
+      <Avatar data-testid='av' size={size}>
+        <AvatarImage />
         <AvatarFallback />
+        <AvatarOverlay />
       </Avatar>,
     );
-    expect(screen.getByTestId('av')).toHaveClass('size-24', 'rounded-8');
+    expect(screen.getByTestId('av')).toHaveClass(radius);
+    for (const part of ['image', 'fallback', 'overlay']) {
+      expect(screen.getByTestId(`av--${part}`)).toHaveClass(box, radius);
+    }
+    expect(screen.getByTestId('av--fallback')).toHaveClass('text-xs');
   });
 
   it('shows the fallback while loading and the photo once loaded', async () => {
@@ -58,12 +79,18 @@ describe('Avatar', () => {
     expect(img).toHaveAttribute('data-state', 'hidden');
   });
 
-  it('drops the stroke once a photo is visible (class contract; jsdom has no CSS)', () => {
+  it('draws the stroke and tint on the fallback plate, never on the root or the photo', async () => {
     renderAvatar({ src: '/me.png' });
-    expect(screen.getByTestId('av')).toHaveClass(
-      'border',
-      'has-[>img[data-state=visible]]:border-0',
-    );
+    const root = screen.getByTestId('av');
+    const img = screen.getByTestId('av--image');
+    const fallback = screen.getByTestId('av--fallback');
+    expect(root).not.toHaveClass('border');
+    expect(img).not.toHaveClass('border');
+    expect(fallback).toHaveClass('border', 'border-border-primary', 'bg-states-primary-hover');
+    // Once the photo is visible Ark hides the fallback, and the stroke goes with it.
+    fireEvent.load(img);
+    await waitFor(() => expect(fallback).toHaveAttribute('data-state', 'hidden'));
+    expect(fallback).toHaveClass('data-[state=hidden]:hidden');
   });
 
   it('always renders the image element, even without src', () => {
@@ -93,7 +120,36 @@ describe('Avatar', () => {
     );
   });
 
+  it('clamps the root to its container only for a user item', () => {
+    const { rerender } = render(
+      <Avatar data-testid='av'>
+        <AvatarFallback />
+      </Avatar>,
+    );
+    expect(screen.getByTestId('av')).toHaveClass('has-[>[data-slot=avatar-content]]:max-w-full');
+    expect(screen.getByTestId('av')).not.toHaveClass('max-w-full');
+    rerender(
+      <Avatar data-testid='av'>
+        <AvatarImage />
+      </Avatar>,
+    );
+    expect(screen.getByTestId('av--image')).toHaveClass('bg-states-primary-hover');
+  });
+
   describe('fallback content', () => {
+    it.each([
+      ['sm', 'A'],
+      ['md', 'AM'],
+      ['lg', 'AM'],
+    ] as const)('shows %s initials as %s', (size, initials) => {
+      render(
+        <Avatar data-testid='av' size={size}>
+          <AvatarFallback name='Artem Miskevich' />
+        </Avatar>,
+      );
+      expect(screen.getByTestId('av--fallback').textContent).toBe(initials);
+    });
+
     it('prefers children', () => {
       render(
         <Avatar data-testid='av'>
@@ -135,13 +191,31 @@ describe('Avatar', () => {
       );
     });
 
-    it('colours initials as text, not as an icon', () => {
+    it('colours initials as text, branded in a Branded frame', () => {
       render(
         <Avatar data-testid='av'>
           <AvatarFallback name='Ada Lovelace' />
         </Avatar>,
       );
-      expect(screen.getByTestId('av--fallback')).toHaveClass('text-text-primary');
+      const fallback = screen.getByTestId('av--fallback');
+      expect(fallback).toHaveClass('text-text-primary', 'branded:text-text-brand');
+      expect(fallback).not.toHaveClass('text-icon-primary');
+    });
+
+    it('colours the icon as an icon, branded in a Branded frame', () => {
+      render(
+        <Avatar data-testid='av'>
+          <AvatarFallback />
+        </Avatar>,
+      );
+      const fallback = screen.getByTestId('av--fallback');
+      expect(fallback).toHaveClass(
+        'text-icon-primary',
+        'branded:text-icon-brand',
+        'branded:bg-states-brand-hover',
+        'branded:border-border-brand',
+      );
+      expect(fallback).not.toHaveClass('text-text-primary');
     });
   });
 
@@ -172,6 +246,122 @@ describe('Avatar', () => {
     expect(ref.current).toBe(root);
     expect(root).toHaveClass('-m-4');
     expect(root).toHaveAttribute('title', 'Ada');
+  });
+});
+
+describe('AvatarContent', () => {
+  const renderItem = (size?: 'sm' | 'md' | 'lg') =>
+    render(
+      <Avatar data-testid='av' size={size}>
+        <AvatarImage />
+        <AvatarFallback name='Artem Miskevich' />
+        <AvatarContent>
+          <AvatarName>Artem Miskevich</AvatarName>
+          <AvatarDescription>admin@wallarm.com</AvatarDescription>
+        </AvatarContent>
+      </Avatar>,
+    );
+
+  it('puts the plate in column 1 and the text in column 2 of the root row', () => {
+    renderItem('sm');
+    expect(screen.getByTestId('av')).toHaveClass('inline-grid', 'items-center', 'gap-x-6');
+    for (const part of ['image', 'fallback']) {
+      expect(screen.getByTestId(`av--${part}`)).toHaveClass('col-start-1', 'row-start-1');
+    }
+    expect(screen.getByTestId('av--content')).toHaveClass(
+      'col-start-2',
+      'row-start-1',
+      'flex-col',
+      'min-w-0',
+    );
+  });
+
+  it.each(['sm', 'md', 'lg'] as const)('styles name and description at %s', size => {
+    renderItem(size);
+    const name = screen.getByTestId('av--name');
+    const description = screen.getByTestId('av--description');
+    expect(name).toHaveTextContent('Artem Miskevich');
+    expect(name).toHaveClass('text-sm', 'text-text-primary', 'font-normal', 'truncate');
+    expect(description).toHaveTextContent('admin@wallarm.com');
+    expect(description).toHaveClass('text-xs', 'text-text-secondary', 'truncate');
+  });
+
+  it('renders spans (valid inside a button root) with data-slots', () => {
+    renderItem();
+    expect(screen.getByTestId('av--content')).toHaveAttribute('data-slot', 'avatar-content');
+    expect(screen.getByTestId('av--name')).toHaveAttribute('data-slot', 'avatar-name');
+    expect(screen.getByTestId('av--description')).toHaveAttribute(
+      'data-slot',
+      'avatar-description',
+    );
+    for (const part of ['content', 'name', 'description']) {
+      expect(screen.getByTestId(`av--${part}`).tagName).toBe('SPAN');
+    }
+  });
+
+  it('forwards ref, className and rest props on each part', () => {
+    const refs = {
+      content: { current: null as HTMLSpanElement | null },
+      name: { current: null as HTMLSpanElement | null },
+      description: { current: null as HTMLSpanElement | null },
+    };
+    render(
+      <Avatar data-testid='av'>
+        <AvatarFallback />
+        <AvatarContent ref={refs.content} className='w-160' title='c'>
+          <AvatarName ref={refs.name} className='font-medium' title='n'>
+            Ada
+          </AvatarName>
+          <AvatarDescription ref={refs.description} title='d'>
+            ada@example.com
+          </AvatarDescription>
+        </AvatarContent>
+      </Avatar>,
+    );
+    expect(refs.content.current).toBe(screen.getByTestId('av--content'));
+    expect(refs.name.current).toBe(screen.getByTestId('av--name'));
+    expect(refs.description.current).toBe(screen.getByTestId('av--description'));
+    expect(screen.getByTestId('av--content')).toHaveClass('w-160');
+    expect(screen.getByTestId('av--name')).toHaveClass('font-medium');
+    expect(screen.getByTestId('av--name')).not.toHaveClass('font-normal');
+    expect(screen.getByTestId('av--description')).toHaveAttribute('title', 'd');
+  });
+
+  it.each(['name', 'description'] as const)(
+    'shows the full %s in a tooltip only when it is truncated',
+    async part => {
+      const text = part === 'name' ? 'Artem Miskevich' : 'admin@wallarm.com';
+      const { unmount } = renderItem();
+      // jsdom has no layout, so a hover over untruncated text opens nothing.
+      await userEvent.hover(screen.getByTestId(`av--${part}`));
+      await new Promise(resolve => setTimeout(resolve, 600));
+      expect(screen.getAllByText(text)).toHaveLength(1);
+      unmount();
+
+      renderItem();
+      const el = screen.getByTestId(`av--${part}`);
+      Object.defineProperties(el, {
+        scrollWidth: { configurable: true, value: 300 },
+        clientWidth: { configurable: true, value: 100 },
+      });
+      await userEvent.hover(el);
+      await waitFor(() => expect(screen.getAllByText(text)).toHaveLength(2), { timeout: 2000 });
+    },
+  );
+
+  it('keeps the name inside an interactive root', () => {
+    render(
+      <Avatar as='button' data-testid='av'>
+        <AvatarFallback name='Ada Lovelace' />
+        <AvatarContent>
+          <AvatarName>Ada Lovelace</AvatarName>
+        </AvatarContent>
+      </Avatar>,
+    );
+    expect(screen.getByRole('button', { name: 'Ada Lovelace' })).toHaveAttribute(
+      'data-testid',
+      'av',
+    );
   });
 });
 
@@ -214,6 +404,19 @@ describe('AvatarOverlay', () => {
     );
   });
 
+  it('swaps the fallback content, not its plate, while the overlay shows (class contract)', () => {
+    render(
+      <Avatar data-testid='av'>
+        <AvatarFallback />
+        <AvatarOverlay />
+      </Avatar>,
+    );
+    expect(screen.getByTestId('av')).toHaveClass(
+      'hover:not-disabled:[&:has(>[data-slot=avatar-overlay])>[data-slot=avatar-fallback]]:text-transparent',
+      'hover:not-disabled:[&:has(>[data-slot=avatar-overlay])>[data-slot=avatar-fallback]>*]:invisible',
+    );
+  });
+
   it('paints the wash only over a visible photo (class contract)', () => {
     render(
       <Avatar data-testid='av'>
@@ -238,8 +441,8 @@ describe('as="button"', () => {
     expect(root).toHaveAttribute('data-testid', 'av');
     expect(root).toHaveAttribute('type', 'button');
     expect(root).toHaveAttribute('data-slot', 'avatar');
-    expect(root).toHaveClass('group/avatar', 'size-32');
-    expect(screen.getByTestId('av--image')).toBeInTheDocument();
+    expect(root).toHaveClass('group/avatar', 'rounded-12');
+    expect(screen.getByTestId('av--image')).toHaveClass('size-32');
   });
 
   it('keeps a consumer type and supports disabled', () => {

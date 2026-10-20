@@ -6,7 +6,16 @@ import { FieldDescription, FieldLabel } from '../Field';
 import { FileUpload, FileUploadError, FileUploadTrigger, useFilePreviewUrl } from '../FileUpload';
 import { Loader } from '../Loader';
 import { HStack, VStack } from '../Stack';
-import { Avatar, AvatarFallback, AvatarImage, AvatarOverlay, type AvatarProps } from '.';
+import {
+  Avatar,
+  AvatarContent,
+  AvatarDescription,
+  AvatarFallback,
+  AvatarImage,
+  AvatarName,
+  AvatarOverlay,
+  type AvatarProps,
+} from '.';
 
 // Deterministic "photo": no network, identical pixels in every screenshot run.
 const PHOTO = `data:image/svg+xml;utf8,${encodeURIComponent(
@@ -19,6 +28,7 @@ const MAX_SIZE = 512 * 1024;
 const DESCRIPTION = [
   "A person's photo on a rounded plate, falling back to initials or an icon while it loads, when it fails, or when there is none.",
   'It is decorative beside a visible name; standing alone, give it `aria-label` so it reads as an image.',
+  'Add `AvatarContent` with `AvatarName` (and an optional `AvatarDescription`) for the user item: plate and name in one row.',
   "To let people change it, make the avatar the `FileUploadTrigger` (`asChild`) and give it `as='button'` — picking only previews, and your form uploads.",
 ].join(' ');
 
@@ -30,7 +40,7 @@ const meta = {
     docs: { description: { component: DESCRIPTION } },
   },
   argTypes: {
-    size: { control: 'select', options: ['xs', 'sm'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
   },
 } satisfies Meta<typeof Avatar>;
 
@@ -44,24 +54,114 @@ export const Basic: StoryFn<AvatarProps> = args => (
   </Avatar>
 );
 
-/** `xs` (24px) is the nav-rail plate; `sm` (32px, the default) is for rows and forms. */
+const SIZES = ['sm', 'md', 'lg'] as const;
+
+/**
+ * `sm` (20px) and `md` (24px, the nav-rail plate) are the compact sizes for user items; `lg` (32px,
+ * the default) is for rows and forms. Each row shows a photo, initials and the icon, then the same
+ * three inside a Branded frame.
+ */
 export const Sizes: StoryFn<AvatarProps> = () => (
   <VStack gap={16} align='start' data-testid='avatar'>
-    {(['xs', 'sm'] as const).map(size => (
-      <HStack key={size} gap={12} align='center'>
+    {SIZES.map(size => (
+      <HStack key={size} gap={12} align='center' data-testid={`avatar-${size}`}>
         <Avatar size={size} data-testid={`avatar-${size}-photo`}>
           <AvatarImage src={PHOTO} />
           <AvatarFallback name='Ada Lovelace' />
         </Avatar>
-        <Avatar size={size}>
+        <Avatar size={size} data-testid={`avatar-${size}-initials`}>
           <AvatarFallback name='Ada Lovelace' />
         </Avatar>
-        <Avatar size={size}>
+        <Avatar size={size} data-testid={`avatar-${size}-icon`}>
           <AvatarFallback />
         </Avatar>
+        <HStack gap={12} align='center' data-frame-style='branded'>
+          <Avatar size={size} data-testid={`avatar-${size}-branded-photo`}>
+            <AvatarImage src={PHOTO} />
+            <AvatarFallback name='Ada Lovelace' />
+          </Avatar>
+          <Avatar size={size} data-testid={`avatar-${size}-branded-initials`}>
+            <AvatarFallback name='Ada Lovelace' />
+          </Avatar>
+          <Avatar size={size} data-testid={`avatar-${size}-branded-icon`}>
+            <AvatarFallback />
+          </Avatar>
+        </HStack>
         <span className='sb-annotation'>{size}</span>
       </HStack>
     ))}
+  </VStack>
+);
+
+/**
+ * The user item (Figma 12557:5856): the plate and the name in one row, 6px apart. The name is
+ * `text-sm` at every size and truncates with an ellipsis when the row is narrow.
+ */
+export const WithName: StoryFn<AvatarProps> = () => (
+  <VStack gap={16} align='start' data-testid='avatar'>
+    {(['sm', 'md'] as const).map(size => (
+      <VStack key={size} gap={8} align='start' data-testid={`avatar-${size}`}>
+        <Avatar size={size} data-testid={`avatar-${size}-photo`}>
+          <AvatarImage src={PHOTO} />
+          <AvatarFallback name='Artem Miskevich' />
+          <AvatarContent>
+            <AvatarName>Artem Miskevich</AvatarName>
+          </AvatarContent>
+        </Avatar>
+        <Avatar size={size} data-testid={`avatar-${size}-initials`}>
+          <AvatarFallback name='Artem Miskevich' />
+          <AvatarContent>
+            <AvatarName>Artem Miskevich</AvatarName>
+          </AvatarContent>
+        </Avatar>
+        <div data-frame-style='branded'>
+          <Avatar size={size} data-testid={`avatar-${size}-branded`}>
+            <AvatarFallback name='Artem Miskevich' />
+            <AvatarContent>
+              <AvatarName>Artem Miskevich</AvatarName>
+            </AvatarContent>
+          </Avatar>
+        </div>
+        <div className='w-120'>
+          <Avatar size={size} data-testid={`avatar-${size}-truncated`}>
+            <AvatarFallback name='Maximilian Alexander-Montgomery' />
+            <AvatarContent>
+              <AvatarName>Maximilian Alexander-Montgomery</AvatarName>
+            </AvatarContent>
+          </Avatar>
+        </div>
+      </VStack>
+    ))}
+  </VStack>
+);
+
+/** `AvatarDescription` adds a secondary line under the name — the email in the account menu. Both lines truncate. */
+export const WithDescription: StoryFn<AvatarProps> = () => (
+  <VStack gap={16} align='start' data-testid='avatar'>
+    <Avatar data-testid='avatar-photo'>
+      <AvatarImage src={PHOTO} />
+      <AvatarFallback name='Artem Miskevich' />
+      <AvatarContent>
+        <AvatarName>Artem Miskevich</AvatarName>
+        <AvatarDescription>admin@wallarm.com</AvatarDescription>
+      </AvatarContent>
+    </Avatar>
+    <Avatar size='md' data-testid='avatar-md'>
+      <AvatarFallback name='Artem Miskevich' />
+      <AvatarContent>
+        <AvatarName>Artem Miskevich</AvatarName>
+        <AvatarDescription>admin@wallarm.com</AvatarDescription>
+      </AvatarContent>
+    </Avatar>
+    <div className='w-160'>
+      <Avatar data-testid='avatar-truncated'>
+        <AvatarFallback />
+        <AvatarContent>
+          <AvatarName>Maximilian Alexander-Montgomery</AvatarName>
+          <AvatarDescription>maximilian.alexander-montgomery@wallarm.com</AvatarDescription>
+        </AvatarContent>
+      </Avatar>
+    </div>
   </VStack>
 );
 
@@ -92,7 +192,7 @@ export const CustomIcon: StoryFn<AvatarProps> = () => (
   </Avatar>
 );
 
-/** Inside a Branded frame the empty plate takes the brand tint and stroke, while initials keep the body text colour and a photo is unchanged. */
+/** Inside a Branded frame the empty plate takes the brand tint and stroke, initials and the icon take the brand colour, and a photo is unchanged. */
 export const Branded: StoryFn<AvatarProps> = () => (
   <HStack gap={12} align='center' data-frame-style='branded' data-testid='avatar'>
     <Avatar>

@@ -265,10 +265,10 @@ describe('Branded frame style', () => {
     const item = screen.getByTestId('item-user');
     expect(item).not.toHaveClass('branded:text-text-brand');
     expect(item).toHaveClass('branded:hover:overlay-states-brand-hover');
-    expect(item.querySelector('[data-slot="nav-rail-item-avatar"]')).toHaveClass(
-      'branded:text-icon-brand',
-      'branded:border-border-brand',
-    );
+    // The fallback is the plate, so it carries the brand tint, stroke and icon colour.
+    expect(
+      item.querySelector('[data-slot="nav-rail-item-avatar"] [data-slot="avatar-fallback"]'),
+    ).toHaveClass('branded:text-icon-brand', 'branded:border-border-brand');
   });
 });
 

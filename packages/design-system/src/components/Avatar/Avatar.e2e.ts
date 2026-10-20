@@ -4,6 +4,8 @@ import { createStoryHelper } from '@wallarm-org/playwright-config/storybook';
 const STORIES = [
   'Basic',
   'Sizes',
+  'With Name',
+  'With Description',
   'Fallback',
   'Custom Icon',
   'Branded',
@@ -26,7 +28,14 @@ type VisualStory = Exclude<(typeof STORIES)[number], 'Click To Upload'>;
 // the fallback (image hidden, fallback visible). Loading and error render the same pixels.
 const SETTLED: Record<VisualStory, { photo?: string[]; broken?: string[] }> = {
   Basic: { photo: ['avatar'] },
-  Sizes: { photo: ['avatar-xs-photo', 'avatar-sm-photo'] },
+  Sizes: {
+    photo: ['sm', 'md', 'lg'].flatMap(size => [
+      `avatar-${size}-photo`,
+      `avatar-${size}-branded-photo`,
+    ]),
+  },
+  'With Name': { photo: ['avatar-sm-photo', 'avatar-md-photo'] },
+  'With Description': { photo: ['avatar-photo'] },
   Fallback: { broken: ['avatar-broken-initials', 'avatar-broken-icon'] },
   'Custom Icon': {},
   Branded: { photo: ['avatar-branded-photo'] },

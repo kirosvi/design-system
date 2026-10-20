@@ -22,7 +22,7 @@ Replace the one-off avatar plate in `NavRailItem` with a reusable **Avatar** tha
 |---|---|
 | D1 | Compound component on Ark UI: `Avatar`, `AvatarImage`, `AvatarFallback`, `AvatarOverlay`. There is no flat-props shortcut. |
 | D2 | v1 scope matches Figma, plus initials from `name` (Chakra behaviour). Out of scope: `AvatarGroup`/`+N`, status badge, `shape`, `variant`, colour palette or colour-by-name. |
-| D3 | Sizes are only the ones in Figma: `xs` (24) and `sm` (32). The default is `sm`. |
+| D3 | Sizes are only the ones in Figma: `xs` (24) and `sm` (32). The default is `sm`. **Superseded 2026-10-20 (WDS-191, §12):** `sm` (20), `md` (24), `lg` (32), default `lg`. |
 | D4 | The shape is always a rounded square (Figma), never a circle. |
 | D5 | Click-to-upload works through a new headless `FileUploadTrigger asChild` mode. No Avatar-specific upload component. |
 | D6 | Add a `useFilePreviewUrl(file)` hook to FileUpload, so consumers don't each hand-roll `createObjectURL`/`revokeObjectURL`. |
@@ -125,6 +125,8 @@ It lives in `src/utils/getInitials.ts`. It is internal and not exported from the
 
 ## 5. Behaviour
 
+> **Amended 2026-10-20 (WDS-191):** item 2 (Border) no longer uses the `has-[…]:border-0` trick — see §12.
+
 1. **Loading and error.** Ark runs the image load state machine. The fallback shows while loading, on error, and without `src`. The image shows only once loaded. There is no `useState`/`onError` in DS code. Ark toggles visibility with the HTML `hidden` attribute, and any Tailwind display utility (`flex`, `grid`, `inline-flex`) overrides it. So `AvatarImage` and `AvatarFallback` both carry `data-[state=hidden]:hidden`.
 2. **Border.** The 1px `border-border-primary` shows only while no photo is visible. The root uses `has-[>img[data-state=visible]]:border-0`, so the border is CSS-only with no JS status. The box is fixed-size and `border-box`, so nothing moves, and the photo then fills the full 24/32px like Figma `Photo=On`. A transparent border would leave a 1px ring of the plate tint around the photo.
 3. **Changing `src`** (for example stored URL → blob preview → new server URL) re-runs loading. The fallback shows between images only if the new one is still loading.
@@ -137,6 +139,8 @@ It lives in `src/utils/getInitials.ts`. It is internal and not exported from the
 7. **Drag and drop onto the avatar** is not supported in v1. The FileUpload root already refuses drops outside a Dropzone.
 
 ## 6. Visual spec (Figma → tokens)
+
+> **Amended 2026-10-20 (WDS-191):** sizes, plate structure and branded initials changed — see §12. The table below is the original v1 spec.
 
 | | `xs` | `sm` |
 |---|---|---|
@@ -164,6 +168,8 @@ It lives in `src/utils/getInitials.ts`. It is internal and not exported from the
 - `Avatar.a11y.test.tsx` asserts these rules with testing-library ARIA queries (the repo has no axe).
 
 ## 8. NavRail migration
+
+> **Amended 2026-10-20 (WDS-191):** `size='xs'` is now `size='md'` — see §12.
 
 `NavRailItem` renders:
 
@@ -211,6 +217,8 @@ theme/semantic.css                                   (overlay token, light + dar
 src/index.ts                                         (export Avatar)
 ```
 
+> **Amended 2026-10-20 (WDS-191):** Figma now has `Size` and `Type` props, both mapped — see §12.
+
 `Avatar.figma.tsx` binds the WADS Components `user-avatar` set, node `12336:5504` in `VKb5gW46uSGw0rqrhZsbXT`: `Photo=On` → `AvatarImage` + `AvatarFallback`, `Photo=Off` → `AvatarFallback`. Figma has no size prop, so `size` is not mapped.
 
 ## 11. Testing
@@ -232,3 +240,45 @@ src/index.ts                                         (export Avatar)
   - screenshots: sizes × fallback kinds × branded, and hover and focus overlay over photo and over fallback;
   - interaction: pick a file → preview shown, and an oversized file → error;
   - NavRail and AppShell screenshots stay unchanged.
+
+## 12. Amendment 2026-10-20 — WDS-191: user item and compact sizes
+
+Figma: `user-avatar` [12336:5504](https://www.figma.com/design/VKb5gW46uSGw0rqrhZsbXT/WADS-Components?node-id=12336-5504) (props `Size` Small | Medium, `Type` Photo | Nuetral | Branded) and `user-item` [12557:5856](https://www.figma.com/design/VKb5gW46uSGw0rqrhZsbXT/WADS-Components?node-id=12557-5856) (prop `Size`).
+
+**Sizes (breaking rename).** Old `xs` → `md`, old `sm` → `lg`. `NavRailItem` now uses `md`.
+
+| | `sm` | `md` | `lg` (default) |
+|---|---|---|---|
+| Plate | `size-20` | `size-24` | `size-32` |
+| Radius | `rounded-8` | `rounded-8` | `rounded-12` |
+| Fallback icon | 16 | 16 | 16 |
+| Initials | `text-xs font-medium` | `text-xs font-medium` (was `text-2xs`) | `text-xs font-medium` |
+| Name / description | `text-sm` / `text-xs` | `text-sm` / `text-xs` | `text-sm` / `text-xs` |
+
+**New parts.** `AvatarContent` (`<span>`, `flex-col min-w-0`, slot `content`) holding `AvatarName` (`text-sm text-text-primary`, regular, slot `name`) and an optional `AvatarDescription` (`text-xs text-text-secondary`, slot `description` — the email line of the AppShell account menu). Both lines are single-line and truncate with an ellipsis; a truncated line shows its full text in an `OverflowTooltip` (same pattern as `StepperDescription`). Their text size comes from the root `size` through context, one CVA entry per size.
+
+```tsx
+<Avatar size='sm'>
+  <AvatarImage src={url} />
+  <AvatarFallback name='Artem Miskevich' />
+  <AvatarContent>
+    <AvatarName>Artem Miskevich</AvatarName>
+    <AvatarDescription>admin@wallarm.com</AvatarDescription>
+  </AvatarContent>
+</Avatar>
+```
+
+**Structure.** The root is now the row: `inline-grid items-center gap-x-6`, plus `max-w-full` only when it has `AvatarContent` (so the text can truncate while a bare plate keeps its exact size, e.g. NavRail's `-m-4` plate in a 16px box). The plate layers (`AvatarImage`, `AvatarFallback`, `AvatarOverlay`) share cell column 1 / row 1 and each carries the plate box (`size-*`, `rounded-*`, `overflow-hidden`); `AvatarContent` sits in column 2. Without `AvatarContent` the grid has a single track, so the root is exactly the plate (no gap). The root keeps the plate radius, so the focus ring follows the plate when there is no content and wraps the whole row (plate + text) when `AvatarContent` is present.
+
+- `AvatarImage` keeps the plate tint (`bg-states-primary-hover`, Figma `Type=Photo`) under transparent photos.
+- At `sm` (20px) the fallback shows one initial (first word), as in Figma; two letters overflow the 18px content box. `md` and `lg` keep two.
+- `aria-label` makes the root `role='img'` only for a standalone plate; with `AvatarContent` the root gets no role, so the visible name stays readable.
+
+- The plate tint and 1px stroke live on `AvatarFallback`. Ark hides the fallback once the photo is visible, so a photo has no stroke without the old `has-[>img[data-state=visible]]:border-0` rule; the photo is clipped by its own radius.
+- The hover/focus overlay swap now hides the fallback's *content* (`text-transparent` for initials, `*:invisible` for an icon or custom children), not the whole fallback, so the plate stays visible under the edit icon.
+
+**Branded initials.** Initials take `branded:text-text-brand` (Figma Branded); this replaces §6's "initials keep `text-text-primary`". The icon takes `branded:text-icon-brand`, the plate `branded:bg-states-brand-hover branded:border-border-brand`.
+
+**Code Connect.** `Size` Small → `sm`, Medium → `md`; `Type` Photo → image + fallback, Nuetral and Branded → fallback (branding comes from the frame). `user-item` maps to `Avatar` + `AvatarContent` + `AvatarName`.
+
+Out of scope: migrating the AppShell account menu, Table and Attribute to `AvatarContent`.

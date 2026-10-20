@@ -3,7 +3,14 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { captureAnalyticsClicks } from '../../testUtils/captureAnalyticsClicks';
 import { FileUpload, FileUploadTrigger } from '../FileUpload';
-import { Avatar, AvatarFallback, AvatarImage } from '.';
+import {
+  Avatar,
+  AvatarContent,
+  AvatarDescription,
+  AvatarFallback,
+  AvatarImage,
+  AvatarName,
+} from '.';
 
 afterEach(() => {
   rs.restoreAllMocks();
@@ -40,5 +47,20 @@ describe('Avatar — analytics (docs/metrics/contract.md)', () => {
       </Avatar>,
     );
     expect(screen.getByTestId('av')).toHaveAttribute('data-analytics-id', 'AVATAR_VIEW');
+  });
+
+  it('forwards consumer attributes on the content, name and description nodes', () => {
+    render(
+      <Avatar data-testid='av'>
+        <AvatarFallback />
+        <AvatarContent data-analytics-id='USER_ITEM'>
+          <AvatarName data-analytics-props={PROPS}>Ada</AvatarName>
+          <AvatarDescription aria-label='Email'>ada@example.com</AvatarDescription>
+        </AvatarContent>
+      </Avatar>,
+    );
+    expect(screen.getByTestId('av--content')).toHaveAttribute('data-analytics-id', 'USER_ITEM');
+    expect(screen.getByTestId('av--name').getAttribute('data-analytics-props')).toBe(PROPS);
+    expect(screen.getByTestId('av--description')).toHaveAttribute('aria-label', 'Email');
   });
 });

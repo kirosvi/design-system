@@ -48,7 +48,8 @@ describe('Avatar as a FileUpload trigger', () => {
     expect(button).toHaveAttribute('data-slot', 'file-upload-trigger');
     expect(button).toHaveAttribute('data-testid', 'fu--trigger');
     expect(button).toHaveAttribute('type', 'button');
-    expect(button).toHaveClass('group/avatar', 'size-32');
+    expect(button).toHaveClass('group/avatar', 'rounded-12');
+    expect(byTestId('fu--trigger--image')).toHaveClass('size-32');
     expect(byTestId('fu--trigger--image')).toHaveAttribute('data-slot', 'avatar-image');
     expect(byTestId('fu--trigger--fallback')).toHaveTextContent('AL');
   });
