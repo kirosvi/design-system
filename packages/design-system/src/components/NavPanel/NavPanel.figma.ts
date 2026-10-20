@@ -1,7 +1,11 @@
 // url=https://www.figma.com/design/VKb5gW46uSGw0rqrhZsbXT/WADS-Components?node-id=9345-34137
 // source=https://github.com/wallarm/design-system/blob/main/packages/design-system/src/components/NavPanel/NavPanel.tsx
 // component=NavPanel
+import type { SlotResult } from 'figma';
 import figma from 'figma';
+
+// An empty slot comes back as a guid-less SLOT section that renders "Missing snippet".
+const filled = (slot?: SlotResult) => !!slot?.some(s => s.type !== 'SLOT' || s.guid);
 
 const instance = figma.selectedInstance;
 
@@ -23,7 +27,7 @@ export default {
   id: 'nav-panel',
   example: figma.code`<NavPanel>
   <NavPanelHeader>${productName}</NavPanelHeader>
-  ${items?.length ? items : '...'}${divider}
+  ${filled(items) ? items : '...'}${divider}
 </NavPanel>`,
   imports: [
     `import { NavPanel, NavPanelHeader${nested ? ', NavPanelDivider' : ''} } from '@wallarm-org/design-system/NavPanel';`,

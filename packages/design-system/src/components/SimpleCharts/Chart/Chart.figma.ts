@@ -48,7 +48,7 @@ const metricHeader = (metric: InstanceHandle | undefined, indent: string) => {
   const deltaLayer = metric?.getBoolean('Delta')
     ? asInstance(metric.findInstance('delta', { traverseInstances: true }))
     : undefined;
-  if (deltaLayer) metricImports.add('MetricDelta');
+  // MetricDelta comes with the nested `delta` template's own import.
   const delta = deltaLayer
     ? figma.code`
 ${indent}  ${deltaLayer.executeTemplate().example}`

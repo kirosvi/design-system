@@ -93,8 +93,9 @@ const bodyContent = hasTabs
   : figma.code`
         ${body ?? ''}`;
 
-const footerCode = footer
-  ? figma.code`
+const footerCode =
+  footerActions.length || footerLeftActions.length
+    ? figma.code`
       <DrawerFooter>${
         footerLeftActions.length
           ? figma.code`
@@ -120,7 +121,7 @@ const footerCode = footer
           : ''
       }
       </DrawerFooter>`
-  : '';
+    : '';
 
 const content = figma.code`${
   resizeHandle
