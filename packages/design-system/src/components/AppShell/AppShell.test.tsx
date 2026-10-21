@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { AppShell } from './AppShell';
 import { AppShellAside } from './AppShellAside';
 import { AppShellRemote } from './AppShellRemote';
-import { EXPAND_BORDER_MS, HERO_EASE } from './constants';
+import { ASIDE_SLIDE_EASE, ASIDE_SLIDE_MS } from './constants';
 
 describe('AppShell ambient', () => {
   it('renders the Frame ambient layer by default, hidden from assistive tech', () => {
@@ -115,10 +115,30 @@ describe('AppShellAside', () => {
     );
 
     const shell = screen.getByTestId('shell');
-    expect(shell.style.getPropertyValue('--app-shell-aside-duration')).toBe(
-      `${EXPAND_BORDER_MS}ms`,
+    expect(shell.style.getPropertyValue('--app-shell-aside-duration')).toBe(`${ASIDE_SLIDE_MS}ms`);
+    expect(shell.style.getPropertyValue('--app-shell-aside-ease')).toBe(ASIDE_SLIDE_EASE);
+  });
+
+  it('sizes the panel from --app-shell-aside-width, which the shell className overrides', () => {
+    const shell = (className?: string) => (
+      <AppShell data-testid='shell' className={className}>
+        <AppShellRemote />
+        <AppShellAside open>panel</AppShellAside>
+      </AppShell>
     );
-    expect(shell.style.getPropertyValue('--app-shell-aside-ease')).toBe(HERO_EASE);
+    const { rerender } = render(shell());
+    // One variable feeds both the panel's width and the shell's track.
+    expect(screen.getByTestId('shell--aside').className.split(' ')).toContain(
+      'w-(--app-shell-aside-width)',
+    );
+    expect(screen.getByTestId('shell').className.split(' ')).toContain(
+      '[--app-shell-aside-width:--spacing(480)]',
+    );
+
+    rerender(shell('[--app-shell-aside-width:400px]'));
+    const classes = screen.getByTestId('shell').className.split(' ');
+    expect(classes).toContain('[--app-shell-aside-width:400px]');
+    expect(classes).not.toContain('[--app-shell-aside-width:--spacing(480)]');
   });
 
   it('exposes the open state the remote styles against', () => {

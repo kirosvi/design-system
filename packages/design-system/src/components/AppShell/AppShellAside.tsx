@@ -17,6 +17,14 @@ export interface AppShellAsideProps extends HTMLAttributes<HTMLElement> {
 /**
  * A panel docked right of the content surface, in the shell's `aside` grid area. Render it
  * after `AppShellRemote`: while it is open, the remote turns into a card beside it.
+ *
+ * It is 480px wide. To change that, set `--app-shell-aside-width` on the `AppShell` (for example
+ * `className='[--app-shell-aside-width:400px]'`), not a width class here: the shell sizes its
+ * track from the same variable.
+ *
+ * Desktop-first: while it is open the shell needs room for the rail plus the panel. In a
+ * narrower window the right end (the panel and the header's last actions) is clipped rather
+ * than scrolled to, so keep a min-width on the host or close the panel on narrow viewports.
  */
 export const AppShellAside: FC<AppShellAsideProps> = ({
   ref,
@@ -39,9 +47,9 @@ export const AppShellAside: FC<AppShellAsideProps> = ({
       className={cn(
         // Display only while open, so the browser's own [hidden] rule hides the closed
         // region even where Tailwind preflight is not loaded.
-        '[grid-area:aside] mx-8 mb-8 data-[state=open]:flex w-480 flex-col overflow-auto overscroll-none rounded-12 border border-border-primary-light bg-bg-page-bg pb-4',
+        '[grid-area:aside] mx-8 mb-8 data-[state=open]:flex w-(--app-shell-aside-width) flex-col overflow-auto overscroll-none rounded-12 border border-border-primary-light bg-bg-page-bg pb-4',
         // Once closed it keeps painting while the shell's track slides shut, then display:none.
-        'transition-[display] transition-discrete duration-(--app-shell-aside-duration) motion-reduce:transition-none',
+        'transition-[display] transition-discrete duration-(--app-shell-aside-duration) ease-(--app-shell-aside-ease) motion-reduce:transition-none',
         className,
       )}
     >

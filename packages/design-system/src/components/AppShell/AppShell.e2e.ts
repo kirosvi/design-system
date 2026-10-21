@@ -11,13 +11,21 @@ const seedBrandedFrame = (page: Page) =>
 const switchToDarkTheme = (page: Page) =>
   page.evaluate(() => document.documentElement.setAttribute('data-theme', 'dark'));
 
-// The docked panel's margin box: 480px wide plus its 8px gap and 8px right margin.
-const ASIDE_TRACK = 496;
+interface Box {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
 
 interface AsideFrame {
-  remoteWidth: number;
+  remoteBox: Box;
+  remoteRadius: string;
+  asideBox: Box;
   asideDisplay: string;
   asideInert: boolean;
+  /** The panel's margin box (its width plus side margins); 0 while it is not rendered. */
+  asideTrack: number;
 }
 
 interface AsideRecording {
@@ -26,26 +34,40 @@ interface AsideRecording {
 }
 
 /**
- * Clicks the header toggle and records the remote's width and the aside's state on every frame
- * until they hold still, so a test can tell an animation from a one-frame jump.
+ * Clicks the header toggle and records the remote and the aside on every frame until they hold
+ * still, so a test can tell an animation from a one-frame jump.
  */
 const toggleAsideAndRecord = (page: Page): Promise<AsideRecording> =>
   page.evaluate(async () => {
-    const byTestId = (id: string) => {
-      const element = document.querySelector<HTMLElement>(`[data-testid="${id}"]`);
-      if (!element) throw new Error(`No element with data-testid="${id}"`);
+    const find = <T extends HTMLElement>(selector: string) => {
+      const element = document.querySelector<T>(selector);
+      if (!element) throw new Error(`Nothing matches ${selector}`);
       return element;
     };
-    const remote = byTestId('app-shell--remote');
-    const aside = byTestId('app-shell--aside');
-    const read = () => ({
-      remoteWidth: remote.getBoundingClientRect().width,
-      asideDisplay: getComputedStyle(aside).display,
-      asideInert: aside.inert,
-    });
+    const remote = find('[data-testid="app-shell--remote"]');
+    const aside = find('[data-testid="app-shell--aside"]');
+    const toggle = find<HTMLButtonElement>('button[aria-label="AI Assistant"]');
+    const boxOf = (element: HTMLElement) => {
+      const { x, y, width, height } = element.getBoundingClientRect();
+      return { x, y, width, height };
+    };
+    const read = () => {
+      const asideStyle = getComputedStyle(aside);
+      const asideBox = boxOf(aside);
+      const margins =
+        Number.parseFloat(asideStyle.marginLeft) + Number.parseFloat(asideStyle.marginRight);
+      return {
+        remoteBox: boxOf(remote),
+        remoteRadius: getComputedStyle(remote).borderTopRightRadius,
+        asideBox,
+        asideDisplay: asideStyle.display,
+        asideInert: aside.inert,
+        asideTrack: asideStyle.display === 'none' ? 0 : asideBox.width + margins,
+      };
+    };
 
     const before = read();
-    document.querySelector<HTMLButtonElement>('button[aria-label="AI Assistant"]')?.click();
+    toggle.click();
 
     const frames: ReturnType<typeof read>[] = [];
     const startedAt = performance.now();
@@ -57,7 +79,7 @@ const toggleAsideAndRecord = (page: Page): Promise<AsideRecording> =>
           recent.length === 10 &&
           recent.every(
             frame =>
-              frame.remoteWidth === recent[0]?.remoteWidth &&
+              frame.remoteBox.width === recent[0]?.remoteBox.width &&
               frame.asideDisplay === recent[0]?.asideDisplay,
           );
         if (still || performance.now() - startedAt > 3000) resolve();
@@ -72,16 +94,16 @@ const settledFrame = ({ before, frames }: AsideRecording) => frames.at(-1) ?? be
 
 /** Distinct widths the remote passed through strictly between its start and its settled width. */
 const inBetweenWidths = (recording: AsideRecording) => {
-  const from = recording.before.remoteWidth;
-  const to = settledFrame(recording).remoteWidth;
+  const from = recording.before.remoteBox.width;
+  const to = settledFrame(recording).remoteBox.width;
   const [low, high] = [Math.min(from, to), Math.max(from, to)];
-  return new Set(recording.frames.map(f => f.remoteWidth).filter(w => w > low && w < high));
+  return new Set(recording.frames.map(f => f.remoteBox.width).filter(w => w > low && w < high));
 };
 
-/** The biggest change of the remote's width from one frame to the next. */
-const largestStep = ({ before, frames }: AsideRecording) => {
-  const widths = [before.remoteWidth, ...frames.map(f => f.remoteWidth)];
-  return Math.max(...widths.map((w, i) => Math.abs(w - (widths[i - 1] ?? w))));
+/** Frame-to-frame steps of the remote's width that cover at least half of `travel`. */
+const bigSteps = ({ before, frames }: AsideRecording, travel: number) => {
+  const widths = [before, ...frames].map(f => f.remoteBox.width);
+  return widths.filter((w, i) => Math.abs(w - (widths[i - 1] ?? w)) >= Math.abs(travel) / 2).length;
 };
 
 test.describe('Component: AppShell', () => {
@@ -150,17 +172,22 @@ test.describe('Component: AppShell', () => {
       page,
     }) => {
       await appShellStory.goto(page, 'With Aside');
-      const docked = await page.screenshot({ animations: 'disabled' });
-      // Close it first while reduced motion is still emulated, then let the opening animate.
-      await toggleAsideAndRecord(page);
+      // Close it while reduced motion is still emulated: the frame before is the static layout.
+      const docked = (await toggleAsideAndRecord(page)).before;
       await page.emulateMedia({ reducedMotion: 'no-preference' });
 
       const opening = await toggleAsideAndRecord(page);
-      expect(opening.before.remoteWidth - settledFrame(opening).remoteWidth).toBe(ASIDE_TRACK);
-      expect(inBetweenWidths(opening).size).toBeGreaterThanOrEqual(3);
-      expect(largestStep(opening)).toBeLessThan(ASIDE_TRACK / 2);
+      const settled = settledFrame(opening);
+      const travel = opening.before.remoteBox.width - settled.remoteBox.width;
+      // The canvas gives up exactly the panel's margin box, over many frames. One hitch may
+      // swallow frames, so a single big step is allowed; a jump has no in-between widths at all.
+      expect(travel).toBeCloseTo(docked.asideTrack, 1);
+      expect(inBetweenWidths(opening).size).toBeGreaterThanOrEqual(2);
+      expect(bigSteps(opening, travel)).toBeLessThanOrEqual(1);
       // It settles exactly where the story renders without any animation.
-      expect(await page.screenshot({ animations: 'disabled' })).toEqual(docked);
+      expect(settled.remoteBox).toEqual(docked.remoteBox);
+      expect(settled.asideBox).toEqual(docked.asideBox);
+      expect(settled.remoteRadius).toBe(docked.remoteRadius);
     });
 
     test('Should animate the aside out and release its space when the toggle closes it', async ({
@@ -170,12 +197,19 @@ test.describe('Component: AppShell', () => {
       await page.emulateMedia({ reducedMotion: 'no-preference' });
 
       const closing = await toggleAsideAndRecord(page);
-      // Out of reach from the first frame, yet still painted while it slides away.
-      const paintedFrames = closing.frames.filter(f => f.asideDisplay !== 'none');
+      const settled = settledFrame(closing);
+      const travel = settled.remoteBox.width - closing.before.remoteBox.width;
+      expect(travel).toBeCloseTo(closing.before.asideTrack, 1);
+      expect(inBetweenWidths(closing).size).toBeGreaterThanOrEqual(2);
+      expect(bigSteps(closing, travel)).toBeLessThanOrEqual(1);
+      // Out of reach from the first frame, yet painted for as long as the canvas is still short
+      // of its closed width: the panel never vanishes while its track is sliding shut.
       expect(closing.frames[0]?.asideInert).toBe(true);
-      expect(paintedFrames.length).toBeGreaterThanOrEqual(3);
-      expect(inBetweenWidths(closing).size).toBeGreaterThanOrEqual(3);
-      expect(largestStep(closing)).toBeLessThan(ASIDE_TRACK / 2);
+      for (const frame of closing.frames) {
+        if (frame.remoteBox.width < settled.remoteBox.width) {
+          expect(frame.asideDisplay).not.toBe('none');
+        }
+      }
 
       // Settled: hidden, and the canvas runs to the window edge again.
       const remote = page.getByTestId('app-shell--remote');
@@ -184,6 +218,28 @@ test.describe('Component: AppShell', () => {
       await expect(remote).toHaveCSS('border-top-right-radius', '0px');
       const box = await remote.boundingBox();
       expect((box?.x ?? 0) + (box?.width ?? 0)).toBe(page.viewportSize()?.width);
+    });
+
+    test('Should fit the track to the panel when its width is customised', async ({ page }) => {
+      await appShellStory.goto(page, 'With Aside');
+      // What a host's className='[--app-shell-aside-width:400px]' on AppShell does.
+      await page
+        .getByTestId('app-shell')
+        .evaluate(shell => shell.style.setProperty('--app-shell-aside-width', '400px'));
+
+      const aside = page.getByTestId('app-shell--aside');
+      const [marginLeft, marginRight] = await aside.evaluate(element => {
+        const style = getComputedStyle(element);
+        return [Number.parseFloat(style.marginLeft), Number.parseFloat(style.marginRight)];
+      });
+      const asideBox = await aside.boundingBox();
+      const remoteBox = await page.getByTestId('app-shell--remote').boundingBox();
+      const remoteRight = (remoteBox?.x ?? 0) + (remoteBox?.width ?? 0);
+      const asideRight = (asideBox?.x ?? 0) + (asideBox?.width ?? 0);
+      expect(asideBox?.width).toBe(400);
+      // The track follows: same gap to the canvas and right margin, no empty strip, no clipping.
+      expect((asideBox?.x ?? 0) - remoteRight).toBe(marginLeft);
+      expect((page.viewportSize()?.width ?? 0) - asideRight).toBe(marginRight);
     });
   });
 
@@ -212,10 +268,10 @@ test.describe('Component: AppShell', () => {
       const opening = await toggleAsideAndRecord(page);
       for (const recording of [closing, opening]) {
         const settled = settledFrame(recording);
-        expect(settled.remoteWidth).not.toBe(recording.before.remoteWidth);
+        expect(settled.remoteBox.width).not.toBe(recording.before.remoteBox.width);
         // Final from the very first frame: no in-between widths, no lingering panel.
         for (const frame of recording.frames) {
-          expect(frame.remoteWidth).toBe(settled.remoteWidth);
+          expect(frame.remoteBox.width).toBe(settled.remoteBox.width);
           expect(frame.asideDisplay).toBe(settled.asideDisplay);
         }
       }

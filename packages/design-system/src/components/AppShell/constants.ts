@@ -4,3 +4,6 @@ export const MORPH_MS = 600;
 export const EXPAND_MS = 560;
 export const EXPAND_BORDER_MS = 400;
 export const SKELETON_DELAY = 250;
+/** AppShellAside's slide. Starts on the boot expand's border timing; tune it on its own. */
+export const ASIDE_SLIDE_MS = 400;
+export const ASIDE_SLIDE_EASE = HERO_EASE;
