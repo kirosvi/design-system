@@ -117,7 +117,7 @@ check**, not a queue:
 | ✅ | Messaging/Alert | 8 | 8 | `components/Alert/Alert.stories.tsx` |
 | ✅ | Messaging/Banner | 8 | 8 | `components/Banner/Banner.stories.tsx` |
 | ✅ | Messaging/Toast | 8 | 8 | `components/Toast/Toast.stories.tsx` |
-| ✅ | Navigation/AppShell | 3 | 3 | `components/AppShell/AppShell.stories.tsx` |
+| ✅ | Navigation/AppShell | 6 | 6 | `components/AppShell/AppShell.stories.tsx` |
 | ✅ | Navigation/Breadcrumbs | 7 | 7 | `components/Breadcrumbs/Breadcrumbs.stories.tsx` |
 | ✅ | Navigation/Link | 5 | 5 | `components/Link/Link.stories.tsx` |
 | ✅ | Navigation/Pagination | 9 | 9 | `components/Pagination/Pagination.stories.tsx` |

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { Bell, ChevronUpDown } from '../../../icons';
 import { Button } from '../../Button';
 import { Code } from '../../Code';
@@ -7,7 +8,12 @@ import { TopHeaderSeparator } from '../../TopHeader';
 import { QuickHelpDropdown } from './_storyQuickHelpDropdown';
 import { StorySearchModal } from './_storySearchModal';
 
-export const HeaderActions = () => (
+interface HeaderActionsProps {
+  /** Rendered before the updates bell — where the host puts its AI Assistant toggle. */
+  assistantToggle?: ReactNode;
+}
+
+export const HeaderActions = ({ assistantToggle }: HeaderActionsProps) => (
   <>
     <StorySearchModal />
 
@@ -23,6 +29,8 @@ export const HeaderActions = () => (
       </Code>
       <ChevronUpDown className='!icon-sm' />
     </Button>
+
+    {assistantToggle}
 
     <Tooltip>
       <TooltipTrigger asChild>
