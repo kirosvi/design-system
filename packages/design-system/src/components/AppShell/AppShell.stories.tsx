@@ -279,7 +279,7 @@ Loading.argTypes = {
   },
 };
 
-/** `AppShellAside` docks a panel right of the content surface — a stand-in assistant here, toggled from the header — that slides in as the canvas narrows and back out on close, hiding the region without unmounting what is inside, so text typed into the panel survives a close and reopen. */
+/** `AppShellAside` docks a panel right of the content surface — a stand-in assistant here, toggled from the header — that slides in as the canvas narrows, while closing widens the canvas back and hides the region without unmounting what is inside, so text typed into the panel survives a close and reopen. */
 export const WithAside: StoryFn<AppShellProps> = ({ ambient }) => (
   <StoryRouter>
     <Shell ambient={ambient} aside />

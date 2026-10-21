@@ -172,4 +172,33 @@ describe('AppShellAside', () => {
     expect(screen.queryByTestId('shell--aside')).toBeNull();
     expect(screen.queryByRole('complementary')).toBeNull();
   });
+
+  it('keeps the two-column grid unless an aside is composed', () => {
+    render(
+      <AppShell data-testid='shell'>
+        <AppShellRemote>content</AppShellRemote>
+      </AppShell>,
+    );
+
+    const classes = screen.getByTestId('shell').className.split(' ');
+    expect(classes).toContain('[grid-template-areas:"header_header""rail_remote"]');
+    expect(classes).toContain('[grid-template-columns:auto_1fr]');
+    // The aside's third area and track exist only behind a composed aside, so an extra in-flow
+    // child of an aside-less shell still lands in a new row, not a 0px cell at the window edge.
+    for (const token of classes.filter(c => c.includes('aside') && c.includes('grid-template'))) {
+      expect(token.startsWith('has-[>[data-slot=app-shell-aside]')).toBe(true);
+    }
+  });
+
+  it('keeps a consumer style next to its own motion variables', () => {
+    render(
+      <AppShell data-testid='shell' style={{ minWidth: 1024 }}>
+        <AppShellRemote />
+      </AppShell>,
+    );
+
+    const shell = screen.getByTestId('shell');
+    expect(shell.style.minWidth).toBe('1024px');
+    expect(shell.style.getPropertyValue('--app-shell-aside-duration')).toBe(`${ASIDE_SLIDE_MS}ms`);
+  });
 });
