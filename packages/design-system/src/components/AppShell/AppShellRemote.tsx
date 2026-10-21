@@ -21,6 +21,8 @@ export const AppShellRemote: FC<AppShellRemoteProps> = ({ ref, className, childr
         // With an open AppShellAside after it, the canvas no longer runs to the window edge, so
         // it becomes a card: rounded top corners and its own right border.
         'has-[~[data-slot=app-shell-aside][data-state=open]]:rounded-tr-12 has-[~[data-slot=app-shell-aside][data-state=open]]:border-r',
+        // The corner and edge follow the shell's aside track on its timing.
+        'transition-[border-top-right-radius,border-right-width] duration-(--app-shell-aside-duration) ease-(--app-shell-aside-ease) motion-reduce:transition-none',
         className,
       )}
     >

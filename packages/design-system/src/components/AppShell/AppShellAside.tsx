@@ -5,8 +5,10 @@ import { useTestId } from '../../utils/testId';
 export interface AppShellAsideProps extends HTMLAttributes<HTMLElement> {
   ref?: Ref<HTMLElement>;
   /**
-   * Shows the panel. Closed, the region takes no space and is `hidden` and `inert`, but its
-   * children stay mounted, so whatever state they hold survives a close and reopen.
+   * Shows the panel, sliding it in from the right as the canvas narrows. Closing makes it
+   * `hidden` and `inert` at once and slides it back out, after which it takes no space; under
+   * reduced motion both are instant. Its children stay mounted throughout, so whatever state
+   * they hold survives a close and reopen.
    */
   open: boolean;
   children?: ReactNode;
@@ -38,6 +40,8 @@ export const AppShellAside: FC<AppShellAsideProps> = ({
         // Display only while open, so the browser's own [hidden] rule hides the closed
         // region even where Tailwind preflight is not loaded.
         '[grid-area:aside] mx-8 mb-8 data-[state=open]:flex w-480 flex-col overflow-auto overscroll-none rounded-12 border border-border-primary-light bg-bg-page-bg pb-4',
+        // Once closed it keeps painting while the shell's track slides shut, then display:none.
+        'transition-[display] transition-discrete duration-(--app-shell-aside-duration) motion-reduce:transition-none',
         className,
       )}
     >

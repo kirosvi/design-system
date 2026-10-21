@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { AppShell } from './AppShell';
 import { AppShellAside } from './AppShellAside';
 import { AppShellRemote } from './AppShellRemote';
+import { EXPAND_BORDER_MS, HERO_EASE } from './constants';
 
 describe('AppShell ambient', () => {
   it('renders the Frame ambient layer by default, hidden from assistive tech', () => {
@@ -78,6 +79,7 @@ describe('AppShellAside', () => {
     rerender(shell(false));
     const aside = screen.getByTestId('shell--aside');
     expect(aside).toHaveAttribute('hidden');
+    // Out of reach the moment it starts closing, not when its exit transition ends.
     expect(aside).toHaveAttribute('inert');
     expect(screen.queryByRole('complementary')).toBeNull();
     // Same node, so whatever state the panel holds survives the close.
@@ -102,6 +104,21 @@ describe('AppShellAside', () => {
     const classes = screen.getByTestId('shell--aside').className.split(' ');
     expect(classes).not.toContain('flex');
     expect(classes).toContain('data-[state=open]:flex');
+  });
+
+  it('times its slide with the shell motion constants', () => {
+    render(
+      <AppShell data-testid='shell'>
+        <AppShellRemote />
+        <AppShellAside open>panel</AppShellAside>
+      </AppShell>,
+    );
+
+    const shell = screen.getByTestId('shell');
+    expect(shell.style.getPropertyValue('--app-shell-aside-duration')).toBe(
+      `${EXPAND_BORDER_MS}ms`,
+    );
+    expect(shell.style.getPropertyValue('--app-shell-aside-ease')).toBe(HERO_EASE);
   });
 
   it('exposes the open state the remote styles against', () => {
