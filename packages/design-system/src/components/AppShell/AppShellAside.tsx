@@ -35,7 +35,9 @@ export const AppShellAside: FC<AppShellAsideProps> = ({
       data-state={open ? 'open' : 'closed'}
       data-testid={testId}
       className={cn(
-        '[grid-area:aside] mx-8 mb-8 flex w-480 flex-col overflow-auto overscroll-none rounded-12 border border-border-primary-light bg-bg-page-bg pb-4',
+        // Display only while open, so the browser's own [hidden] rule hides the closed
+        // region even where Tailwind preflight is not loaded.
+        '[grid-area:aside] mx-8 mb-8 data-[state=open]:flex w-480 flex-col overflow-auto overscroll-none rounded-12 border border-border-primary-light bg-bg-page-bg pb-4',
         className,
       )}
     >

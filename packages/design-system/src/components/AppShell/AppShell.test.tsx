@@ -89,7 +89,22 @@ describe('AppShellAside', () => {
     expect(screen.getByTestId('field')).toHaveValue('abc');
   });
 
-  it('marks the shell while the aside is open', () => {
+  it('leaves the closed region to the browser [hidden] rule', () => {
+    render(
+      <AppShell data-testid='shell'>
+        <AppShellRemote />
+        <AppShellAside open={false}>panel</AppShellAside>
+      </AppShell>,
+    );
+
+    // No unconditional display utility: one would beat the UA [hidden] rule wherever
+    // Tailwind preflight (its display:none !important) is missing.
+    const classes = screen.getByTestId('shell--aside').className.split(' ');
+    expect(classes).not.toContain('flex');
+    expect(classes).toContain('data-[state=open]:flex');
+  });
+
+  it('exposes the open state the remote styles against', () => {
     const shell = (open: boolean) => (
       <AppShell data-testid='shell'>
         <AppShellRemote />
@@ -110,7 +125,7 @@ describe('AppShellAside', () => {
     );
   });
 
-  it('leaves the shell layout unchanged without an aside', () => {
+  it('renders no aside region when none is composed', () => {
     render(
       <AppShell data-testid='shell'>
         <AppShellRemote>content</AppShellRemote>

@@ -56,9 +56,10 @@ test.describe('Component: AppShell', () => {
     }) => {
       await appShellStory.goto(page, 'With Aside');
       const toggle = page.getByRole('button', { name: 'AI Assistant' });
-      const aside = page.getByRole('complementary', { name: 'AI Assistant' });
+      // Test ids resolve the aside even while it is hidden, so toBeHidden checks the real node.
+      const aside = page.getByTestId('app-shell--aside');
       const message = aside.getByRole('textbox', { name: 'Message' });
-      const remote = page.locator('[data-slot="app-shell-remote"]');
+      const remote = page.getByTestId('app-shell--remote');
       await expect(remote).toHaveCSS('border-right-width', '1px');
       await message.fill('Show recent attacks');
 
@@ -70,6 +71,22 @@ test.describe('Component: AppShell', () => {
 
       await toggle.click();
       await expect(message).toHaveValue('Show recent attacks');
+    });
+  });
+
+  test.describe('Accessibility', () => {
+    test('Should be closable via keyboard from inside the panel with focus returned to the toggle', async ({
+      page,
+    }) => {
+      await appShellStory.goto(page, 'With Aside');
+      const aside = page.getByTestId('app-shell--aside');
+      const closeButton = aside.getByRole('button', { name: 'Close' });
+      await closeButton.focus();
+      await expect(closeButton).toBeFocused();
+
+      await page.keyboard.press('Enter');
+      await expect(aside).toBeHidden();
+      await expect(page.getByRole('button', { name: 'AI Assistant' })).toBeFocused();
     });
   });
 });

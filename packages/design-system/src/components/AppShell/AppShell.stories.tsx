@@ -1,4 +1,4 @@
-import { type FC, useEffect, useState } from 'react';
+import { type FC, type Ref, useEffect, useRef, useState } from 'react';
 import {
   createMemoryHistory,
   createRootRoute,
@@ -58,7 +58,7 @@ import {
 } from './story-content';
 
 const DESCRIPTION = [
-  'The platform’s outermost frame — global top bar, product rail, and the content surface products mount into. There is exactly one, at the app root, and it persists while the content swaps.',
+  'The platform’s outermost frame — global top bar, product rail, and the content surface products mount into, with an optional `AppShellAside` panel docked to its right. There is exactly one, at the app root, and it persists while the content swaps.',
   'Do not wrap a page in it: a single product screen renders `RemoteShell` and its own content, blind to the shell. In-product navigation is `NavPanel`, and laying out a page’s insides is `Stack` and `Flex`.',
   'The gray surround — header bar plus rail, everything that is not the canvas — is the **Frame**. It carries **Ambient**, a faint still layer of soft blooms, grain and a dot cluster pooled bottom-left, painted under everything. Ambient is on by default; `ambient={false}` leaves the flat Frame fill.',
   'The Frame comes in two styles, **Neutral** and **Branded**: a user preference next to light/dark, set with `useTheme().setFrameStyle` (from `ThemeProvider`) and written on `<html>` so every micro-frontend follows it. Branded warms the Frame and turns active navigation to the brand colour; try it from the account item → Appearance.',
@@ -107,14 +107,16 @@ interface ShellProps {
 }
 
 interface AssistantToggleProps {
+  ref?: Ref<HTMLButtonElement>;
   open: boolean;
   onToggle: () => void;
 }
 
-const AssistantToggle: FC<AssistantToggleProps> = ({ open, onToggle }) => (
+const AssistantToggle: FC<AssistantToggleProps> = ({ ref, open, onToggle }) => (
   <Tooltip>
     <TooltipTrigger asChild>
       <Button
+        ref={ref}
         variant='ghost'
         size='small'
         color='neutral'
@@ -157,14 +159,24 @@ const Shell = ({
 
   const [sidebarMode, setSidebarMode] = useState<SidebarMode>('adaptive');
   const [asideOpen, setAsideOpen] = useState(true);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   const { theme, setTheme } = useTheme();
   const railMode = railModeFor(sidebarMode, activeProduct === 'home');
   const assistantToggle = aside && (
-    <AssistantToggle open={asideOpen} onToggle={() => setAsideOpen(open => !open)} />
+    <AssistantToggle
+      ref={toggleRef}
+      open={asideOpen}
+      onToggle={() => setAsideOpen(open => !open)}
+    />
   );
+  const closeAsideFromPanel = () => {
+    // Focus inside the panel would drop to <body> once it hides: hand it back to the toggle.
+    toggleRef.current?.focus();
+    setAsideOpen(false);
+  };
 
   return (
-    <AppShell ambient={ambient}>
+    <AppShell ambient={ambient} data-testid='app-shell'>
       <AppShellHeader>
         <TopHeader>
           <TopHeaderLogo href='/'>
@@ -239,7 +251,7 @@ const Shell = ({
 
       {aside && (
         <AppShellAside open={asideOpen} aria-label='AI Assistant'>
-          <AssistantPanel onClose={() => setAsideOpen(false)} />
+          <AssistantPanel onClose={closeAsideFromPanel} />
         </AppShellAside>
       )}
     </AppShell>
