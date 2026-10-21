@@ -12,7 +12,7 @@ import {
   useRouterState,
 } from '@tanstack/react-router';
 import type { Meta, StoryFn } from 'storybook-react-rsbuild';
-import { Bell, Home } from '../../icons';
+import { Bell, Home, X } from '../../icons';
 import { AnimatedBackground } from '../AnimatedBackground';
 import { Button } from '../Button';
 import { Input } from '../Input';
@@ -32,7 +32,9 @@ import { Text } from '../Text';
 import { useTheme } from '../ThemeProvider';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../Tooltip';
 import { TopHeader, TopHeaderActions, TopHeaderLogo, TopHeaderSeparator } from '../TopHeader';
+import { WallyIcon } from '../WallyIcon';
 import { AppShell, type AppShellProps } from './AppShell';
+import { AppShellAside } from './AppShellAside';
 import { AppShellHeader } from './AppShellHeader';
 import { AppShellRail } from './AppShellRail';
 import { AppShellRemote } from './AppShellRemote';
@@ -69,6 +71,7 @@ const meta = {
     AppShellHeader,
     AppShellRail,
     AppShellRemote,
+    AppShellAside,
   },
   parameters: {
     layout: 'fullscreen',
@@ -99,14 +102,66 @@ interface ShellProps {
   loading?: boolean;
   /** Each product fakes a 2s load when opened, showing its panel and content skeletons. */
   simulateProductLoading?: boolean;
+  /** Docks a stand-in assistant in `AppShellAside`, open at first and toggled from the header. */
+  aside?: boolean;
 }
 
-const Shell = ({ ambient, loading = false, simulateProductLoading = false }: ShellProps) => {
+interface AssistantToggleProps {
+  open: boolean;
+  onToggle: () => void;
+}
+
+const AssistantToggle: FC<AssistantToggleProps> = ({ open, onToggle }) => (
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <Button
+        variant='ghost'
+        size='small'
+        color='neutral'
+        aria-label='AI Assistant'
+        aria-pressed={open}
+        onClick={onToggle}
+      >
+        <WallyIcon />
+      </Button>
+    </TooltipTrigger>
+    <TooltipContent>AI Assistant</TooltipContent>
+  </Tooltip>
+);
+
+/** Stand-in for the assistant a host mounts in the aside. */
+const AssistantPanel: FC<{ onClose: () => void }> = ({ onClose }) => (
+  <>
+    <div className='flex items-center gap-8 border-b border-border-primary-light py-8 pr-8 pl-12'>
+      <WallyIcon size='xs' />
+      <Text size='sm' weight='medium' grow>
+        Ask Wally
+      </Text>
+      <Button variant='ghost' size='small' color='neutral' aria-label='Close' onClick={onClose}>
+        <X />
+      </Button>
+    </div>
+    <div className='mt-auto p-12'>
+      <Input aria-label='Message' placeholder='Ask Wally…' />
+    </div>
+  </>
+);
+
+const Shell = ({
+  ambient,
+  loading = false,
+  simulateProductLoading = false,
+  aside = false,
+}: ShellProps) => {
   const { activeProduct, goToProduct } = useStoryProductNavigation();
 
   const [sidebarMode, setSidebarMode] = useState<SidebarMode>('adaptive');
+  const [asideOpen, setAsideOpen] = useState(true);
   const { theme, setTheme } = useTheme();
   const railMode = railModeFor(sidebarMode, activeProduct === 'home');
+  const assistantToggle = aside && (
+    <AssistantToggle open={asideOpen} onToggle={() => setAsideOpen(open => !open)} />
+  );
 
   return (
     <AppShell ambient={ambient}>
@@ -140,7 +195,7 @@ const Shell = ({ ambient, loading = false, simulateProductLoading = false }: She
                 <QuickHelpDropdown />
               </>
             ) : (
-              <HeaderActions />
+              <HeaderActions assistantToggle={assistantToggle} />
             )}
           </TopHeaderActions>
         </TopHeader>
@@ -181,6 +236,12 @@ const Shell = ({ ambient, loading = false, simulateProductLoading = false }: She
       <AppShellRemote>
         <RemoteForProduct product={activeProduct} simulateLoading={simulateProductLoading} />
       </AppShellRemote>
+
+      {aside && (
+        <AppShellAside open={asideOpen} aria-label='AI Assistant'>
+          <AssistantPanel onClose={() => setAsideOpen(false)} />
+        </AppShellAside>
+      )}
     </AppShell>
   );
 };
@@ -205,6 +266,13 @@ Loading.argTypes = {
     description: 'Show the header and rail skeletons instead of their items.',
   },
 };
+
+/** `AppShellAside` docks a panel right of the content surface — a stand-in assistant here, toggled from the header — and closing it hides the region without unmounting what is inside, so text typed into the panel survives a close and reopen. */
+export const WithAside: StoryFn<AppShellProps> = ({ ambient }) => (
+  <StoryRouter>
+    <Shell ambient={ambient} aside />
+  </StoryRouter>
+);
 
 const RevealFlowShell = () => {
   const { activeProduct, goToProduct } = useStoryProductNavigation();

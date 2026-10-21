@@ -64,6 +64,8 @@ export {
 } from './components/AnimatedBackground';
 export {
   AppShell,
+  AppShellAside,
+  type AppShellAsideProps,
   AppShellHeader,
   type AppShellHeaderProps,
   type AppShellProps,

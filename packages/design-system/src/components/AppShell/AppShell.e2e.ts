@@ -1,7 +1,7 @@
 import { expect, type Page, test } from '@playwright/test';
 import { createStoryHelper } from '@wallarm-org/playwright-config/storybook';
 
-const appShellStory = createStoryHelper('navigation-appshell', ['Basic'] as const);
+const appShellStory = createStoryHelper('navigation-appshell', ['Basic', 'With Aside'] as const);
 
 // ThemeProvider reads the stored Frame style on mount, so seed it before the story loads.
 const seedBrandedFrame = (page: Page) =>
@@ -30,6 +30,11 @@ test.describe('Component: AppShell', () => {
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
       await expect(page).toHaveScreenshot({ animations: 'disabled' });
     });
+
+    test('Should render docked aside correctly', async ({ page }) => {
+      await appShellStory.goto(page, 'With Aside');
+      await expect(page).toHaveScreenshot({ animations: 'disabled' });
+    });
   });
 
   test.describe('Interactions', () => {
@@ -44,6 +49,27 @@ test.describe('Component: AppShell', () => {
       // Park the pointer on the canvas so no rail tooltip is open in the shot.
       await page.mouse.move(800, 400);
       await expect(page).toHaveScreenshot({ animations: 'disabled' });
+    });
+
+    test('Should keep aside content when the header toggle closes and reopens it', async ({
+      page,
+    }) => {
+      await appShellStory.goto(page, 'With Aside');
+      const toggle = page.getByRole('button', { name: 'AI Assistant' });
+      const aside = page.getByRole('complementary', { name: 'AI Assistant' });
+      const message = aside.getByRole('textbox', { name: 'Message' });
+      const remote = page.locator('[data-slot="app-shell-remote"]');
+      await expect(remote).toHaveCSS('border-right-width', '1px');
+      await message.fill('Show recent attacks');
+
+      await toggle.click();
+      await expect(aside).toBeHidden();
+      await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+      // Closed, the canvas runs to the window edge again, as in a shell without an aside.
+      await expect(remote).toHaveCSS('border-right-width', '0px');
+
+      await toggle.click();
+      await expect(message).toHaveValue('Show recent attacks');
     });
   });
 });
