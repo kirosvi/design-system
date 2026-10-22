@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { format, isValid } from 'date-fns';
+import { format, isValid, parseISO } from 'date-fns';
 import { formatTimezone } from '../../../utils/formatDateTime';
 import type { DateOrder } from '../../DateFormatProvider/context';
 
@@ -12,10 +12,15 @@ export interface ChartTimeFormatterOptions {
   hourCycle?: ChartHourCycle;
 }
 
+const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
+
 const toDate = (value: unknown): Date | null => {
   if (value instanceof Date) return isValid(value) ? value : null;
   if (typeof value === 'number' || typeof value === 'string') {
-    const d = new Date(value);
+    // `new Date('2026-01-05')` is UTC midnight — the previous day west of UTC. A date-only
+    // string means a calendar day, so read it as local midnight.
+    const d =
+      typeof value === 'string' && DATE_ONLY.test(value) ? parseISO(value) : new Date(value);
     return isValid(d) ? d : null;
   }
   return null;
@@ -41,14 +46,17 @@ export const formatChartHour = (
   return format(date, timePattern(options.hourCycle ?? 24, false));
 };
 
-/** `24 Jan` (day-first) / `Jan 24` (month-first). Year is omitted — axis space is precious. */
+/**
+ * `24 Jan` (day-first) / `Jan 24` (month-first). Year is omitted by default — axis space is
+ * precious; `withYear` gives `24 Jan, 2026` / `Jan 24, 2026` for popovers.
+ */
 export const formatChartDate = (
   value: unknown,
-  options: { order?: ChartTimeOrder } = {},
+  options: { order?: ChartTimeOrder; withYear?: boolean } = {},
 ): string => {
   const date = toDate(value);
   if (!date) return '';
-  return format(date, datePattern(options.order ?? 'day-first', false));
+  return format(date, datePattern(options.order ?? 'day-first', options.withYear ?? false));
 };
 
 /** Combined `24 Jan 14:32`. Respects both `order` and `hourCycle`. */

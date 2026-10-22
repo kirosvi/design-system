@@ -20,3 +20,13 @@ export const metricCaptionClasses = 'text-xs text-text-secondary';
 
 // Skeleton: the thin caption-line placeholder under the value block.
 export const metricSkeletonLineClasses = 'w-full py-4';
+
+// Sparkline: a sibling after `Metric` inside `Chart`. `mt-auto` pins it to the card's bottom
+// edge; `px-px` is the Figma 1px inset from the card border.
+export const metricSparklineClasses = 'mt-auto w-full px-px';
+export const metricSparklinePlotClasses = 'relative h-48';
+// The ruler is an <svg>: `h-full`, since `inset-y-0` leaves a replaced element at its 150px default.
+export const metricSparklineRulerClasses =
+  'pointer-events-none absolute top-0 h-full w-px -translate-x-1/2 overflow-visible';
+// Portalled to `body` so the card's `overflow-clip` doesn't cut it; top-tier like Tooltip.
+export const metricSparklinePopoverClasses = 'pointer-events-none fixed z-(--tooltip-z-index)';
