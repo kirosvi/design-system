@@ -13,6 +13,8 @@ const getParts = (page: Page, key: string, testId = 'column-chart') =>
   page.getByTestId(`${testId}--part`).and(page.locator(`[data-key="${key}"]`));
 const getLegendItem = (page: Page, key: string) =>
   page.getByTestId('column-chart--legend-item').and(page.locator(`[data-key="${key}"]`));
+// The popover renders inside the `aria-hidden` plot, so `getByRole('tooltip')` never finds it.
+const getHoverPopover = (page: Page) => page.getByTestId('column-chart--hover-popover');
 
 // Moves the pointer onto the third column (3 Jan) — recharts' tooltip follows the pointer
 // over the step's band, so the middle of the column's top part is enough. A 0 value draws no
@@ -33,7 +35,7 @@ test.describe('Component: ColumnChart', () => {
     test('Should render hovered column correctly', async ({ page }) => {
       await columnChartStory.goto(page, 'Default');
       await hoverThirdColumn(page);
-      await expect(page.getByRole('tooltip')).toBeVisible();
+      await expect(getHoverPopover(page)).toBeVisible();
       await expect(page).toHaveScreenshot();
     });
 
@@ -78,7 +80,7 @@ test.describe('Component: ColumnChart', () => {
     test('Should show the column breakdown when a column is hovered', async ({ page }) => {
       await columnChartStory.goto(page, 'Default');
       await hoverThirdColumn(page);
-      const popover = page.getByRole('tooltip');
+      const popover = getHoverPopover(page);
       await expect(popover).toBeVisible();
       await expect(popover).toContainText('3 Jan');
       await expect(popover).toContainText('True positive');
@@ -116,7 +118,10 @@ test.describe('Component: ColumnChart', () => {
     test('Should be announced via role tooltip on the hover popover', async ({ page }) => {
       await columnChartStory.goto(page, 'Default');
       await hoverThirdColumn(page);
-      await expect(page.getByRole('tooltip')).toHaveAttribute('aria-live', 'polite');
+      const popover = getHoverPopover(page);
+      await expect(popover).toBeVisible();
+      await expect(popover).toHaveAttribute('role', 'tooltip');
+      await expect(popover).toHaveAttribute('aria-live', 'polite');
     });
 
     test('Should be operable via keyboard on a clickable legend', async ({ page }) => {
