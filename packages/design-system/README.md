@@ -70,7 +70,7 @@ body {
 - **Modals** - Dialog, Drawer, Popover
 - **Navigation** - Tabs, Breadcrumbs, SegmentedControl
 - **Layout** - Stack, Flex, ScrollArea
-- **Data display** - Badge, Tag, Code
+- **Data Display** - Badge, Tag, Code
 
 ## 🛠 Development
 
