@@ -1,11 +1,12 @@
-import { describe, expect, it } from '@rstest/core';
-import { render, screen } from '@testing-library/react';
+import { afterEach, describe, expect, it, rs } from '@rstest/core';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { Chart } from '../Chart';
 import { Metric } from './Metric';
 import { MetricCaption } from './MetricCaption';
 import { MetricDelta } from './MetricDelta';
 import { MetricHeader } from './MetricHeader';
 import { MetricSkeleton } from './MetricSkeleton';
+import { MetricSparkline } from './MetricSparkline';
 import { MetricTotal } from './MetricTotal';
 import { MetricValue } from './MetricValue';
 
@@ -173,5 +174,158 @@ describe('Metric — delta', () => {
     render(<MetricDelta value={1234} />);
     const badge = screen.getByRole('img', { name: 'up 1,234' });
     expect(badge).toHaveTextContent('1,234');
+  });
+});
+
+describe('MetricSparkline', () => {
+  const data = [
+    { x: new Date(2026, 0, 1), value: 10 },
+    { x: new Date(2026, 0, 2), value: 30 },
+    { x: new Date(2026, 0, 3), value: 20 },
+  ];
+
+  afterEach(() => rs.restoreAllMocks());
+
+  // jsdom has no layout: give the plot a 200px-wide box at x=100.
+  const mockPlotRect = () =>
+    rs.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      x: 100,
+      y: 50,
+      left: 100,
+      top: 50,
+      right: 300,
+      bottom: 98,
+      width: 200,
+      height: 48,
+      toJSON: () => ({}),
+    });
+
+  it('derives its testid from the surrounding provider and maps min..max onto the plot', () => {
+    render(
+      <Metric data-testid='m'>
+        <MetricSparkline data={data} />
+      </Metric>,
+    );
+    const root = screen.getByTestId('m--sparkline');
+    expect(root).toHaveAttribute('data-slot', 'metric-sparkline');
+    expect(root).toHaveAttribute('data-color', 'brand');
+    const line = root.querySelectorAll('path')[1];
+    // One X unit per step; the max sits PAD_TOP (4) from the top, the min PAD_BOTTOM (8) from 48.
+    expect(line).toHaveAttribute('d', 'M0,40 L1,4 L2,22');
+    expect(root.querySelector('svg')).toHaveAttribute('viewBox', '0 0 2 48');
+  });
+
+  it('draws a flat midline for a single point or a constant series', () => {
+    const { rerender } = render(<MetricSparkline data-testid='s' data={[{ x: 1, value: 5 }]} />);
+    const line = () => screen.getByTestId('s--plot').querySelectorAll('path')[1];
+    expect(line()).toHaveAttribute('d', 'M0,22 L1,22');
+    rerender(
+      <MetricSparkline
+        data-testid='s'
+        data={[
+          { x: 1, value: 5 },
+          { x: 2, value: 5 },
+          { x: 3, value: 5 },
+        ]}
+      />,
+    );
+    expect(line()).toHaveAttribute('d', 'M0,22 L1,22 L2,22');
+  });
+
+  it('leaves a gap at a non-finite value instead of blanking the line', () => {
+    render(
+      <MetricSparkline
+        data-testid='s'
+        data={[
+          { x: 1, value: 10 },
+          { x: 2, value: 30 },
+          { x: 3, value: Number.NaN },
+          { x: 4, value: 20 },
+        ]}
+      />,
+    );
+    const [area, line] = screen.getByTestId('s--plot').querySelectorAll('path');
+    expect(line).toHaveAttribute('d', 'M0,40 L1,4 M3,22');
+    expect(area).toHaveAttribute('d', 'M0,48 L0,40 L1,4 L1,48 Z M3,48 L3,22 L3,48 Z');
+  });
+
+  it('renders an empty plot (no svg) for empty data', () => {
+    render(<MetricSparkline data-testid='s' data={[]} />);
+    expect(screen.getByTestId('s--plot').querySelector('svg')).toBeNull();
+  });
+
+  it('shows the ruler and a date/value popover for the nearest point on hover', () => {
+    mockPlotRect();
+    render(
+      <Metric data-testid='m'>
+        <MetricSparkline data={data} label='Attacks' />
+      </Metric>,
+    );
+    const plot = screen.getByTestId('m--sparkline--plot');
+    // 45% of the width → nearest of 3 points is index 1.
+    fireEvent.pointerMove(plot, { clientX: 190 });
+
+    const popover = screen.getByTestId('m--sparkline--popover');
+    expect(popover).toHaveAttribute('role', 'tooltip');
+    expect(popover).toHaveTextContent('2 Jan, 2026');
+    expect(popover).toHaveTextContent('Attacks');
+    expect(popover).toHaveTextContent('30');
+    expect(screen.getByTestId('m--sparkline--ruler')).toHaveStyle({ left: '50%' });
+
+    fireEvent.pointerLeave(plot);
+    expect(screen.queryByTestId('m--sparkline--popover')).toBeNull();
+    expect(screen.queryByTestId('m--sparkline--ruler')).toBeNull();
+  });
+
+  it('uses formatX / formatValue when given', () => {
+    mockPlotRect();
+    render(
+      <MetricSparkline
+        data-testid='s'
+        data={data}
+        formatX={() => 'Day 3'}
+        formatValue={(v: number) => `${v.toFixed(1)} rps`}
+      />,
+    );
+    fireEvent.pointerMove(screen.getByTestId('s--plot'), { clientX: 300 });
+    expect(screen.getByRole('tooltip')).toHaveTextContent('Day 3');
+    expect(screen.getByRole('tooltip')).toHaveTextContent('20.0 rps');
+  });
+
+  it('shows a non-ISO string x as written and a date-only ISO x as that local day', () => {
+    mockPlotRect();
+    const { rerender } = render(
+      <MetricSparkline
+        data-testid='s'
+        data={[
+          { x: 'Week 1', value: 1 },
+          { x: '2026-01-05', value: 2 },
+        ]}
+      />,
+    );
+    const plot = screen.getByTestId('s--plot');
+    fireEvent.pointerMove(plot, { clientX: 100 });
+    // V8's Date.parse would read "Week 1" as 1 Jan 2001.
+    expect(screen.getByRole('tooltip')).toHaveTextContent('Week 1');
+    fireEvent.pointerMove(plot, { clientX: 300 });
+    expect(screen.getByRole('tooltip')).toHaveTextContent('5 Jan, 2026');
+    rerender(<MetricSparkline data-testid='s' data={[{ x: 'Week 1', value: 1 }]} />);
+    // The held index (1) no longer exists — no ruler outside the plot, no popover.
+    expect(screen.queryByTestId('s--ruler')).toBeNull();
+    expect(screen.queryByRole('tooltip')).toBeNull();
+  });
+
+  it('ends the hover on scroll, since the fixed popover cannot follow it', () => {
+    mockPlotRect();
+    render(<MetricSparkline data-testid='s' data={data} />);
+    fireEvent.pointerMove(screen.getByTestId('s--plot'), { clientX: 200 });
+    expect(screen.getByRole('tooltip')).toBeInTheDocument();
+    fireEvent.scroll(window);
+    expect(screen.queryByRole('tooltip')).toBeNull();
+  });
+
+  it('forwards consumer attributes to the root', () => {
+    render(<MetricSparkline data={data} data-testid='s' data-analytics-id='trend' />);
+    expect(screen.getByTestId('s')).toHaveAttribute('data-analytics-id', 'trend');
   });
 });

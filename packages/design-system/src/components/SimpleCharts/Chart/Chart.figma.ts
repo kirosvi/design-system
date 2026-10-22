@@ -14,6 +14,7 @@ const type = instance.getEnum('Type', {
   'Pie RC': 'pie',
   'Line (Common)': 'line',
   Metric: 'metric',
+  'Metric and sparkline': 'metric-sparkline',
   'Horizontal bar (stacked)': 'horizontal-bar-stack',
   'Empty (Common)': 'empty',
   'Area (Stacked)': 'area',
@@ -135,6 +136,10 @@ const pieLegendItems = pieRows.map(
       </PieChartLegendItem>`,
 );
 
+const sparklineData = `[${[14, 11, 11, 16, 18, 13]
+  .map((value, n) => `{ x: new Date(2026, 0, ${n + 1}), value: ${value} }`)
+  .join(', ')}]`;
+
 const hbarMetric = asInstance(
   instance.findInstance('_metric-item-common', { traverseInstances: true }),
 );
@@ -192,13 +197,18 @@ const body =
             ? figma.code`<Metric>
     ${metricHeader(hbarMetric, '    ')}
   </Metric>`
-            : type === 'horizontal-bar-stack'
-              ? figma.code`<HorizontalBarStack data={${pieData}}>
+            : type === 'metric-sparkline'
+              ? figma.code`<Metric>
+    ${metricHeader(hbarMetric, '    ')}
+  </Metric>
+  <MetricSparkline data={${sparklineData}} label='Attribute' />`
+              : type === 'horizontal-bar-stack'
+                ? figma.code`<HorizontalBarStack data={${pieData}}>
     ${metricHeader(hbarMetric, '    ')}
   </HorizontalBarStack>`
-              : emptyText && emptyText !== 'No data'
-                ? figma.code`<ChartEmpty>${emptyText}</ChartEmpty>`
-                : figma.code`<ChartEmpty />`;
+                : emptyText && emptyText !== 'No data'
+                  ? figma.code`<ChartEmpty>${emptyText}</ChartEmpty>`
+                  : figma.code`<ChartEmpty />`;
 
 const bodyImports: Record<string, string[]> = {
   'bar-list': [
@@ -240,6 +250,7 @@ const bodyImports: Record<string, string[]> = {
     'LineChartYAxis',
   ],
   metric: ['Metric'],
+  'metric-sparkline': ['Metric', 'MetricSparkline'],
   'horizontal-bar-stack': ['HorizontalBarStack'],
   empty: ['ChartEmpty'],
 };
