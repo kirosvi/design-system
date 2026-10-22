@@ -235,8 +235,7 @@ describe('Size variants', () => {
         <SelectInput data-testid='trigger' size='small' />
       </Select>,
     );
-    const tag = document.querySelector('[data-slot="tag"]');
-    expect(tag?.className).toContain('h-20');
+    expect(screen.getAllByTestId('select--tag')[0]?.className).toContain('h-20');
   });
 
   it('SelectInput keeps its item Tags at large for medium/default sizes', () => {
@@ -245,8 +244,17 @@ describe('Size variants', () => {
         <SelectInput data-testid='trigger' size='medium' />
       </Select>,
     );
-    const tag = document.querySelector('[data-slot="tag"]');
-    expect(tag?.className).toContain('h-24');
+    expect(screen.getAllByTestId('select--tag')[0]?.className).toContain('h-24');
+  });
+
+  it('SelectInput tag close keeps the `{select}--close` test id', () => {
+    render(
+      <Select collection={collection} multiple defaultValue={['react']} data-testid='select'>
+        <SelectInput data-testid='trigger' />
+      </Select>,
+    );
+    expect(screen.getAllByTestId('select--close').length).toBeGreaterThan(0);
+    expect(screen.queryByTestId('select--tag--close')).toBeNull();
   });
 
   it('SelectInput renders the inline-edit (28px) height', () => {
@@ -264,8 +272,7 @@ describe('Size variants', () => {
         <SelectInput data-testid='trigger' size='inline-edit' />
       </Select>,
     );
-    const tag = document.querySelector('[data-slot="tag"]');
-    expect(tag?.className).toContain('h-24');
+    expect(screen.getAllByTestId('select--tag')[0]?.className).toContain('h-24');
   });
 });
 
