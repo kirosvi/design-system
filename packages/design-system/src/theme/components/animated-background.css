@@ -51,7 +51,7 @@
 .lg-frame {
     position: relative;
     overflow: hidden;
-    background: #ffffff;
+    background: var(--lg-frame-bg, #ffffff);
     container-type: inline-size;
     --lg-blur-ref: 360;
 }
@@ -66,6 +66,11 @@
     position: absolute;
     border-radius: 50%;
     will-change: transform;
+}
+
+/* Chat palette (Figma chat-bg 67:1254): 70px blur on a 480px-wide panel, scaled to the frame */
+.lg-frame[data-palette="chat"] .lg-mesh {
+    filter: blur(calc(100cqw * 70 / 480));
 }
 
 @keyframes lg-f1 {

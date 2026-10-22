@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { describe, expect, it, rs } from '@rstest/core';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -71,6 +72,22 @@ describe('Attribute pass-through', () => {
 
     const content = await screen.findByTestId('content');
     expect(content).toHaveAttribute('data-analytics-id', 'POPOVER_BODY');
+  });
+
+  it('forwards ref and lets wrappers override data-slot on PopoverContent', async () => {
+    const ref = createRef<HTMLDivElement>();
+    render(
+      <Popover open>
+        <PopoverTrigger>Open</PopoverTrigger>
+        <PopoverContent ref={ref} data-testid='content' {...{ 'data-slot': 'custom-content' }}>
+          Body
+        </PopoverContent>
+      </Popover>,
+    );
+
+    const content = await screen.findByTestId('content');
+    expect(ref.current).toBe(content);
+    expect(content).toHaveAttribute('data-slot', 'custom-content');
   });
 });
 

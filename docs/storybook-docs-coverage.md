@@ -4,7 +4,7 @@
 > [`storybook-docs` skill](../.claude/skills/storybook-docs/SKILL.md); problems found along
 > the way go in [findings](./storybook-docs-findings.md).
 
-> **Last updated:** 2026-09-30, against main at v1.27.0 (plus `FileUpload` on `feat/WDS-185`, `Avatar` on `feat-avatar-component` and `Stepper` on `feat/stepper`). **97 of 99 pages are written** (`FilterDropdown` and `Stepper` left).
+> **Last updated:** 2026-09-30, against main at v1.27.0 (plus `FileUpload` on `feat/WDS-185`, `Avatar` on `feat-avatar-component` and `Stepper` on `feat/stepper`). **97 of 109 pages are written** (`FilterDropdown`, `Stepper` and the ten `AI/*` pages from `feat/ai-components` left).
 >
 > `SearchModal` landed in v1.7.0 with no stories file, so it is not a page yet — it becomes an
 > unticked row the moment one is added.
@@ -42,7 +42,7 @@ check**, not a queue:
 
 ## Snapshot
 
-- **97 written to the standard · 2 left** (`FilterDropdown`, new on `feat/WDS-180`; `Stepper`, new on `feat/stepper`), across 99 story pages.
+- **97 written to the standard · 12 left** (`FilterDropdown`, new on `feat/WDS-180`; `Stepper`, new on `feat/stepper`; the ten `AI/*` pages, new on `feat/ai-components`), across 109 story pages.
 - Levelling was usually cutting, not filling — and often correcting. Five pages
   claimed behaviour their own code contradicted: `Slider`, `Dialog`,
   `CodeSnippet` (its `Sizes` story labelled the wrong default), `BarList`
@@ -53,6 +53,16 @@ check**, not a queue:
 ## Pages
 | Status | Page | Stories | With a sentence | Story file |
 |---|---|---|---|---|
+| ☐ | AI/ApprovalCard | 8 | 8 | `components/ApprovalCard/ApprovalCard.stories.tsx` |
+| ☐ | AI/AssistantMessage | 9 | 9 | `components/AssistantMessage/AssistantMessage.stories.tsx` |
+| ☐ | AI/ChainOfThought | 11 | 11 | `components/ChainOfThought/ChainOfThought.stories.tsx` |
+| ☐ | AI/Chat | 15 | 15 | `components/Chat/Chat.stories.tsx` |
+| ☐ | AI/ChatInput | 8 | 8 | `components/ChatInput/ChatInput.stories.tsx` |
+| ☐ | AI/WallyAssistant | 9 | 9 | `components/WallyAssistant/WallyAssistant.stories.tsx` |
+| ☐ | AI/ChatPermissions | 3 | 3 | `components/ChatPermissions/ChatPermissions.stories.tsx` |
+| ☐ | AI/Conversation | 4 | 4 | `components/Conversation/Conversation.stories.tsx` |
+| ☐ | AI/MessageActions | 5 | 5 | `components/MessageActions/MessageActions.stories.tsx` |
+| ☐ | AI/UserMessage | 5 | 5 | `components/UserMessage/UserMessage.stories.tsx` |
 | ✅ | Actions/Button | 10 | 10 | `components/Button/Button.stories.tsx` |
 | ✅ | Actions/DropdownMenu | 9 | 9 | `components/DropdownMenu/DropdownMenu.stories.tsx` |
 | ✅ | Actions/SplitButton | 5 | 5 | `components/SplitButton/SplitButton.stories.tsx` |

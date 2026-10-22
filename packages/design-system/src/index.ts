@@ -63,6 +63,15 @@ export {
   type AnimatedBackgroundProps,
 } from './components/AnimatedBackground';
 export {
+  ApprovalCard,
+  ApprovalCardActions,
+  type ApprovalCardActionsProps,
+  ApprovalCardContent,
+  type ApprovalCardContentProps,
+  type ApprovalCardProps,
+  type ApprovalCardStatus,
+} from './components/ApprovalCard';
+export {
   AppShell,
   AppShellAside,
   type AppShellAsideProps,
@@ -74,6 +83,16 @@ export {
   AppShellRemote,
   type AppShellRemoteProps,
 } from './components/AppShell';
+export {
+  AssistantMessage,
+  AssistantMessageContent,
+  type AssistantMessageContentProps,
+  AssistantMessageError,
+  type AssistantMessageErrorProps,
+  AssistantMessageLoader,
+  type AssistantMessageLoaderProps,
+  type AssistantMessageProps,
+} from './components/AssistantMessage';
 export {
   Attribute,
   AttributeActions,
@@ -201,6 +220,54 @@ export {
   cardVariants,
 } from './components/Card';
 export {
+  ChainOfThought,
+  type ChainOfThoughtProps,
+  ChainOfThoughtStep,
+  type ChainOfThoughtStepProps,
+} from './components/ChainOfThought';
+export {
+  Chat,
+  type ChatBackground,
+  ChatBody,
+  type ChatBodyProps,
+  ChatFooter,
+  type ChatFooterProps,
+  ChatGreeting,
+  type ChatGreetingProps,
+  ChatHeader,
+  ChatHeaderActions,
+  type ChatHeaderActionsProps,
+  type ChatHeaderProps,
+  ChatHeaderTitle,
+  type ChatHeaderTitleProps,
+  type ChatProps,
+  ChatSuggestion,
+  type ChatSuggestionProps,
+  ChatSuggestions,
+  type ChatSuggestionsPlacement,
+  type ChatSuggestionsProps,
+  ChatTrigger,
+  type ChatTriggerProps,
+} from './components/Chat';
+export {
+  ChatInput,
+  type ChatInputProps,
+  ChatInputSubmit,
+  type ChatInputSubmitProps,
+  ChatInputTextarea,
+  type ChatInputTextareaProps,
+} from './components/ChatInput';
+export {
+  ChatPermissions,
+  ChatPermissionsContent,
+  type ChatPermissionsContentProps,
+  ChatPermissionsItem,
+  type ChatPermissionsItemProps,
+  type ChatPermissionsProps,
+  ChatPermissionsTrigger,
+  type ChatPermissionsTriggerProps,
+} from './components/ChatPermissions';
+export {
   Checkbox,
   CheckboxDescription,
   type CheckboxDescriptionProps,
@@ -212,6 +279,16 @@ export {
   type CheckboxProps,
 } from './components/Checkbox';
 export { Code, type CodeProps } from './components/Code';
+export {
+  Conversation,
+  ConversationContent,
+  type ConversationContentProps,
+  ConversationEmptyState,
+  type ConversationEmptyStateProps,
+  type ConversationProps,
+  ConversationScrollButton,
+  type ConversationScrollButtonProps,
+} from './components/Conversation';
 export {
   Copyable,
   CopyableIcon,
@@ -524,6 +601,14 @@ export {
   type LogoStyle,
   type LogoType,
 } from './components/Logo';
+export {
+  MessageAction,
+  type MessageActionProps,
+  MessageActions,
+  type MessageActionsProps,
+  MessageTimestamp,
+  type MessageTimestampProps,
+} from './components/MessageActions';
 export {
   NavRail,
   NavRailBody,
@@ -970,7 +1055,67 @@ export {
   type TreeViewItemProps,
   type TreeViewProps,
 } from './components/TreeView';
+export {
+  UserMessage,
+  UserMessageBubble,
+  type UserMessageBubbleProps,
+  type UserMessageProps,
+  UserMessageShowMore,
+  type UserMessageShowMoreProps,
+} from './components/UserMessage';
 export { UtilityPage, type UtilityPageProps } from './components/UtilityPage';
+export {
+  ApprovalCardView,
+  type ApprovalCardViewProps,
+  ChainOfThoughtView,
+  type ChainOfThoughtViewProps,
+  type ChatApprovalOption,
+  type ChatApprovalOptionKind,
+  type ChatApprovalPart,
+  type ChatApprovalResponse,
+  type ChatApprovalStatus,
+  type ChatAssistantMessage,
+  type ChatAssistantPart,
+  type ChatChainOfThoughtPart,
+  type ChatContextItem,
+  type ChatCustomPart,
+  type ChatErrorPart,
+  type ChatFeedback,
+  type ChatIconKey,
+  type ChatId,
+  type ChatLabels,
+  type ChatMarkdownProps,
+  type ChatMessage,
+  type ChatMessageActionNodes,
+  ChatMessageView,
+  type ChatMessageViewProps,
+  type ChatMeta,
+  type ChatOpen,
+  type ChatPart,
+  type ChatPartRenderContext,
+  ChatPartView,
+  type ChatPartViewProps,
+  type ChatSnapshot,
+  type ChatStatus,
+  type ChatStep,
+  type ChatStepKind,
+  type ChatStepRenderContext,
+  type ChatStepStatus,
+  type ChatSuggestionItem,
+  type ChatTextPart,
+  type ChatToolPermission,
+  type ChatUserMessage,
+  type ChatUserPart,
+  type ChatViewConfig,
+  ChatViewProvider,
+  type ChatViewProviderProps,
+  type ChatViewState,
+  copyTextOf,
+  DEFAULT_CHAT_LABELS,
+  deriveChatState,
+  WallyAssistant,
+  type WallyAssistantProps,
+} from './components/WallyAssistant';
 export {
   WallyIcon,
   type WallyIconProps,

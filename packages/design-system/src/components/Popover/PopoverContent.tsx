@@ -1,4 +1,11 @@
-import { type CSSProperties, type FC, type HTMLAttributes, type ReactNode, useMemo } from 'react';
+import {
+  type CSSProperties,
+  type FC,
+  type HTMLAttributes,
+  type ReactNode,
+  type Ref,
+  useMemo,
+} from 'react';
 import { Popover as ArkUiPopover, usePopoverContext } from '@ark-ui/react';
 import { Portal as ArkUiPortal } from '@ark-ui/react/portal';
 import { cn } from '../../utils/cn';
@@ -10,6 +17,7 @@ import type { PopoverSizeDimension } from './types';
 export interface PopoverContentProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'id' | 'style'>,
     TestableProps {
+  ref?: Ref<HTMLDivElement>;
   children: ReactNode;
   minHeight?: PopoverSizeDimension;
   maxHeight?: PopoverSizeDimension;
@@ -18,6 +26,7 @@ export interface PopoverContentProps
 }
 
 export const PopoverContent: FC<PopoverContentProps> = ({
+  ref,
   children,
   minHeight,
   maxHeight = POPOVER_MAX_HEIGHT,
@@ -30,7 +39,7 @@ export const PopoverContent: FC<PopoverContentProps> = ({
   const testId = useTestId('content', testIdProp);
   const { getContentProps } = usePopoverContext();
   const { id } = getContentProps();
-  const contentRef = useLayerZIndexRef<HTMLDivElement>();
+  const contentRef = useLayerZIndexRef<HTMLDivElement>(ref);
 
   const style = useMemo(
     () =>
@@ -47,10 +56,11 @@ export const PopoverContent: FC<PopoverContentProps> = ({
     <ArkUiPortal>
       <ArkUiPopover.Positioner>
         <ArkUiPopover.Content
+          // Before the spread so wrappers (e.g. ChatPermissionsContent) can set their own slot.
+          data-slot='popover-content'
           {...rest}
           ref={contentRef}
           id={id}
-          data-slot='popover-content'
           data-testid={testId}
           style={style}
           className={cn(

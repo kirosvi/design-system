@@ -1,0 +1,27 @@
+@utility shimmer-text {
+    background-image: linear-gradient(
+        90deg,
+        var(--color-text-secondary) 0%,
+        --alpha(var(--color-text-secondary) / 20%) 50%,
+        var(--color-text-secondary) 100%
+    );
+    background-size: 200% 100%;
+    background-clip: text;
+    color: transparent;
+    animation: ds-shimmer-text 2s linear infinite;
+
+    @media (prefers-reduced-motion: reduce), (forced-colors: active) {
+        animation: none;
+        background-image: none;
+        color: var(--color-text-secondary);
+    }
+}
+
+@keyframes ds-shimmer-text {
+    from {
+        background-position: 200% 0;
+    }
+    to {
+        background-position: -200% 0;
+    }
+}

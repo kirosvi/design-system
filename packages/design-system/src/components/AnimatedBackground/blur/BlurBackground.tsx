@@ -55,9 +55,63 @@ const BLOBS: BlobSpec[] = [
   },
 ];
 
+// Figma chat-bg 67:1254 (Wally — AI Assistant): solid ellipses under a 70px blur on a 480×853
+// panel, positions converted to percentages of that panel.
+const CHAT_BLOBS: BlobSpec[] = [
+  {
+    name: 'b1-lavender-top',
+    style: { width: '70%', height: '45%', left: '15%', top: '-15%' },
+    background: '#d4d2dc',
+    anim: 'lg-f1',
+    base: 37,
+  },
+  {
+    name: 'b2-cream-right',
+    style: { width: '55%', height: '65%', left: '55%', top: '25%' },
+    background: '#f5d8a0',
+    anim: 'lg-f2',
+    base: 29,
+  },
+  {
+    name: 'b3-peach-mid',
+    style: { width: '75%', height: '40%', left: '-5%', top: '35%' },
+    background: '#f0cdb8',
+    anim: 'lg-f6',
+    base: 43,
+  },
+  {
+    name: 'b4-orange-outer',
+    style: { width: '55%', height: '40%', left: '15%', top: '55%' },
+    background: '#ff8a3a',
+    anim: 'lg-f4',
+    base: 31,
+  },
+  {
+    name: 'b6-cream-br',
+    style: { width: '50%', height: '35%', left: '55%', top: '65%' },
+    background: '#f8e0b0',
+    anim: 'lg-f5',
+    base: 41,
+  },
+  {
+    name: 'b5-orange-core',
+    style: { width: '35%', height: '22%', left: '28%', top: '73%' },
+    background: '#ff5a08',
+    anim: 'lg-f3',
+    base: 23,
+  },
+];
+
+export type BlurBackgroundPalette = 'default' | 'chat';
+
 export interface BlurBackgroundProps extends HTMLAttributes<HTMLDivElement> {
   ref?: Ref<HTMLDivElement>;
   children?: ReactNode;
+  /**
+   * Blob colours and layout. `'chat'` is the Wally chat panel mesh (Figma chat-bg 67:1254),
+   * tuned for a ~480px-wide panel and meant to be dimmed by the host (5–12% opacity).
+   */
+  palette?: BlurBackgroundPalette;
 }
 
 const BLUR = 90;
@@ -68,11 +122,15 @@ export const BlurBackground: FC<BlurBackgroundProps> = ({
   className,
   style,
   children,
+  palette = 'default',
   ...rest
 }) => {
+  const blobs = palette === 'chat' ? CHAT_BLOBS : BLOBS;
+  // Only set for non-default palettes so the default DOM stays byte-identical.
+  const paletteAttr = palette === 'default' ? undefined : palette;
   const meshContent = (
     <div className='lg-mesh' style={{ '--lg-blur': BLUR } as CSSProperties}>
-      {BLOBS.map(b => (
+      {blobs.map(b => (
         <div
           key={b.name}
           className='lg-blob'
@@ -93,6 +151,7 @@ export const BlurBackground: FC<BlurBackgroundProps> = ({
     return (
       <div
         data-slot='blur-background'
+        data-palette={paletteAttr}
         {...rest}
         ref={ref}
         className={cn('lg-frame', className)}
@@ -107,6 +166,7 @@ export const BlurBackground: FC<BlurBackgroundProps> = ({
   return (
     <div
       data-slot='blur-background'
+      data-palette={paletteAttr}
       {...rest}
       ref={ref}
       className={cn('lg-frame relative', className)}
