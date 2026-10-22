@@ -20,7 +20,7 @@
 | R1 CopilotKit only through headless hooks | The mapper and the wiring live in the app (§10.1). The DS imports nothing from CopilotKit or AG-UI. |
 | R2 dumb components | Only UI-local state: scroll stickiness, step open toggles, and an optional uncontrolled draft (§1). |
 | R3 maximally compound | Every visual piece is an exported L1 part, every data rule is an exported L2 view or function, and every seam hands back the default (§6.3). |
-| R4 DS-owned, versionable data model | `WallyAssistant/model.ts` (§3), the identity rules (§7.2) and the versioning policy (§8). |
+| R4 DS-owned, versionable data model | `WallyAssistant/model/model.ts` (§3), the identity rules (§7.2) and the versioning policy (§8). |
 | R5 Conversation | `Conversation*` (§4.1, §7.6). |
 | R6 no renames; AI Elements as the example | §2.2 maps AI Elements to our names and lists what we borrowed. |
 | R7 closed component | `WallyAssistant` (§6). The open parts stay public (§5). |
@@ -80,14 +80,14 @@ APP   CopilotKit headless hooks · custom SSE/REST · anything
 L3    WallyAssistant (closed)                                            WallyAssistant/WallyAssistant.tsx
                                │ renders
 L2    ChatViewProvider · ChatMessageView · ChatPartView ·
-      ChainOfThoughtView · ApprovalCardView · deriveChatState()     WallyAssistant/*
+      ChainOfThoughtView · ApprovalCardView · deriveChatState()     WallyAssistant/{views,model}/*
                                │ renders
 L1    Chat* · Conversation* (new) · ChatInput* · ChatPermissions* · ApprovalCard* · UserMessage*
       AssistantMessage* (+Loader, +Error: new) · MessageActions* · ChainOfThought* (+'error')
                                │ uses
 L0    Button · SplitButton · DropdownMenu · Tooltip · Popover · Switch · Badge · TagClose · Copyable
       Separator · Text · WallyIcon · utils/Collapse · utils/formatDateTime · src/icons · shimmer-text
-MODEL WallyAssistant/model.ts (types only) — imported by L2 and L3; L1 never imports it
+MODEL WallyAssistant/model/model.ts (types only) — imported by L2 and L3; L1 never imports it
 ```
 
 | Owner | State |
@@ -156,7 +156,7 @@ MODEL WallyAssistant/model.ts (types only) — imported by L2 and L3; L1 never i
 
 ---
 
-## 3. Data model: `WallyAssistant/model.ts`
+## 3. Data model: `WallyAssistant/model/model.ts`
 
 ```ts
 /**
@@ -678,7 +678,7 @@ return custom === undefined ? defaultNode : custom;              // undefined �
 - They run on every render of their view, so keep them cheap.
 - The returned node becomes a direct child of the message. Return DS parts unwrapped, so the built spacing applies. Give a custom card its own `self-stretch mb-8` to match the card rhythm.
 
-### 5.4 Labels: `WallyAssistant/labels.ts`
+### 5.4 Labels: `WallyAssistant/model/labels.ts`
 
 ```ts
 export interface ChatLabels {
@@ -1214,7 +1214,7 @@ export function useStickToBottom(
 
 ## 8. Extensibility and versioning
 
-- **One contract file.** `WallyAssistant/model.ts` is exported as types. The package's semver is the version; there is no constant.
+- **One contract file.** `WallyAssistant/model/model.ts` is exported as types. The package's semver is the version; there is no constant.
 - **Minor release (`feat(wally-assistant): …`):**
   - a new part `type`
   - a new optional field
@@ -1253,17 +1253,21 @@ packages/design-system/src/components/
     classes.ts  index.ts
     Conversation.stories.tsx  Conversation.test.tsx  Conversation.analytics.test.tsx  Conversation.e2e.ts
   WallyAssistant/                             NEW
-    model.ts                             §3 (types only)
-    labels.ts                            ChatLabels + DEFAULT_CHAT_LABELS
-    deriveChatState.ts                   §5.5 + shared helpers
-    stepIcons.tsx                        internal STEP_TYPE_ICONS + resolver (§7.4)
-    ChatViewContext.ts                   internal context + useChatView()
-    ChatViewProvider.tsx  ChatMessageView.tsx  ChatPartView.tsx  ChainOfThoughtView.tsx  ApprovalCardView.tsx
-    WallyAssistant.tsx
-    mocks.ts                             reduceWally, WALLY_SCRIPT, fixtures, useMockWally (excluded from build and d.ts, like Table/mocks.tsx)
-    index.ts
-    deriveChatState.test.ts  mocks.test.ts  ChatViews.test.tsx  WallyAssistant.test.tsx  WallyAssistant.analytics.test.tsx
-    WallyAssistant.stories.tsx  WallyAssistant.e2e.ts  ANALYTICS_GAPS.md
+    WallyAssistant.tsx  index.ts
+    WallyAssistant.test.tsx  WallyAssistant.analytics.test.tsx  WallyAssistant.stories.tsx  WallyAssistant.e2e.ts  ANALYTICS_GAPS.md
+    model/
+      model.ts                           §3 (types only)
+      labels.ts                          ChatLabels + DEFAULT_CHAT_LABELS
+      deriveChatState.ts                 §5.5 + shared helpers
+      deriveChatState.test.ts
+    views/
+      ChatViewContext.ts                 internal context + useChatView()
+      ChatViewProvider.tsx  ChatMessageView.tsx  ChatPartView.tsx  ChainOfThoughtView.tsx  ApprovalCardView.tsx
+      stepIcons.tsx                      internal STEP_TYPE_ICONS + resolver (§7.4)
+      ChatViews.test.tsx  ChatViews.analytics.test.tsx
+    mocks/
+      index.ts                           reduceWally, WALLY_SCRIPT, fixtures, useMockWally; imported as `WallyAssistant/mocks` (excluded from build and d.ts via `**/mocks/**`, like Table/mocks.tsx)
+      mocks.test.ts
   AssistantMessage/   + AssistantMessageLoader.tsx, AssistantMessageError.tsx (classes, index, tests, stories, e2e)
   ChainOfThought/     ChainOfThoughtStep.tsx + classes.ts ('error'), story, test, e2e
   Chat/               ChatHeaderTitle.tsx (label), ChatBody.tsx (JSDoc), story, test
@@ -1613,7 +1617,7 @@ Still true from v1 §5.3:
 - `@ag-ui/core` and `@copilotkit/core` are direct app dependencies.
 - Activity messages (`role: 'activity'`) map to `custom` parts and render through `renderPart` (e.g. `useRenderActivityMessage`).
 
-### 10.2 Custom SSE/REST API → the same model (`WallyAssistant/mocks.ts`, which also drives the stories)
+### 10.2 Custom SSE/REST API → the same model (`WallyAssistant/mocks/index.ts`, which also drives the stories)
 
 ```ts
 import type {
@@ -1700,7 +1704,7 @@ export function reduceWally(s: ChatSnapshot, e: WallyEvent): ChatSnapshot {
 //   onApprovalRespond={r => post(`/approvals/${r.approvalId}`, r)} onRetry={(message) => resendTurn(message.id)} />
 ```
 
-`mocks.ts` also exports:
+`mocks/index.ts` also exports:
 - **`WALLY_SCRIPT`**, an array of `[delayMs, WallyEvent]` pairs.
 - **Fixtures:** `EMPTY`, `CONVERSATION` (two finished turns plus follow-up suggestions), `APPROVAL_PENDING`, `ERROR_TURN`, and `longThread(n)` for the perf test.
 - **`useMockWally({ initial, script, speed })`**, which returns `{ snapshot, send, stop, respond }`:
@@ -1828,7 +1832,7 @@ Rstest, RTL and user-event. Find elements by `data-testid`; use `getByRole` only
 - **Provider:** labels merge; changing an inline handler callback doesn't re-render message views.
 - **Perf:** with 300 messages and one growing text part, a counting `markdown` component re-renders only for that part per snapshot.
 
-**WallyAssistant**, using `mocks.ts` fixtures
+**WallyAssistant**, using `mocks/` fixtures
 - **Empty state and draft:**
   - The empty panel shows the greeting with its pills and the `strong` background.
   - A pill click calls `onSuggestionSelect(item)`; without it, `onSubmit(prompt ?? label)`.
@@ -1891,7 +1895,7 @@ Files are `*.e2e.ts`, with `describe('Component: X')` split into Visual, Interac
 ### 11.4 Quality gates (every unit)
 
 - `pnpm --filter @wallarm-org/design-system lint`
-- `tsc --build tsconfig.app.json --noEmit`, because the package's `typecheck` script is a no-op. Also run `tsc --build tsconfig.unit.json --noEmit`, which type-checks the tests and the `mocks.ts` they import.
+- `tsc --build tsconfig.app.json --noEmit`, because the package's `typecheck` script is a no-op. Also run `tsc --build tsconfig.unit.json --noEmit`, which type-checks the tests and the `mocks/` they import.
 - `test`
 - `compiler:audit`, with no new bailouts. `Table/lib/useRenderEveryTime.ts` is uncompiled on purpose.
 - Screenshot baselines come only from CI, through a commit containing `[update-screenshots]`. Check the bot's commit for unrelated flaky baselines (FilterInput) and restore those from main. Never run `e2e:docker` locally.

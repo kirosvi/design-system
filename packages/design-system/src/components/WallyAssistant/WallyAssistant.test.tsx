@@ -5,7 +5,7 @@ import { userEvent } from '@testing-library/user-event';
 import { CodeSnippetAdapterProvider, type SyntaxAdapter } from '../CodeSnippet';
 import { Drawer, DrawerContent } from '../Drawer';
 import { APPROVAL_PENDING, CONVERSATION, EMPTY, ERROR_TURN } from './mocks';
-import type { ChatContextItem, ChatMessage } from './model';
+import type { ChatContextItem, ChatMessage } from './model/model';
 import {
   WallyAssistant,
   type WallyAssistantOwnProps,

@@ -35,6 +35,7 @@ import {
   ChatMessageView,
   ChatPartView,
   type ChatSnapshot,
+  type ChatToolPermission,
   type ChatViewConfig,
   ChatViewProvider,
   copyTextOf,
@@ -47,7 +48,7 @@ const DESCRIPTION = [
   'The closed Wally panel: pass a `ChatSnapshot` (messages, status, suggestions, permissions, context) and callbacks, and it renders the whole Figma chat — header, stick-to-bottom log, greeting, chain of thought, docked approval and input.',
   'It holds no agent state: the app folds its stream into a new snapshot on every delta. Send is blocked while the last message has a pending approval (typing still works), and a resolved card stays docked until the next message.',
   'Every rule lives in exported pieces — `ChatViewProvider`, `deriveChatState`, `ChatMessageView`, `ChatPartView` — so a custom layout reuses them (Custom Layout). Seams like `renderPart`, `renderStepContent` and `renderMessageActions` hand back the default rendering.',
-  'Stories are driven by `useMockWally()` from `WallyAssistant/mocks.ts` and keep feedback and permissions in app state. Messages render with the default `AssistantMessageMarkdown`, and fenced code highlights with the lazy Prism adapter WallyAssistant mounts unless the app provides a `CodeSnippetAdapterProvider`.',
+  'Stories are driven by `useMockWally()` from `WallyAssistant/mocks` and keep feedback and permissions in app state. Messages render with the default `AssistantMessageMarkdown`, and fenced code highlights with the lazy Prism adapter WallyAssistant mounts unless the app provides a `CodeSnippetAdapterProvider`.',
 ].join(' ');
 
 const meta = {
@@ -229,6 +230,14 @@ export const Empty: StoryFn<typeof meta> = () => {
     m.role === 'assistant' && m.id in feedback ? withFeedback(m, feedback[m.id] ?? null) : m,
   );
 
+  const handleFeedback = (message: ChatAssistantMessage, value: ChatFeedback | null) => {
+    setFeedback(f => ({ ...f, [message.id]: value }));
+  };
+
+  const handlePermissionChange = (permission: ChatToolPermission, allowed: boolean) => {
+    setPermissions(list => list?.map(x => (x.id === permission.id ? { ...x, allowed } : x)));
+  };
+
   return (
     <div className='h-640 w-480'>
       <WallyAssistant
@@ -240,10 +249,8 @@ export const Empty: StoryFn<typeof meta> = () => {
         onSubmit={wally.send}
         onStop={wally.stop}
         onApprovalRespond={wally.respond}
-        onFeedback={(m, value) => setFeedback(f => ({ ...f, [m.id]: value }))}
-        onPermissionChange={(p, allowed) =>
-          setPermissions(list => list?.map(x => (x.id === p.id ? { ...x, allowed } : x)))
-        }
+        onFeedback={handleFeedback}
+        onPermissionChange={handlePermissionChange}
       />
     </div>
   );
@@ -258,6 +265,14 @@ export const Conversation: StoryFn<typeof meta> = () => {
     m.role === 'assistant' && m.id in feedback ? withFeedback(m, feedback[m.id] ?? null) : m,
   );
 
+  const handleFeedback = (message: ChatAssistantMessage, value: ChatFeedback | null) => {
+    setFeedback(f => ({ ...f, [message.id]: value }));
+  };
+
+  const handlePermissionChange = (permission: ChatToolPermission, allowed: boolean) => {
+    setPermissions(list => list?.map(x => (x.id === permission.id ? { ...x, allowed } : x)));
+  };
+
   return (
     <div className='h-640 w-480'>
       <WallyAssistant
@@ -269,10 +284,8 @@ export const Conversation: StoryFn<typeof meta> = () => {
         onSubmit={wally.send}
         onStop={wally.stop}
         onApprovalRespond={wally.respond}
-        onFeedback={(m, value) => setFeedback(f => ({ ...f, [m.id]: value }))}
-        onPermissionChange={(p, allowed) =>
-          setPermissions(list => list?.map(x => (x.id === p.id ? { ...x, allowed } : x)))
-        }
+        onFeedback={handleFeedback}
+        onPermissionChange={handlePermissionChange}
       />
     </div>
   );
@@ -291,6 +304,14 @@ export const StreamingSimulation: StoryFn<{ speed: number }> = ({ speed }) => {
     m.role === 'assistant' && m.id in feedback ? withFeedback(m, feedback[m.id] ?? null) : m,
   );
 
+  const handleFeedback = (message: ChatAssistantMessage, value: ChatFeedback | null) => {
+    setFeedback(f => ({ ...f, [message.id]: value }));
+  };
+
+  const handlePermissionChange = (permission: ChatToolPermission, allowed: boolean) => {
+    setPermissions(list => list?.map(x => (x.id === permission.id ? { ...x, allowed } : x)));
+  };
+
   return (
     <div className='h-640 w-480'>
       <WallyAssistant
@@ -302,10 +323,8 @@ export const StreamingSimulation: StoryFn<{ speed: number }> = ({ speed }) => {
         onSubmit={wally.send}
         onStop={wally.stop}
         onApprovalRespond={wally.respond}
-        onFeedback={(m, value) => setFeedback(f => ({ ...f, [m.id]: value }))}
-        onPermissionChange={(p, allowed) =>
-          setPermissions(list => list?.map(x => (x.id === p.id ? { ...x, allowed } : x)))
-        }
+        onFeedback={handleFeedback}
+        onPermissionChange={handlePermissionChange}
       />
     </div>
   );
@@ -324,6 +343,14 @@ export const Approval: StoryFn<typeof meta> = () => {
     m.role === 'assistant' && m.id in feedback ? withFeedback(m, feedback[m.id] ?? null) : m,
   );
 
+  const handleFeedback = (message: ChatAssistantMessage, value: ChatFeedback | null) => {
+    setFeedback(f => ({ ...f, [message.id]: value }));
+  };
+
+  const handlePermissionChange = (permission: ChatToolPermission, allowed: boolean) => {
+    setPermissions(list => list?.map(x => (x.id === permission.id ? { ...x, allowed } : x)));
+  };
+
   return (
     <div className='h-640 w-480'>
       <WallyAssistant
@@ -335,10 +362,8 @@ export const Approval: StoryFn<typeof meta> = () => {
         onSubmit={wally.send}
         onStop={wally.stop}
         onApprovalRespond={wally.respond}
-        onFeedback={(m, value) => setFeedback(f => ({ ...f, [m.id]: value }))}
-        onPermissionChange={(p, allowed) =>
-          setPermissions(list => list?.map(x => (x.id === p.id ? { ...x, allowed } : x)))
-        }
+        onFeedback={handleFeedback}
+        onPermissionChange={handlePermissionChange}
       />
     </div>
   );
@@ -354,6 +379,18 @@ const ErrorStory: StoryFn<typeof meta> = () => {
     m.role === 'assistant' && m.id in feedback ? withFeedback(m, feedback[m.id] ?? null) : m,
   );
 
+  const handleFeedback = (message: ChatAssistantMessage, value: ChatFeedback | null) => {
+    setFeedback(f => ({ ...f, [message.id]: value }));
+  };
+
+  const handlePermissionChange = (permission: ChatToolPermission, allowed: boolean) => {
+    setPermissions(list => list?.map(x => (x.id === permission.id ? { ...x, allowed } : x)));
+  };
+
+  const handleRetry = () => {
+    setRetries(n => n + 1);
+  };
+
   return (
     <div className='h-640 w-480'>
       <WallyAssistant
@@ -365,11 +402,9 @@ const ErrorStory: StoryFn<typeof meta> = () => {
         onSubmit={wally.send}
         onStop={wally.stop}
         onApprovalRespond={wally.respond}
-        onFeedback={(m, value) => setFeedback(f => ({ ...f, [m.id]: value }))}
-        onPermissionChange={(p, allowed) =>
-          setPermissions(list => list?.map(x => (x.id === p.id ? { ...x, allowed } : x)))
-        }
-        onRetry={() => setRetries(n => n + 1)}
+        onFeedback={handleFeedback}
+        onPermissionChange={handlePermissionChange}
+        onRetry={handleRetry}
         footerStart={
           retries ? <p className='text-xs text-text-secondary'>Retried {retries}×</p> : null
         }
@@ -393,6 +428,14 @@ export const Overrides: StoryFn<typeof meta> = () => {
     m.role === 'assistant' && m.id in feedback ? withFeedback(m, feedback[m.id] ?? null) : m,
   );
 
+  const handleFeedback = (message: ChatAssistantMessage, value: ChatFeedback | null) => {
+    setFeedback(f => ({ ...f, [message.id]: value }));
+  };
+
+  const handlePermissionChange = (permission: ChatToolPermission, allowed: boolean) => {
+    setPermissions(list => list?.map(x => (x.id === permission.id ? { ...x, allowed } : x)));
+  };
+
   return (
     <div className='h-640 w-480'>
       <WallyAssistant
@@ -404,10 +447,8 @@ export const Overrides: StoryFn<typeof meta> = () => {
         onSubmit={wally.send}
         onStop={wally.stop}
         onApprovalRespond={wally.respond}
-        onFeedback={(m, value) => setFeedback(f => ({ ...f, [m.id]: value }))}
-        onPermissionChange={(p, allowed) =>
-          setPermissions(list => list?.map(x => (x.id === p.id ? { ...x, allowed } : x)))
-        }
+        onFeedback={handleFeedback}
+        onPermissionChange={handlePermissionChange}
         renderPart={renderPart}
         renderStepContent={renderStepContent}
         renderMessageActions={renderMessageActions}
@@ -454,6 +495,12 @@ export const CustomLayout: StoryFn<typeof meta> = () => {
   const state = deriveChatState(messages, status, 'docked');
   const last = state.rows[state.rows.length - 1];
 
+  const handleSubmit = (text: string) => {
+    if (state.awaitingApproval) return;
+    wally.send(text);
+    setDraft('');
+  };
+
   return (
     <ChatViewProvider
       status={status}
@@ -487,11 +534,7 @@ export const CustomLayout: StoryFn<typeof meta> = () => {
             <ChatInput
               value={draft}
               onValueChange={setDraft}
-              onSubmit={text => {
-                if (state.awaitingApproval) return;
-                wally.send(text);
-                setDraft('');
-              }}
+              onSubmit={handleSubmit}
               onStop={wally.stop}
               isRunning={state.running}
             >
@@ -559,6 +602,14 @@ export const Analytics: StoryFn<typeof meta> = () => {
     m.role === 'assistant' && m.id in feedback ? withFeedback(m, feedback[m.id] ?? null) : m,
   );
 
+  const handleFeedback = (message: ChatAssistantMessage, value: ChatFeedback | null) => {
+    setFeedback(f => ({ ...f, [message.id]: value }));
+  };
+
+  const handlePermissionChange = (permission: ChatToolPermission, allowed: boolean) => {
+    setPermissions(list => list?.map(x => (x.id === permission.id ? { ...x, allowed } : x)));
+  };
+
   return (
     <div className='h-640 w-480'>
       <WallyAssistant
@@ -572,10 +623,8 @@ export const Analytics: StoryFn<typeof meta> = () => {
         onSubmit={wally.send}
         onStop={wally.stop}
         onApprovalRespond={wally.respond}
-        onFeedback={(m, value) => setFeedback(f => ({ ...f, [m.id]: value }))}
-        onPermissionChange={(p, allowed) =>
-          setPermissions(list => list?.map(x => (x.id === p.id ? { ...x, allowed } : x)))
-        }
+        onFeedback={handleFeedback}
+        onPermissionChange={handlePermissionChange}
         headerActions={
           <Button
             variant='ghost'

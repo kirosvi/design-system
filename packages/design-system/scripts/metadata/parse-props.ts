@@ -208,7 +208,9 @@ export function parseComponentProps(
         // Sub-component: e.g., AlertCloseProps → AlertClose
         const subName = name.replace(/Props$/, '');
         if (!valueExports.has(subName)) continue;
-        const subFile = project.getSourceFile(`${componentDir}/${subName}.tsx`);
+        // Sub-components may live in a nested folder (e.g. WallyAssistant/views/) — fall back to the Props declaration's file.
+        const subFile =
+          project.getSourceFile(`${componentDir}/${subName}.tsx`) ?? decl.getSourceFile();
         const subDefaults = subFile ? extractDefaultValues(subFile, subName) : {};
         subComponents.push({
           name: subName,

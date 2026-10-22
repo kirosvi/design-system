@@ -1,28 +1,28 @@
 import type { FC, ReactNode } from 'react';
-import { ChevronDown } from '../../icons';
-import { useTestId } from '../../utils/testId';
+import { ChevronDown } from '../../../icons';
+import { useTestId } from '../../../utils/testId';
 import {
   ApprovalCard,
   ApprovalCardActions,
   ApprovalCardContent,
   type ApprovalCardProps,
-} from '../ApprovalCard';
-import { Button } from '../Button';
+} from '../../ApprovalCard';
+import { Button } from '../../Button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '../DropdownMenu';
-import { SplitButton } from '../SplitButton';
-import { MarkdownView, useChatView } from './ChatViewContext';
-import type { ChatLabels } from './labels';
+} from '../../DropdownMenu';
+import { SplitButton } from '../../SplitButton';
+import type { ChatLabels } from '../model/labels';
 import type {
   ChatApprovalOption,
   ChatApprovalPart,
   ChatApprovalResponse,
   ChatMessage,
-} from './model';
+} from '../model/model';
+import { MarkdownView, useChatView } from './ChatViewContext';
 
 export interface ApprovalCardViewProps
   extends Omit<

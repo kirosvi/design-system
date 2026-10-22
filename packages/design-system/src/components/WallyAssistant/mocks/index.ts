@@ -3,7 +3,7 @@
  * Excluded from the build and the d.ts (`**\/mocks.{ts,tsx}`), like `Table/mocks.tsx`.
  */
 import { useEffect, useReducer, useRef } from 'react';
-import { isRunningStatus } from './deriveChatState';
+import { isRunningStatus } from '../model/deriveChatState';
 import type {
   ChatApprovalPart,
   ChatApprovalResponse,
@@ -15,7 +15,7 @@ import type {
   ChatStatus,
   ChatStep,
   ChatStepStatus,
-} from './model';
+} from '../model/model';
 
 export type WallyEvent =
   | { t: 'user'; id: string; text: string; at?: string }

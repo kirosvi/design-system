@@ -141,6 +141,11 @@ const STREAMING_STEPS = [
 export const Streaming: StoryFn<typeof meta> = () => {
   const [count, setCount] = useState(1);
   const finished = count > STREAMING_STEPS.length;
+
+  const handleClick = () => {
+    setCount(count + 1);
+  };
+
   return (
     <div className='flex flex-col gap-12'>
       <ChainOfThought data-testid='cot'>
@@ -165,7 +170,7 @@ export const Streaming: StoryFn<typeof meta> = () => {
           color='neutral'
           size='small'
           disabled={finished}
-          onClick={() => setCount(count + 1)}
+          onClick={handleClick}
           data-testid='next-step'
         >
           {count === STREAMING_STEPS.length ? 'Finish' : 'Next step'}

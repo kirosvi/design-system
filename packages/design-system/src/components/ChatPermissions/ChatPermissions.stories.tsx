@@ -52,6 +52,10 @@ export const AllOn: StoryFn<typeof meta> = () => {
   const enabled = TOOLS.filter(tool => allowed[tool.name]);
   const disabled = TOOLS.filter(tool => !allowed[tool.name]);
 
+  const handleCheckedChange = (name: string, checked: boolean) => {
+    setAllowed(prev => ({ ...prev, [name]: checked }));
+  };
+
   return (
     <div className='flex h-[360px] w-[400px] items-end'>
       <ChatPermissions data-testid='permissions'>
@@ -64,9 +68,7 @@ export const AllOn: StoryFn<typeof meta> = () => {
               title={tool.name}
               description={tool.description}
               checked
-              onCheckedChange={({ checked }) =>
-                setAllowed(prev => ({ ...prev, [tool.name]: checked }))
-              }
+              onCheckedChange={({ checked }) => handleCheckedChange(tool.name, checked)}
             />
           ))}
           {enabled.length > 0 && disabled.length > 0 && <Separator spacing={4} />}
@@ -77,9 +79,7 @@ export const AllOn: StoryFn<typeof meta> = () => {
               title={tool.name}
               description={tool.description}
               checked={false}
-              onCheckedChange={({ checked }) =>
-                setAllowed(prev => ({ ...prev, [tool.name]: checked }))
-              }
+              onCheckedChange={({ checked }) => handleCheckedChange(tool.name, checked)}
             />
           ))}
         </ChatPermissionsContent>
@@ -99,6 +99,10 @@ export const SomeOff: StoryFn<typeof meta> = () => {
   const enabled = TOOLS.filter(tool => allowed[tool.name]);
   const disabled = TOOLS.filter(tool => !allowed[tool.name]);
 
+  const handleCheckedChange = (name: string, checked: boolean) => {
+    setAllowed(prev => ({ ...prev, [name]: checked }));
+  };
+
   return (
     <div className='flex h-[360px] w-[400px] items-end'>
       <ChatPermissions data-testid='permissions'>
@@ -111,9 +115,7 @@ export const SomeOff: StoryFn<typeof meta> = () => {
               title={tool.name}
               description={tool.description}
               checked
-              onCheckedChange={({ checked }) =>
-                setAllowed(prev => ({ ...prev, [tool.name]: checked }))
-              }
+              onCheckedChange={({ checked }) => handleCheckedChange(tool.name, checked)}
             />
           ))}
           {enabled.length > 0 && disabled.length > 0 && <Separator spacing={4} />}
@@ -124,9 +126,7 @@ export const SomeOff: StoryFn<typeof meta> = () => {
               title={tool.name}
               description={tool.description}
               checked={false}
-              onCheckedChange={({ checked }) =>
-                setAllowed(prev => ({ ...prev, [tool.name]: checked }))
-              }
+              onCheckedChange={({ checked }) => handleCheckedChange(tool.name, checked)}
             />
           ))}
         </ChatPermissionsContent>
@@ -142,6 +142,10 @@ export const SomeOff: StoryFn<typeof meta> = () => {
 export const Analytics: StoryFn<typeof meta> = () => {
   const [checked, setChecked] = useState(true);
 
+  const handleCheckedChange = (details: { checked: boolean }) => {
+    setChecked(details.checked);
+  };
+
   return (
     <div className='flex h-[360px] w-[400px] items-end'>
       <ChatPermissions data-testid='permissions'>
@@ -154,7 +158,7 @@ export const Analytics: StoryFn<typeof meta> = () => {
             title='search_attacks'
             description='Search detected attacks and incidents'
             checked={checked}
-            onCheckedChange={details => setChecked(details.checked)}
+            onCheckedChange={handleCheckedChange}
           />
         </ChatPermissionsContent>
       </ChatPermissions>

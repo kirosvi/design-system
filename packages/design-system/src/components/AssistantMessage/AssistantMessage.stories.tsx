@@ -422,6 +422,10 @@ export const MarkdownStreaming: StoryFn<typeof meta> = () => {
     return () => clearTimeout(id);
   }, [length]);
 
+  const handleClick = () => {
+    setLength(0);
+  };
+
   return (
     <div className='flex flex-col items-start gap-16'>
       <CodeSnippetAdapterProvider adapter={loadPrismAdapter}>
@@ -437,7 +441,7 @@ export const MarkdownStreaming: StoryFn<typeof meta> = () => {
         size='small'
         disabled={streaming}
         data-testid='markdown-streaming--replay'
-        onClick={() => setLength(0)}
+        onClick={handleClick}
       >
         <RefreshCcw />
         Replay

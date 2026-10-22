@@ -36,6 +36,15 @@ export const Default: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
   const [isRunning, setIsRunning] = useState(false);
 
+  const handleSubmit = () => {
+    setValue('');
+    setIsRunning(true);
+  };
+
+  const handleStop = () => {
+    setIsRunning(false);
+  };
+
   return (
     <div className='w-[400px]'>
       <ChatInput
@@ -43,11 +52,8 @@ export const Default: StoryFn<typeof meta> = () => {
         value={value}
         onValueChange={setValue}
         isRunning={isRunning}
-        onSubmit={() => {
-          setValue('');
-          setIsRunning(true);
-        }}
-        onStop={() => setIsRunning(false)}
+        onSubmit={handleSubmit}
+        onStop={handleStop}
       >
         <ChatInputTextarea />
         <ChatInputSubmit />
@@ -63,6 +69,15 @@ export const Typing: StoryFn<typeof meta> = () => {
   );
   const [isRunning, setIsRunning] = useState(false);
 
+  const handleSubmit = () => {
+    setValue('');
+    setIsRunning(true);
+  };
+
+  const handleStop = () => {
+    setIsRunning(false);
+  };
+
   return (
     <div className='w-[400px]'>
       <ChatInput
@@ -70,11 +85,8 @@ export const Typing: StoryFn<typeof meta> = () => {
         value={value}
         onValueChange={setValue}
         isRunning={isRunning}
-        onSubmit={() => {
-          setValue('');
-          setIsRunning(true);
-        }}
-        onStop={() => setIsRunning(false)}
+        onSubmit={handleSubmit}
+        onStop={handleStop}
       >
         <ChatInputTextarea />
         <ChatInputSubmit />
@@ -88,6 +100,15 @@ export const Streaming: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
   const [isRunning, setIsRunning] = useState(true);
 
+  const handleSubmit = () => {
+    setValue('');
+    setIsRunning(true);
+  };
+
+  const handleStop = () => {
+    setIsRunning(false);
+  };
+
   return (
     <div className='w-[400px]'>
       <ChatInput
@@ -95,11 +116,8 @@ export const Streaming: StoryFn<typeof meta> = () => {
         value={value}
         onValueChange={setValue}
         isRunning={isRunning}
-        onSubmit={() => {
-          setValue('');
-          setIsRunning(true);
-        }}
-        onStop={() => setIsRunning(false)}
+        onSubmit={handleSubmit}
+        onStop={handleStop}
       >
         <ChatInputTextarea />
         <ChatInputSubmit />
@@ -112,6 +130,10 @@ export const Streaming: StoryFn<typeof meta> = () => {
 export const Disabled: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('Draft kept');
 
+  const handleSubmit = () => {
+    setValue('');
+  };
+
   return (
     <div className='w-[400px]'>
       <ChatInput
@@ -119,7 +141,7 @@ export const Disabled: StoryFn<typeof meta> = () => {
         disabled
         value={value}
         onValueChange={setValue}
-        onSubmit={() => setValue('')}
+        onSubmit={handleSubmit}
       >
         <ChatInputTextarea />
         <ChatInputSubmit />
@@ -133,13 +155,21 @@ export const WithContext: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
   const [chips, setChips] = useState(['Attacks', 'Incidents']);
 
+  const handleContextRemove = (chip: string) => {
+    setChips(prev => prev.filter(item => item !== chip));
+  };
+
+  const handleSubmit = () => {
+    setValue('');
+  };
+
   return (
     <div className='w-[400px]'>
       <ChatInput
         data-testid='chat-input'
         value={value}
         onValueChange={setValue}
-        onSubmit={() => setValue('')}
+        onSubmit={handleSubmit}
         context={chips.map(chip => (
           <Badge key={chip} type='secondary' color='blue' data-testid={`context-${chip}`}>
             <Quote />
@@ -147,7 +177,7 @@ export const WithContext: StoryFn<typeof meta> = () => {
             <TagClose
               aria-label={`Remove ${chip}`}
               className='rounded-4 focus-visible:ring-3 focus-visible:ring-focus-primary'
-              onClick={() => setChips(prev => prev.filter(item => item !== chip))}
+              onClick={() => handleContextRemove(chip)}
             />
           </Badge>
         ))}
@@ -164,6 +194,14 @@ export const WithSettings: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
   const [allowed, setAllowed] = useState({ search_attacks: true, propose_add_to_denylist: true });
 
+  const handlePermissionChange = (name: string, checked: boolean) => {
+    setAllowed(prev => ({ ...prev, [name]: checked }));
+  };
+
+  const handleSubmit = () => {
+    setValue('');
+  };
+
   return (
     <div className='flex h-[320px] items-end'>
       <div className='w-[400px]'>
@@ -171,7 +209,7 @@ export const WithSettings: StoryFn<typeof meta> = () => {
           data-testid='chat-input'
           value={value}
           onValueChange={setValue}
-          onSubmit={() => setValue('')}
+          onSubmit={handleSubmit}
         >
           <ChatInputTextarea />
           <ChatPermissions data-testid='permissions'>
@@ -182,9 +220,7 @@ export const WithSettings: StoryFn<typeof meta> = () => {
                   key={name}
                   title={name}
                   checked={checked}
-                  onCheckedChange={details =>
-                    setAllowed(prev => ({ ...prev, [name]: details.checked }))
-                  }
+                  onCheckedChange={details => handlePermissionChange(name, details.checked)}
                 />
               ))}
             </ChatPermissionsContent>
@@ -200,6 +236,10 @@ export const WithSettings: StoryFn<typeof meta> = () => {
 export const NoDisclaimer: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
 
+  const handleSubmit = () => {
+    setValue('');
+  };
+
   return (
     <div className='w-[400px]'>
       <ChatInput
@@ -207,7 +247,7 @@ export const NoDisclaimer: StoryFn<typeof meta> = () => {
         disclaimer={null}
         value={value}
         onValueChange={setValue}
-        onSubmit={() => setValue('')}
+        onSubmit={handleSubmit}
       >
         <ChatInputTextarea />
         <ChatInputSubmit />
@@ -220,13 +260,17 @@ export const NoDisclaimer: StoryFn<typeof meta> = () => {
 export const Analytics: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
 
+  const handleSubmit = () => {
+    setValue('');
+  };
+
   return (
     <div className='w-[400px]'>
       <ChatInput
         data-testid='chat-input'
         value={value}
         onValueChange={setValue}
-        onSubmit={() => setValue('')}
+        onSubmit={handleSubmit}
       >
         <ChatInputTextarea data-analytics-id='WALLY_PROMPT' />
         <ChatInputSubmit

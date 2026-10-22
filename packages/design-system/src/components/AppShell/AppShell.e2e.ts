@@ -46,7 +46,7 @@ const toggleAsideAndRecord = (page: Page): Promise<AsideRecording> =>
     };
     const remote = find('[data-testid="app-shell--remote"]');
     const aside = find('[data-testid="app-shell--aside"]');
-    const toggle = find<HTMLButtonElement>('button[aria-label="AI Assistant"]');
+    const toggle = find<HTMLButtonElement>('button[aria-label="Ask Wally"]');
     const boxOf = (element: HTMLElement) => {
       const { x, y, width, height } = element.getBoundingClientRect();
       return { x, y, width, height };
@@ -150,10 +150,10 @@ test.describe('Component: AppShell', () => {
       page,
     }) => {
       await appShellStory.goto(page, 'With Aside');
-      const toggle = page.getByRole('button', { name: 'AI Assistant' });
+      const toggle = page.getByRole('button', { name: 'Ask Wally' });
       // Test ids resolve the aside even while it is hidden, so toBeHidden checks the real node.
       const aside = page.getByTestId('app-shell--aside');
-      const message = aside.getByRole('textbox', { name: 'Message' });
+      const message = aside.getByRole('textbox', { name: 'Message Wally' });
       const remote = page.getByTestId('app-shell--remote');
       await expect(remote).toHaveCSS('border-right-width', '1px');
       await message.fill('Show recent attacks');
@@ -255,7 +255,7 @@ test.describe('Component: AppShell', () => {
 
       await page.keyboard.press('Enter');
       await expect(aside).toBeHidden();
-      await expect(page.getByRole('button', { name: 'AI Assistant' })).toBeFocused();
+      await expect(page.getByRole('button', { name: 'Ask Wally' })).toBeFocused();
     });
 
     test('Should be toggled without animation via the reduced-motion preference', async ({

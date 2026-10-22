@@ -66,6 +66,14 @@ export const Default: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
   const lastId = turns[turns.length - 1]?.id;
 
+  const handleSubmit = (question: string) => {
+    setTurns(previous => [
+      ...previous,
+      { id: `u${previous.length}`, question, answer: ANSWER.slice(0, 2) },
+    ]);
+    setValue('');
+  };
+
   return (
     <div className='h-640 w-480'>
       <Chat data-testid='chat'>
@@ -98,17 +106,7 @@ export const Default: StoryFn<typeof meta> = () => {
           <ConversationScrollButton />
         </Conversation>
         <ChatFooter>
-          <ChatInput
-            value={value}
-            onValueChange={setValue}
-            onSubmit={question => {
-              setTurns(previous => [
-                ...previous,
-                { id: `u${previous.length}`, question, answer: ANSWER.slice(0, 2) },
-              ]);
-              setValue('');
-            }}
-          >
+          <ChatInput value={value} onValueChange={setValue} onSubmit={handleSubmit}>
             <ChatInputTextarea />
             <ChatInputSubmit />
           </ChatInput>
@@ -121,6 +119,10 @@ export const Default: StoryFn<typeof meta> = () => {
 /** `ConversationEmptyState` with greeting pills, over the `strong` background. */
 export const Empty: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
+
+  const handleSubmit = () => {
+    setValue('');
+  };
 
   return (
     <div className='h-640 w-480'>
@@ -144,7 +146,7 @@ export const Empty: StoryFn<typeof meta> = () => {
           <ConversationScrollButton />
         </Conversation>
         <ChatFooter>
-          <ChatInput value={value} onValueChange={setValue} onSubmit={() => setValue('')}>
+          <ChatInput value={value} onValueChange={setValue} onSubmit={handleSubmit}>
             <ChatInputTextarea />
             <ChatInputSubmit />
           </ChatInput>

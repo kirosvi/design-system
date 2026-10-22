@@ -21,8 +21,8 @@ import {
   ShieldAlert,
   Terminal,
   Wrench,
-} from '../../icons';
-import type { ChatStep, ChatStepStatus } from './model';
+} from '../../../icons';
+import type { ChatStep, ChatStepStatus } from '../model/model';
 
 /** Figma 483:1899 step types. Internal: apps override through the `icons` prop. */
 const STEP_TYPE_ICONS: Readonly<Record<string, ReactNode>> = {

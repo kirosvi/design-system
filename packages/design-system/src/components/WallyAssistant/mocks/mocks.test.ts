@@ -1,5 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it, rs } from '@rstest/core';
 import { act, renderHook } from '@testing-library/react';
+import type {
+  ChatApprovalPart,
+  ChatAssistantMessage,
+  ChatChainOfThoughtPart,
+  ChatSnapshot,
+  ChatStep,
+} from '../model/model';
 import {
   APPROVAL_PENDING,
   CONVERSATION,
@@ -10,14 +17,7 @@ import {
   useMockWally,
   WALLY_SCRIPT,
   type WallyEvent,
-} from './mocks';
-import type {
-  ChatApprovalPart,
-  ChatAssistantMessage,
-  ChatChainOfThoughtPart,
-  ChatSnapshot,
-  ChatStep,
-} from './model';
+} from './index';
 
 const run = (s: ChatSnapshot, events: WallyEvent[]) => events.reduce(reduceWally, s);
 const step = (id: string, status: ChatStep['status'] = 'running'): ChatStep => ({

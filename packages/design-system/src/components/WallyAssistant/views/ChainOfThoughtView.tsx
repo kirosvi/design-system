@@ -1,16 +1,16 @@
 import { type FC, useState } from 'react';
-import { Activity, Brain } from '../../icons';
-import { useTestId } from '../../utils/testId';
+import { Activity, Brain } from '../../../icons';
+import { useTestId } from '../../../utils/testId';
 import {
   ChainOfThought,
   type ChainOfThoughtProps,
   ChainOfThoughtStep,
   type ChainOfThoughtStepProps,
-} from '../ChainOfThought';
-import { useRenderEveryTime } from '../Table/lib/useRenderEveryTime';
+} from '../../ChainOfThought';
+import { useRenderEveryTime } from '../../Table/lib/useRenderEveryTime';
+import { isLiveStep, isLiveStepStatus } from '../model/deriveChatState';
+import type { ChatChainOfThoughtPart, ChatId, ChatMessage, ChatStep } from '../model/model';
 import { MarkdownView, useChatView } from './ChatViewContext';
-import { isLiveStep, isLiveStepStatus } from './deriveChatState';
-import type { ChatChainOfThoughtPart, ChatId, ChatMessage, ChatStep } from './model';
 import { resolveStepIcon, stepVisualStatus } from './stepIcons';
 
 /** `...rest` lands on the root `ol`. The DOM `part` attribute is dropped: `part` is the data here. */

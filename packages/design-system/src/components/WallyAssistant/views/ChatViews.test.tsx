@@ -3,18 +3,12 @@ import { afterEach, describe, expect, it, rs } from '@rstest/core';
 import { act, render, screen, within } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { Activity, Brain, CircleDashed, Search, Wrench } from '../../icons';
-import { copyText } from '../../utils/copyText';
-import { TestIdProvider } from '../../utils/testId';
-import { ApprovalCardActions } from '../ApprovalCard';
-import { Button } from '../Button';
-import { ApprovalCardView } from './ApprovalCardView';
-import { ChainOfThoughtView } from './ChainOfThoughtView';
-import { ChatMessageView } from './ChatMessageView';
-import { ChatPartView } from './ChatPartView';
-import type { ChatMarkdownProps, ChatViewConfig } from './ChatViewContext';
-import { ChatViewProvider } from './ChatViewProvider';
-import { longThread } from './mocks';
+import { Activity, Brain, CircleDashed, Search, Wrench } from '../../../icons';
+import { copyText } from '../../../utils/copyText';
+import { TestIdProvider } from '../../../utils/testId';
+import { ApprovalCardActions } from '../../ApprovalCard';
+import { Button } from '../../Button';
+import { longThread } from '../mocks';
 import type {
   ChatApprovalPart,
   ChatAssistantMessage,
@@ -24,9 +18,15 @@ import type {
   ChatStep,
   ChatStepStatus,
   ChatUserMessage,
-} from './model';
+} from '../model/model';
+import { ApprovalCardView } from './ApprovalCardView';
+import { ChainOfThoughtView } from './ChainOfThoughtView';
+import { ChatMessageView } from './ChatMessageView';
+import { ChatPartView } from './ChatPartView';
+import type { ChatMarkdownProps, ChatViewConfig } from './ChatViewContext';
+import { ChatViewProvider } from './ChatViewProvider';
 
-rs.mock('../../utils/copyText', () => ({ copyText: rs.fn(() => Promise.resolve()) }));
+rs.mock('../../../utils/copyText', () => ({ copyText: rs.fn(() => Promise.resolve()) }));
 
 afterEach(() => {
   rs.mocked(copyText).mockClear();

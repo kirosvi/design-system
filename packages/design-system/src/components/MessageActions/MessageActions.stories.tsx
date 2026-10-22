@@ -116,8 +116,14 @@ export const Visible: StoryFn<typeof meta> = () => (
  */
 export const PressedFeedback: StoryFn<typeof meta> = () => {
   const [feedback, setFeedback] = useState<'up' | 'down' | null>('up');
-  const toggle = (value: 'up' | 'down') =>
-    setFeedback(current => (current === value ? null : value));
+
+  const handleGoodClick = () => {
+    setFeedback(current => (current === 'up' ? null : 'up'));
+  };
+
+  const handleBadClick = () => {
+    setFeedback(current => (current === 'down' ? null : 'down'));
+  };
 
   return (
     <MessageActions data-testid='feedback-actions' visible>
@@ -125,7 +131,7 @@ export const PressedFeedback: StoryFn<typeof meta> = () => {
         aria-label='Good response'
         aria-pressed={feedback === 'up'}
         data-testid='feedback-up'
-        onClick={() => toggle('up')}
+        onClick={handleGoodClick}
       >
         <ThumbsUp />
       </MessageAction>
@@ -133,7 +139,7 @@ export const PressedFeedback: StoryFn<typeof meta> = () => {
         aria-label='Bad response'
         aria-pressed={feedback === 'down'}
         data-testid='feedback-down'
-        onClick={() => toggle('down')}
+        onClick={handleBadClick}
       >
         <ThumbsDown />
       </MessageAction>

@@ -1,12 +1,12 @@
 import { type FC, type ReactNode, useLayoutEffect, useRef } from 'react';
-import { AssistantMessageMarkdown } from '../AssistantMessage';
+import { AssistantMessageMarkdown } from '../../AssistantMessage';
+import { DEFAULT_CHAT_LABELS } from '../model/labels';
 import {
   type ChatViewConfig,
   ChatViewContext,
   type ChatViewContextValue,
   type ChatViewHandlers,
 } from './ChatViewContext';
-import { DEFAULT_CHAT_LABELS } from './labels';
 
 export interface ChatViewProviderProps extends ChatViewConfig {
   children: ReactNode;

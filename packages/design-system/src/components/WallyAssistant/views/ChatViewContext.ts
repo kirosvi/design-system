@@ -10,8 +10,8 @@ import {
 import {
   AssistantMessageMarkdown,
   type AssistantMessageMarkdownVariant,
-} from '../AssistantMessage';
-import { type ChatLabels, DEFAULT_CHAT_LABELS } from './labels';
+} from '../../AssistantMessage';
+import { type ChatLabels, DEFAULT_CHAT_LABELS } from '../model/labels';
 import type {
   ChatApprovalPart,
   ChatApprovalResponse,
@@ -23,7 +23,7 @@ import type {
   ChatPart,
   ChatStatus,
   ChatStep,
-} from './model';
+} from '../model/model';
 
 export interface ChatMarkdownProps {
   text: string;

@@ -116,6 +116,9 @@ export interface BlurBackgroundProps extends HTMLAttributes<HTMLDivElement> {
 
 const BLUR = 90;
 const SPEED = 2;
+// The chat panel is small and dimmed, so the default pace reads as static there. The slowest blob
+// (base 43) cycles in 2s, the rest a little faster (~1.1–2s), so they never move in lockstep.
+const CHAT_SPEED = 21.5;
 
 export const BlurBackground: FC<BlurBackgroundProps> = ({
   ref,
@@ -126,6 +129,7 @@ export const BlurBackground: FC<BlurBackgroundProps> = ({
   ...rest
 }) => {
   const blobs = palette === 'chat' ? CHAT_BLOBS : BLOBS;
+  const speed = palette === 'chat' ? CHAT_SPEED : SPEED;
   // Only set for non-default palettes so the default DOM stays byte-identical.
   const paletteAttr = palette === 'default' ? undefined : palette;
   const meshContent = (
@@ -138,7 +142,7 @@ export const BlurBackground: FC<BlurBackgroundProps> = ({
             ...b.style,
             background: b.background,
             animationName: b.anim,
-            animationDuration: `${b.base / SPEED}s`,
+            animationDuration: `${b.base / speed}s`,
             animationTimingFunction: 'ease-in-out',
             animationIterationCount: 'infinite',
           }}

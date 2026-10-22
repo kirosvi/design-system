@@ -1,22 +1,22 @@
 import type { FC } from 'react';
-import { ThumbsDown, ThumbsUp } from '../../icons';
-import { formatRelativeTime } from '../../utils/formatDateTime';
-import { useTestId } from '../../utils/testId';
-import { AssistantMessage, AssistantMessageLoader } from '../AssistantMessage';
-import { Copyable, CopyableIcon } from '../Copyable';
-import { useDateFormat } from '../DateFormatProvider';
-import { MessageAction, MessageActions, MessageTimestamp } from '../MessageActions';
-import { useRenderEveryTime } from '../Table/lib/useRenderEveryTime';
-import { UserMessage } from '../UserMessage';
-import { ChatPartView, isAbsentPart } from './ChatPartView';
-import { useChatView } from './ChatViewContext';
+import { ThumbsDown, ThumbsUp } from '../../../icons';
+import { formatRelativeTime } from '../../../utils/formatDateTime';
+import { useTestId } from '../../../utils/testId';
+import { AssistantMessage, AssistantMessageLoader } from '../../AssistantMessage';
+import { Copyable, CopyableIcon } from '../../Copyable';
+import { useDateFormat } from '../../DateFormatProvider';
+import { MessageAction, MessageActions, MessageTimestamp } from '../../MessageActions';
+import { useRenderEveryTime } from '../../Table/lib/useRenderEveryTime';
+import { UserMessage } from '../../UserMessage';
 import {
   copyTextOf,
   getDockedApprovals,
   hasPendingApproval,
   isRunningStatus,
-} from './deriveChatState';
-import type { ChatAssistantMessage, ChatFeedback, ChatMessage, ChatPart } from './model';
+} from '../model/deriveChatState';
+import type { ChatAssistantMessage, ChatFeedback, ChatMessage, ChatPart } from '../model/model';
+import { ChatPartView, isAbsentPart } from './ChatPartView';
+import { useChatView } from './ChatViewContext';
 
 export interface ChatMessageViewProps {
   message: ChatMessage;

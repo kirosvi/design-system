@@ -1,17 +1,5 @@
-export { ApprovalCardView, type ApprovalCardViewProps } from './ApprovalCardView';
-export { ChainOfThoughtView, type ChainOfThoughtViewProps } from './ChainOfThoughtView';
-export { ChatMessageView, type ChatMessageViewProps } from './ChatMessageView';
-export { ChatPartView, type ChatPartViewProps } from './ChatPartView';
-export type {
-  ChatMarkdownProps,
-  ChatMessageActionNodes,
-  ChatPartRenderContext,
-  ChatStepRenderContext,
-  ChatViewConfig,
-} from './ChatViewContext';
-export { ChatViewProvider, type ChatViewProviderProps } from './ChatViewProvider';
-export { type ChatViewState, copyTextOf, deriveChatState } from './deriveChatState';
-export { type ChatLabels, DEFAULT_CHAT_LABELS } from './labels';
+export { type ChatViewState, copyTextOf, deriveChatState } from './model/deriveChatState';
+export { type ChatLabels, DEFAULT_CHAT_LABELS } from './model/labels';
 export type {
   ChatApprovalOption,
   ChatApprovalOptionKind,
@@ -41,5 +29,17 @@ export type {
   ChatToolPermission,
   ChatUserMessage,
   ChatUserPart,
-} from './model';
+} from './model/model';
+export { ApprovalCardView, type ApprovalCardViewProps } from './views/ApprovalCardView';
+export { ChainOfThoughtView, type ChainOfThoughtViewProps } from './views/ChainOfThoughtView';
+export { ChatMessageView, type ChatMessageViewProps } from './views/ChatMessageView';
+export { ChatPartView, type ChatPartViewProps } from './views/ChatPartView';
+export type {
+  ChatMarkdownProps,
+  ChatMessageActionNodes,
+  ChatPartRenderContext,
+  ChatStepRenderContext,
+  ChatViewConfig,
+} from './views/ChatViewContext';
+export { ChatViewProvider, type ChatViewProviderProps } from './views/ChatViewProvider';
 export { WallyAssistant, type WallyAssistantProps } from './WallyAssistant';

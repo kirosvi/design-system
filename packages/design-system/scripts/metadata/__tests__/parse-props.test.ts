@@ -88,6 +88,10 @@ describe('parseComponentProps', () => {
     const subNames = subComponents.map(s => s.name);
     expect(subNames).toContain('ChatViewProvider');
     expect(subNames).not.toContain('ChatMarkdown');
+
+    // Defaults are read from nested sub-component files (WallyAssistant/views/).
+    const provider = subComponents.find(s => s.name === 'ChatViewProvider');
+    expect(provider?.props.find(p => p.name === 'status')?.defaultValue).toBe('ready');
   });
 
   it('returns empty for non-existent component', () => {

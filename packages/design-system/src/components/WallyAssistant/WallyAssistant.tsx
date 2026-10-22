@@ -35,20 +35,20 @@ import {
 } from '../Conversation';
 import { Separator } from '../Separator';
 import { TagClose } from '../Tag';
-import { ChatMessageView } from './ChatMessageView';
-import { ChatPartView } from './ChatPartView';
-import type { ChatViewConfig } from './ChatViewContext';
-import { ChatViewProvider } from './ChatViewProvider';
-import { deriveChatState } from './deriveChatState';
-import { type ChatLabels, DEFAULT_CHAT_LABELS } from './labels';
+import { deriveChatState } from './model/deriveChatState';
+import { type ChatLabels, DEFAULT_CHAT_LABELS } from './model/labels';
 import type {
   ChatContextItem,
   ChatMessage,
   ChatStatus,
   ChatSuggestionItem,
   ChatToolPermission,
-} from './model';
-import { resolveIcon } from './stepIcons';
+} from './model/model';
+import { ChatMessageView } from './views/ChatMessageView';
+import { ChatPartView } from './views/ChatPartView';
+import type { ChatViewConfig } from './views/ChatViewContext';
+import { ChatViewProvider } from './views/ChatViewProvider';
+import { resolveIcon } from './views/stepIcons';
 
 /** DOM attribute names WallyAssistant keeps for its own props (now or later); they never reach the root. */
 export type WallyAssistantReservedProps =

@@ -1,15 +1,15 @@
 import type { FC, ReactNode } from 'react';
-import { RefreshCcw } from '../../icons';
-import { useTestId } from '../../utils/testId';
-import { AssistantMessageContent, AssistantMessageError } from '../AssistantMessage';
-import { Button } from '../Button';
-import { useRenderEveryTime } from '../Table/lib/useRenderEveryTime';
-import { UserMessageBubble, UserMessageShowMore } from '../UserMessage';
+import { RefreshCcw } from '../../../icons';
+import { useTestId } from '../../../utils/testId';
+import { AssistantMessageContent, AssistantMessageError } from '../../AssistantMessage';
+import { Button } from '../../Button';
+import { useRenderEveryTime } from '../../Table/lib/useRenderEveryTime';
+import { UserMessageBubble, UserMessageShowMore } from '../../UserMessage';
+import { isLiveStep, isRunningStatus } from '../model/deriveChatState';
+import type { ChatErrorPart, ChatMessage, ChatPart } from '../model/model';
 import { ApprovalCardView } from './ApprovalCardView';
 import { ChainOfThoughtView } from './ChainOfThoughtView';
 import { MarkdownView, useChatView } from './ChatViewContext';
-import { isLiveStep, isRunningStatus } from './deriveChatState';
-import type { ChatErrorPart, ChatMessage, ChatPart } from './model';
 
 export interface ChatPartViewProps {
   part: ChatPart;

@@ -255,7 +255,7 @@ How I measured: esbuild 0.28.2 with `--bundle --minify --format=esm --target=es2
 
 ## 8. Data model and mapper
 - **Types:** no change.
-- **`model.ts` JSDoc:** `ChatTextPart` should read "Assistant text is GFM markdown, rendered by `markdown` (default `AssistantMessageMarkdown`); user text is plain, whitespace kept." `ChatStep.content` and `ChatApprovalPart.content` stay "markdown".
+- **`model/model.ts` JSDoc:** `ChatTextPart` should read "Assistant text is GFM markdown, rendered by `markdown` (default `AssistantMessageMarkdown`); user text is plain, whitespace kept." `ChatStep.content` and `ChatApprovalPart.content` stay "markdown".
 - **§10.1 mapper:** no logic change.
   - Delete the app's `WallyMarkdown` and `CotInlineCode`, the `InlineCodeSnippet` import, and the `markdown={WallyMarkdown}` prop.
   - Keep `useAgent({ throttleMs: 50 })`.
@@ -815,7 +815,7 @@ export const AssistantMessageMarkdownTable: FC<AssistantMessageMarkdownTableProp
    - An `img` override receives only a safe `src`.
 10. **Parts.** Each part's `ref` reaches its root element, and a consumer `data-testid` replaces the slot id.
 
-**`WallyAssistant/ChatViews.test.tsx`:**
+**`WallyAssistant/views/ChatViews.test.tsx`:**
 - Replace "uses the default labels and plain-text markdown without a provider" with "…and the DS markdown without a provider". Use `approval({ content: 'Run **x**' })` and assert that `card--content` contains a `strong` with text `x`.
 - Add a test: with the provider default, assistant text `**a**` renders a `strong`, and a custom `markdown` still takes precedence.
 - The existing 300-message perf test (with its counting `markdown`) stays as it is.
@@ -874,7 +874,7 @@ The WallyAssistant e2e baselines will change, because the approval fence is now 
 | Unit | Scope | When |
 |---|---|---|
 | M1 | Both deps; `lib/markdown.ts` and its tests; the renderer, parts and classes, with unit and analytics tests; `AssistantMessage/index.ts`; the h5/h6 selector | It can run in parallel with the in-flight workflow in its own worktree, because it touches no `*.stories.tsx` and nothing in `WallyAssistant/`. |
-| M2 | `ChatViewContext.ts`/`ChatViewProvider.tsx` wiring; `ChatViews.test.tsx`; the `model.ts` JSDoc; the `ANALYTICS_GAPS.md` row | After the ChatPanel→WallyAssistant rename lands |
+| M2 | `views/ChatViewContext.ts`/`views/ChatViewProvider.tsx` wiring; `views/ChatViews.test.tsx`; the `model/model.ts` JSDoc; the `ANALYTICS_GAPS.md` row | After the ChatPanel→WallyAssistant rename lands |
 | M3 | Stories (AssistantMessage, WallyAssistant); e2e; the `src/index.ts` barrel (only this unit edits it, as in spec v2); the spec v2 amendments; the Prism size comment; a CI `[update-screenshots]` run | After the stories workflow lands |
 
 **Prototype (scratch, outside the repo):**

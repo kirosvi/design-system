@@ -2,20 +2,20 @@ import type { ReactNode } from 'react';
 import { describe, expect, it, rs } from '@rstest/core';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { ThumbsUp } from '../../icons';
-import { captureAnalyticsClicks } from '../../testUtils/captureAnalyticsClicks';
-import { TestIdProvider } from '../../utils/testId';
-import { ApprovalCardActions } from '../ApprovalCard';
-import { Button } from '../Button';
-import { MessageAction } from '../MessageActions';
+import { ThumbsUp } from '../../../icons';
+import { captureAnalyticsClicks } from '../../../testUtils/captureAnalyticsClicks';
+import { TestIdProvider } from '../../../utils/testId';
+import { ApprovalCardActions } from '../../ApprovalCard';
+import { Button } from '../../Button';
+import { MessageAction } from '../../MessageActions';
+import type { ChatApprovalPart, ChatAssistantMessage, ChatErrorPart } from '../model/model';
 import { ApprovalCardView } from './ApprovalCardView';
 import { ChainOfThoughtView } from './ChainOfThoughtView';
 import { ChatMessageView } from './ChatMessageView';
 import type { ChatViewConfig } from './ChatViewContext';
 import { ChatViewProvider } from './ChatViewProvider';
-import type { ChatApprovalPart, ChatAssistantMessage, ChatErrorPart } from './model';
 
-rs.mock('../../utils/copyText', () => ({ copyText: rs.fn(() => Promise.resolve()) }));
+rs.mock('../../../utils/copyText', () => ({ copyText: rs.fn(() => Promise.resolve()) }));
 
 const PROPS = '{"tool":"denylist","ip":"203.0.113.42"}';
 const approval: ChatApprovalPart = {

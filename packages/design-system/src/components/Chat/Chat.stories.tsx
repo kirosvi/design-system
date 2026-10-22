@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { type MouseEvent, useState } from 'react';
 import type { Meta, StoryFn } from 'storybook-react-rsbuild';
 import {
   Brain,
@@ -202,6 +202,8 @@ export const HeaderWithThreadSelect: StoryFn<typeof meta> = () => (
  */
 export const Greeting: StoryFn<typeof meta> = () => {
   const [picked, setPicked] = useState<string>();
+  const handleSuggestionClick = (event: MouseEvent<HTMLButtonElement>) =>
+    setPicked(event.currentTarget.value);
 
   return (
     <div className='h-640 w-480'>
@@ -236,7 +238,8 @@ export const Greeting: StoryFn<typeof meta> = () => {
                 <ChatSuggestion
                   key={text}
                   data-testid={`chat--suggestion-${index}`}
-                  onClick={() => setPicked(text)}
+                  value={text}
+                  onClick={handleSuggestionClick}
                 >
                   {text}
                 </ChatSuggestion>
@@ -487,6 +490,7 @@ const FOLLOW_UPS = ['Deny 203.0.113.0/24', 'Show the matched rule'];
  */
 export const EmptyPanel: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
+  const handleSubmit = () => setValue('');
 
   return (
     <div className='h-640 w-480'>
@@ -526,7 +530,7 @@ export const EmptyPanel: StoryFn<typeof meta> = () => {
           </ChatGreeting>
         </ChatBody>
         <ChatFooter>
-          <ChatInput value={value} onValueChange={setValue} onSubmit={() => setValue('')}>
+          <ChatInput value={value} onValueChange={setValue} onSubmit={handleSubmit}>
             <ChatInputTextarea />
             <ChatInputSubmit />
           </ChatInput>
@@ -542,6 +546,7 @@ export const EmptyPanel: StoryFn<typeof meta> = () => {
  */
 export const Conversation: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
+  const handleSubmit = () => setValue('');
 
   return (
     <div className='h-640 w-480'>
@@ -633,7 +638,7 @@ export const Conversation: StoryFn<typeof meta> = () => {
               </ChatSuggestion>
             ))}
           </ChatSuggestions>
-          <ChatInput value={value} onValueChange={setValue} onSubmit={() => setValue('')}>
+          <ChatInput value={value} onValueChange={setValue} onSubmit={handleSubmit}>
             <ChatInputTextarea />
             <ChatInputSubmit />
           </ChatInput>
@@ -650,6 +655,8 @@ export const Conversation: StoryFn<typeof meta> = () => {
 export const Streaming: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
   const [isRunning, setIsRunning] = useState(true);
+  const handleSubmit = () => setValue('');
+  const handleStop = () => setIsRunning(false);
 
   return (
     <div className='h-640 w-480'>
@@ -707,9 +714,9 @@ export const Streaming: StoryFn<typeof meta> = () => {
           <ChatInput
             value={value}
             onValueChange={setValue}
-            onSubmit={() => setValue('')}
+            onSubmit={handleSubmit}
             isRunning={isRunning}
-            onStop={() => setIsRunning(false)}
+            onStop={handleStop}
           >
             <ChatInputTextarea />
             <ChatInputSubmit />
@@ -729,6 +736,9 @@ export const ApprovalDocked: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
   const [status, setStatus] = useState<ApprovalCardStatus>('pending');
   const pending = status === 'pending';
+  const handleSubmit = () => setValue('');
+  const handleApprove = () => setStatus('approved');
+  const handleReject = () => setStatus('rejected');
 
   return (
     <div className='h-640 w-480'>
@@ -797,14 +807,14 @@ export const ApprovalDocked: StoryFn<typeof meta> = () => {
               </p>
             </ApprovalCardContent>
             <ApprovalCardActions>
-              <Button data-testid='chat--approve' onClick={() => setStatus('approved')}>
+              <Button data-testid='chat--approve' onClick={handleApprove}>
                 Allow
               </Button>
               <Button
                 variant='secondary'
                 color='neutral'
                 data-testid='chat--reject'
-                onClick={() => setStatus('rejected')}
+                onClick={handleReject}
               >
                 Reject
               </Button>
@@ -813,7 +823,7 @@ export const ApprovalDocked: StoryFn<typeof meta> = () => {
           <ChatInput
             value={value}
             onValueChange={setValue}
-            onSubmit={() => setValue('')}
+            onSubmit={handleSubmit}
             isRunning={pending}
           >
             <ChatInputTextarea />
@@ -828,6 +838,7 @@ export const ApprovalDocked: StoryFn<typeof meta> = () => {
 /** After the decision the docked card collapses to a one-line status and the answer completes. */
 export const ApprovalResolved: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
+  const handleSubmit = () => setValue('');
 
   return (
     <div className='h-640 w-480'>
@@ -880,7 +891,7 @@ export const ApprovalResolved: StoryFn<typeof meta> = () => {
         <ChatFooter>
           {/* Content and actions render only while pending; a resolved card shows just its status row. */}
           <ApprovalCard status='approved' />
-          <ChatInput value={value} onValueChange={setValue} onSubmit={() => setValue('')}>
+          <ChatInput value={value} onValueChange={setValue} onSubmit={handleSubmit}>
             <ChatInputTextarea />
             <ChatInputSubmit />
           </ChatInput>
@@ -904,6 +915,9 @@ export const Permissions: StoryFn<typeof meta> = () => {
     get_api_inventory: true,
     propose_add_to_denylist: false,
   });
+  const handleSubmit = () => setValue('');
+  const handlePermissionChange = (name: string, checked: boolean) =>
+    setAllowed(prev => ({ ...prev, [name]: checked }));
 
   return (
     <div className='h-640 w-480'>
@@ -935,7 +949,7 @@ export const Permissions: StoryFn<typeof meta> = () => {
           <ChatGreeting title='How can I help you today?' />
         </ChatBody>
         <ChatFooter>
-          <ChatInput value={value} onValueChange={setValue} onSubmit={() => setValue('')}>
+          <ChatInput value={value} onValueChange={setValue} onSubmit={handleSubmit}>
             <ChatInputTextarea />
             <ChatPermissions>
               <ChatPermissionsTrigger />
@@ -947,9 +961,7 @@ export const Permissions: StoryFn<typeof meta> = () => {
                     title={tool.name}
                     description={tool.description}
                     checked={allowed[tool.name]}
-                    onCheckedChange={({ checked }) =>
-                      setAllowed(prev => ({ ...prev, [tool.name]: checked }))
-                    }
+                    onCheckedChange={({ checked }) => handlePermissionChange(tool.name, checked)}
                   />
                 ))}
               </ChatPermissionsContent>
@@ -970,6 +982,8 @@ export const Permissions: StoryFn<typeof meta> = () => {
 export const InDrawer: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
   const [isRunning, setIsRunning] = useState(true);
+  const handleSubmit = () => setValue('');
+  const handleStop = () => setIsRunning(false);
 
   return (
     <Drawer width={480}>
@@ -1066,9 +1080,9 @@ export const InDrawer: StoryFn<typeof meta> = () => {
             <ChatInput
               value={value}
               onValueChange={setValue}
-              onSubmit={() => setValue('')}
+              onSubmit={handleSubmit}
               isRunning={isRunning}
-              onStop={() => setIsRunning(false)}
+              onStop={handleStop}
             >
               <ChatInputTextarea />
               <ChatInputSubmit />

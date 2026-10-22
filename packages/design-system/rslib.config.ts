@@ -29,6 +29,7 @@ export default defineConfig({
         '!./src/**/stories/**', // story-only fixtures and mock providers
         '!./src/**/story-content/**', // story-only helpers (fixtures, the TanStack Router harness)
         '!./src/**/mocks.{ts,tsx}',
+        '!./src/**/mocks/**', // folder form (WallyAssistant/mocks/index.ts)
         '!./src/testUtils/**',
       ],
     },

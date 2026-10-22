@@ -23,6 +23,7 @@
     "**/story-content/**",
     "**/mocks.ts",
     "**/mocks.tsx",
+    "**/mocks/**",
     "src/testUtils",
     "node_modules",
     "dist",
