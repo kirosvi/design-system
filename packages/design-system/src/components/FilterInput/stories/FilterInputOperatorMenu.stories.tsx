@@ -1,5 +1,5 @@
 import { type FC, useMemo, useRef, useState } from 'react';
-import type { Meta, StoryFn } from '@storybook/react';
+import type { Meta, StoryFn } from 'storybook-react-rsbuild';
 import { ChevronDown } from '../../../icons';
 import { Button } from '../../Button';
 import { FilterInputOperatorMenu } from '../FilterInputMenu';
