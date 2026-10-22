@@ -1,3 +1,5 @@
+## [3.4.0](https://github.com/wallarm/design-system/compare/v3.3.0...v3.4.0) (2026-10-22)
+
 ## [3.3.0](https://github.com/wallarm/design-system/compare/v3.2.0...v3.3.0) (2026-10-22)
 
 ## [3.2.0](https://github.com/wallarm/design-system/compare/v3.1.0...v3.2.0) (2026-10-21)
