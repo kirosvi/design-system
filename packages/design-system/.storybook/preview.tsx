@@ -56,7 +56,7 @@ const preview: Preview = {
           'Documentation',
           ['Patterns', { FilterInput: ['Composition', '*'] }],
           'Components',
-          'Data display',
+          'Data Display',
           // Chart is pinned last: it's the foundational card frame the other charts compose,
           // not a chart itself. `*` keeps any future chart above it automatically.
           [

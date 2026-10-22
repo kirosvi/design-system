@@ -76,7 +76,7 @@ const DESCRIPTION = [
 ].join(' ');
 
 const meta = {
-  title: 'Data display/SimpleCharts/Overview',
+  title: 'Data Display/SimpleCharts/Overview',
   parameters: {
     layout: 'padded',
     design: {

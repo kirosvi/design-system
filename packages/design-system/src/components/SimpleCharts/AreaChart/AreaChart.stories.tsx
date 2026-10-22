@@ -37,7 +37,7 @@ const DESCRIPTION = [
 ].join(' ');
 
 const meta = {
-  title: 'Data display/SimpleCharts/AreaChart',
+  title: 'Data Display/SimpleCharts/AreaChart',
   component: AreaChart,
   subcomponents: {
     AreaChartBody,

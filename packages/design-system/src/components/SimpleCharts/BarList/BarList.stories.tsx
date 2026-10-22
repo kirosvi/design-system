@@ -73,7 +73,7 @@ const DESCRIPTION = [
 ].join(' ');
 
 const meta = {
-  title: 'Data display/SimpleCharts/BarList',
+  title: 'Data Display/SimpleCharts/BarList',
   component: BarList,
   subcomponents: {
     BarListItem,

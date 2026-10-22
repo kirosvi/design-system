@@ -88,7 +88,7 @@ const DESCRIPTION = [
 ].join(' ');
 
 const meta = {
-  title: 'Data display/SimpleCharts/PieChart',
+  title: 'Data Display/SimpleCharts/PieChart',
   component: PieChart,
   subcomponents: {
     PieChartDonut,

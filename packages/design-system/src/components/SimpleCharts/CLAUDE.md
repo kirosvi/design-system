@@ -64,7 +64,7 @@ Optional, added only when needed:
 
 ## Stories Rules
 
-- `title: 'Data display/SimpleCharts/<ChartName>'`.
+- `title: 'Data Display/SimpleCharts/<ChartName>'`.
 - Include `parameters.design = { type: 'figma', url: <figma node url> }`.
 - Use `satisfies Meta<typeof Component>` and `StoryFn<typeof meta>`.
 - Cover every visual state the chart supports: default, hover, selected/active, focused, empty, loading/skeleton, filtered (if applicable), with-data-variants.
