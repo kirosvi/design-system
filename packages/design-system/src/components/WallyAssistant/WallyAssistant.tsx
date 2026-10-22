@@ -157,6 +157,7 @@ const PermissionItem: FC<{
 }> = ({ index, item, onChange }) => (
   <ChatPermissionsItem
     data-testid={useTestId(`item-${index}`)}
+    name={item.id}
     title={item.title}
     description={item.description}
     checked={item.allowed}

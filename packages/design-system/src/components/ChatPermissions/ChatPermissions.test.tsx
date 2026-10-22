@@ -13,6 +13,7 @@ const renderPermissions = (onCheckedChange = rs.fn()) =>
       <ChatPermissionsTrigger />
       <ChatPermissionsContent>
         <ChatPermissionsItem
+          name='search_attacks'
           title='search_attacks'
           description='Search detected attacks'
           defaultChecked
@@ -110,6 +111,19 @@ describe('ChatPermissions', () => {
 
     expect(onCheckedChange).toHaveBeenCalledWith(expect.objectContaining({ checked: false }));
     expect(screen.getByTestId('permissions--content')).toBeInTheDocument();
+  });
+
+  it('passes the row name to onCheckedChange with the new checked state', async () => {
+    const onCheckedChange = rs.fn();
+    renderPermissions(onCheckedChange);
+    await userEvent.click(screen.getByTestId('permissions--trigger'));
+    const item = await screen.findByTestId('permissions--item');
+
+    await userEvent.click(item);
+    expect(onCheckedChange).toHaveBeenLastCalledWith({ checked: false, name: 'search_attacks' });
+
+    await userEvent.click(item);
+    expect(onCheckedChange).toHaveBeenLastCalledWith({ checked: true, name: 'search_attacks' });
   });
 
   it('renders the row title, truncating description and data-slot', async () => {
@@ -212,8 +226,8 @@ describe('ChatPermissions — test ids', () => {
       <ChatPermissions data-testid='permissions' open>
         <ChatPermissionsTrigger />
         <ChatPermissionsContent>
-          <ChatPermissionsItem data-testid='tool-a' title='a' />
-          <ChatPermissionsItem data-testid='tool-b' title='b' />
+          <ChatPermissionsItem name='a' data-testid='tool-a' title='a' />
+          <ChatPermissionsItem name='b' data-testid='tool-b' title='b' />
         </ChatPermissionsContent>
       </ChatPermissions>,
     );

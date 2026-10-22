@@ -262,6 +262,7 @@ export {
   ChatPermissionsContent,
   type ChatPermissionsContentProps,
   ChatPermissionsItem,
+  type ChatPermissionsItemCheckedChangeDetails,
   type ChatPermissionsItemProps,
   type ChatPermissionsProps,
   ChatPermissionsTrigger,

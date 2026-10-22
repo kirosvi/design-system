@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { type MouseEvent, useState } from 'react';
 import type { Meta, StoryFn } from 'storybook-react-rsbuild';
 import { Quote } from '../../icons';
 import { Badge } from '../Badge';
@@ -6,6 +6,7 @@ import {
   ChatPermissions,
   ChatPermissionsContent,
   ChatPermissionsItem,
+  type ChatPermissionsItemCheckedChangeDetails,
   ChatPermissionsTrigger,
 } from '../ChatPermissions';
 import { TagClose } from '../Tag';
@@ -155,7 +156,8 @@ export const WithContext: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
   const [chips, setChips] = useState(['Attacks', 'Incidents']);
 
-  const handleContextRemove = (chip: string) => {
+  const handleContextRemove = (event: MouseEvent<HTMLButtonElement>) => {
+    const chip = event.currentTarget.value;
     setChips(prev => prev.filter(item => item !== chip));
   };
 
@@ -176,8 +178,9 @@ export const WithContext: StoryFn<typeof meta> = () => {
             {chip}
             <TagClose
               aria-label={`Remove ${chip}`}
+              value={chip}
               className='rounded-4 focus-visible:ring-3 focus-visible:ring-focus-primary'
-              onClick={() => handleContextRemove(chip)}
+              onClick={handleContextRemove}
             />
           </Badge>
         ))}
@@ -194,7 +197,7 @@ export const WithSettings: StoryFn<typeof meta> = () => {
   const [value, setValue] = useState('');
   const [allowed, setAllowed] = useState({ search_attacks: true, propose_add_to_denylist: true });
 
-  const handlePermissionChange = (name: string, checked: boolean) => {
+  const handlePermissionChange = ({ checked, name }: ChatPermissionsItemCheckedChangeDetails) => {
     setAllowed(prev => ({ ...prev, [name]: checked }));
   };
 
@@ -218,9 +221,10 @@ export const WithSettings: StoryFn<typeof meta> = () => {
               {Object.entries(allowed).map(([name, checked]) => (
                 <ChatPermissionsItem
                   key={name}
+                  name={name}
                   title={name}
                   checked={checked}
-                  onCheckedChange={details => handlePermissionChange(name, details.checked)}
+                  onCheckedChange={handlePermissionChange}
                 />
               ))}
             </ChatPermissionsContent>

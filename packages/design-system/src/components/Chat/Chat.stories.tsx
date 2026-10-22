@@ -26,6 +26,7 @@ import {
   ChatPermissions,
   ChatPermissionsContent,
   ChatPermissionsItem,
+  type ChatPermissionsItemCheckedChangeDetails,
   ChatPermissionsTrigger,
 } from '../ChatPermissions';
 import { InlineCodeSnippet } from '../CodeSnippet';
@@ -916,7 +917,7 @@ export const Permissions: StoryFn<typeof meta> = () => {
     propose_add_to_denylist: false,
   });
   const handleSubmit = () => setValue('');
-  const handlePermissionChange = (name: string, checked: boolean) =>
+  const handlePermissionChange = ({ checked, name }: ChatPermissionsItemCheckedChangeDetails) =>
     setAllowed(prev => ({ ...prev, [name]: checked }));
 
   return (
@@ -957,11 +958,12 @@ export const Permissions: StoryFn<typeof meta> = () => {
                 {TOOLS.map(tool => (
                   <ChatPermissionsItem
                     key={tool.name}
+                    name={tool.name}
                     data-testid={`chat--permission-${tool.name}`}
                     title={tool.name}
                     description={tool.description}
                     checked={allowed[tool.name]}
-                    onCheckedChange={({ checked }) => handlePermissionChange(tool.name, checked)}
+                    onCheckedChange={handlePermissionChange}
                   />
                 ))}
               </ChatPermissionsContent>

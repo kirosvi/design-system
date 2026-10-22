@@ -5,6 +5,7 @@ import {
   ChatPermissions,
   ChatPermissionsContent,
   ChatPermissionsItem,
+  type ChatPermissionsItemCheckedChangeDetails,
   ChatPermissionsTrigger,
 } from './index';
 
@@ -52,7 +53,7 @@ export const AllOn: StoryFn<typeof meta> = () => {
   const enabled = TOOLS.filter(tool => allowed[tool.name]);
   const disabled = TOOLS.filter(tool => !allowed[tool.name]);
 
-  const handleCheckedChange = (name: string, checked: boolean) => {
+  const handleCheckedChange = ({ checked, name }: ChatPermissionsItemCheckedChangeDetails) => {
     setAllowed(prev => ({ ...prev, [name]: checked }));
   };
 
@@ -64,22 +65,24 @@ export const AllOn: StoryFn<typeof meta> = () => {
           {enabled.map(tool => (
             <ChatPermissionsItem
               key={tool.name}
+              name={tool.name}
               data-testid={`permission-${tool.name}`}
               title={tool.name}
               description={tool.description}
               checked
-              onCheckedChange={({ checked }) => handleCheckedChange(tool.name, checked)}
+              onCheckedChange={handleCheckedChange}
             />
           ))}
           {enabled.length > 0 && disabled.length > 0 && <Separator spacing={4} />}
           {disabled.map(tool => (
             <ChatPermissionsItem
               key={tool.name}
+              name={tool.name}
               data-testid={`permission-${tool.name}`}
               title={tool.name}
               description={tool.description}
               checked={false}
-              onCheckedChange={({ checked }) => handleCheckedChange(tool.name, checked)}
+              onCheckedChange={handleCheckedChange}
             />
           ))}
         </ChatPermissionsContent>
@@ -99,7 +102,7 @@ export const SomeOff: StoryFn<typeof meta> = () => {
   const enabled = TOOLS.filter(tool => allowed[tool.name]);
   const disabled = TOOLS.filter(tool => !allowed[tool.name]);
 
-  const handleCheckedChange = (name: string, checked: boolean) => {
+  const handleCheckedChange = ({ checked, name }: ChatPermissionsItemCheckedChangeDetails) => {
     setAllowed(prev => ({ ...prev, [name]: checked }));
   };
 
@@ -111,22 +114,24 @@ export const SomeOff: StoryFn<typeof meta> = () => {
           {enabled.map(tool => (
             <ChatPermissionsItem
               key={tool.name}
+              name={tool.name}
               data-testid={`permission-${tool.name}`}
               title={tool.name}
               description={tool.description}
               checked
-              onCheckedChange={({ checked }) => handleCheckedChange(tool.name, checked)}
+              onCheckedChange={handleCheckedChange}
             />
           ))}
           {enabled.length > 0 && disabled.length > 0 && <Separator spacing={4} />}
           {disabled.map(tool => (
             <ChatPermissionsItem
               key={tool.name}
+              name={tool.name}
               data-testid={`permission-${tool.name}`}
               title={tool.name}
               description={tool.description}
               checked={false}
-              onCheckedChange={({ checked }) => handleCheckedChange(tool.name, checked)}
+              onCheckedChange={handleCheckedChange}
             />
           ))}
         </ChatPermissionsContent>
@@ -142,7 +147,7 @@ export const SomeOff: StoryFn<typeof meta> = () => {
 export const Analytics: StoryFn<typeof meta> = () => {
   const [checked, setChecked] = useState(true);
 
-  const handleCheckedChange = (details: { checked: boolean }) => {
+  const handleCheckedChange = (details: ChatPermissionsItemCheckedChangeDetails) => {
     setChecked(details.checked);
   };
 
@@ -152,6 +157,7 @@ export const Analytics: StoryFn<typeof meta> = () => {
         <ChatPermissionsTrigger data-analytics-id='CHAT_PERMISSIONS_OPEN' />
         <ChatPermissionsContent>
           <ChatPermissionsItem
+            name='search_attacks'
             data-testid='permission-search_attacks'
             data-analytics-id='CHAT_PERMISSION_TOGGLE'
             data-analytics-props='{"tool":"search_attacks"}'

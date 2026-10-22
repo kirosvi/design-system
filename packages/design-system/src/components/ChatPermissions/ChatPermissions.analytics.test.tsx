@@ -94,6 +94,7 @@ describe('ChatPermissionsItem — analytics (label root)', () => {
         <ChatPermissionsTrigger />
         <ChatPermissionsContent>
           <ChatPermissionsItem
+            name='search_attacks'
             data-testid='item'
             data-analytics-id='CHAT_PERMISSION_TOGGLE'
             data-analytics-props={PAYLOAD}
@@ -124,7 +125,12 @@ describe('ChatPermissionsItem — analytics (label root)', () => {
       <ChatPermissions open>
         <ChatPermissionsTrigger />
         <ChatPermissionsContent>
-          <ChatPermissionsItem ref={ref} data-testid='item' title='search_attacks' />
+          <ChatPermissionsItem
+            ref={ref}
+            name='search_attacks'
+            data-testid='item'
+            title='search_attacks'
+          />
         </ChatPermissionsContent>
       </ChatPermissions>,
     );
