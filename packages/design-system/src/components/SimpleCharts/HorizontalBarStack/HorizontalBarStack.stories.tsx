@@ -27,7 +27,7 @@ const DESCRIPTION = [
 ].join(' ');
 
 const meta = {
-  title: 'Data display/SimpleCharts/HorizontalBarStack',
+  title: 'Data Display/SimpleCharts/HorizontalBarStack',
   component: HorizontalBarStack,
   parameters: {
     layout: 'centered',

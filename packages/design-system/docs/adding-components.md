@@ -378,8 +378,6 @@ Use the appropriate category for the `title` field:
 | `Status Indication` | Status display                         | Badge, Tag, Indicator            |
 | `Typography`        | Text display                           | Heading, Text, Code              |
 
-A few existing stories still use `Data display` (lowercase `d`); use `Data Display` for new ones.
-
 ## Step 9: Write E2E Tests
 
 Follow the naming and locator rules in [e2e-test-rules.md](https://github.com/wallarm/design-system/blob/main/docs/e2e-test-rules.md): a `Component: {Name}` suite, `Visual` / `Interactions` / `Accessibility` groups, `Should …` titles, and `data-testid` locators (`getByRole` is fine for accessibility assertions).

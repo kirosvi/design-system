@@ -13,7 +13,7 @@ const DESCRIPTION = [
 ].join(' ');
 
 const meta = {
-  title: 'Data display/SimpleCharts/Chart',
+  title: 'Data Display/SimpleCharts/Chart',
   component: Chart,
   subcomponents: {
     ChartHeader,

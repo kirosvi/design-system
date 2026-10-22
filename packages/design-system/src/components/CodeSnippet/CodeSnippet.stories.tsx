@@ -36,7 +36,7 @@ const DESCRIPTION = [
 ].join(' ');
 
 const meta = {
-  title: 'Data display/CodeSnippet/CodeSnippet',
+  title: 'Data Display/CodeSnippet/CodeSnippet',
   component: CodeSnippetRoot,
   parameters: {
     layout: 'padded',

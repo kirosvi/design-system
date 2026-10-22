@@ -20,7 +20,7 @@ const DESCRIPTION = [
 ].join(' ');
 
 const meta = {
-  title: 'Data display/SimpleCharts/Metric',
+  title: 'Data Display/SimpleCharts/Metric',
   component: Metric,
   parameters: {
     layout: 'padded',
