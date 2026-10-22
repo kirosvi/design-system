@@ -29,25 +29,6 @@ const meta = {
       options: ['string', 'integer', 'float', 'date', 'boolean', 'enum'],
       description: 'The field type to determine which operators to show',
     },
-    selectedOperator: {
-      control: 'select',
-      options: [
-        '=',
-        '!=',
-        '>',
-        '<',
-        '>=',
-        '<=',
-        'like',
-        'not_like',
-        'in',
-        'not_in',
-        'is_null',
-        'is_not_null',
-        'between',
-      ],
-      description: 'The currently selected operator',
-    },
     open: {
       control: 'boolean',
       description: 'Whether the menu is open',
@@ -93,7 +74,6 @@ const OperatorMenuHarness: FC<{ fieldType: FieldType }> = ({ fieldType }) => {
 
       <FilterInputOperatorMenu
         fieldType={fieldType}
-        selectedOperator={selectedOperator}
         onSelect={operator => {
           setSelectedOperator(operator);
           setOpen(false);
