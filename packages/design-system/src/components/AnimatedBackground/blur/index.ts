@@ -1,1 +1,5 @@
-export { BlurBackground, type BlurBackgroundProps } from './BlurBackground';
+export {
+  BlurBackground,
+  type BlurBackgroundPalette,
+  type BlurBackgroundProps,
+} from './BlurBackground';

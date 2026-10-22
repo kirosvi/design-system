@@ -22,6 +22,7 @@ The test hierarchy maps directly to Storybook categories:
 
 | Storybook Category   | Epic               |
 | -------------------- | ------------------ |
+| AI                   | AI                 |
 | Actions              | Actions            |
 | Data Display         | Data Display       |
 | Inputs               | Inputs             |

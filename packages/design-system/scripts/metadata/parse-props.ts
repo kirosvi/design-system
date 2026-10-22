@@ -1,4 +1,4 @@
-import { type Project, type SourceFile, SyntaxKind, type Type } from 'ts-morph';
+import { type Node, type Project, type SourceFile, SyntaxKind, type Type } from 'ts-morph';
 import type { PropMetadata } from '@wallarm-org/mcp-core';
 
 /**
@@ -21,12 +21,15 @@ const SKIP_PROPS = new Set([
   'dangerouslySetInnerHTML',
 ]);
 
-// HTML attribute props we still want to show if they're explicitly declared
+// on*/aria-*/data-* props are skipped only when inherited from the DOM attribute
+// types; ones a component declares itself (e.g. `onSubmit`) are part of its API.
 const HTML_ATTR_PREFIXES = ['on', 'aria-', 'data-'];
 
-function isInheritedHtmlProp(name: string): boolean {
-  if (SKIP_PROPS.has(name)) return false; // Let SKIP_PROPS take priority
-  return HTML_ATTR_PREFIXES.some(p => name.startsWith(p));
+function isInheritedHtmlProp(name: string, declarations: Node[]): boolean {
+  if (!HTML_ATTR_PREFIXES.some(p => name.startsWith(p))) return false;
+  return declarations.every(d =>
+    d.getSourceFile().getFilePath().includes('/node_modules/@types/react/'),
+  );
 }
 
 function getTypeText(type: Type): string {
@@ -92,9 +95,9 @@ export function parsePropsFromType(
 
     // Skip internal/inherited HTML props
     if (SKIP_PROPS.has(name)) continue;
-    if (isInheritedHtmlProp(name)) continue;
 
     const declarations = prop.getDeclarations();
+    if (isInheritedHtmlProp(name, declarations)) continue;
     const declaration = declarations[0];
 
     // Get type from the symbol's value declaration
@@ -160,6 +163,17 @@ export function parseComponentProps(
   const mainFile = project.getSourceFile(`${componentDir}/${componentName}.tsx`);
   const mainDefaults = mainFile ? extractDefaultValues(mainFile, componentName) : {};
 
+  // Value (non type-only) exports — a `*Props` type is a sub-component only if
+  // its component is exported too (e.g. `ChatMarkdownProps` has no `ChatMarkdown`).
+  const valueExports = new Set(
+    indexFile
+      .getExportDeclarations()
+      .filter(d => !d.isTypeOnly())
+      .flatMap(d => d.getNamedExports())
+      .filter(e => !e.isTypeOnly())
+      .map(e => e.getAliasNode()?.getText() ?? e.getName()),
+  );
+
   // Iterate over exported types from index.ts
   for (const exportDecl of indexFile.getExportDeclarations()) {
     for (const namedExport of exportDecl.getNamedExports()) {
@@ -193,7 +207,10 @@ export function parseComponentProps(
       } else {
         // Sub-component: e.g., AlertCloseProps → AlertClose
         const subName = name.replace(/Props$/, '');
-        const subFile = project.getSourceFile(`${componentDir}/${subName}.tsx`);
+        if (!valueExports.has(subName)) continue;
+        // Sub-components may live in a nested folder (e.g. WallyAssistant/views/) — fall back to the Props declaration's file.
+        const subFile =
+          project.getSourceFile(`${componentDir}/${subName}.tsx`) ?? decl.getSourceFile();
         const subDefaults = subFile ? extractDefaultValues(subFile, subName) : {};
         subComponents.push({
           name: subName,

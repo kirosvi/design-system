@@ -74,6 +74,26 @@ describe('parseComponentProps', () => {
     expect(subNames.filter(name => name === 'CodeEditorRoot').length).toBeLessThanOrEqual(1);
   });
 
+  it('keeps self-declared on* props and skips Props types without a component export', () => {
+    const { mainProps, subComponents } = parseComponentProps(
+      project,
+      path.join(COMPONENTS_DIR, 'WallyAssistant'),
+      'WallyAssistant',
+    );
+
+    const onSubmit = mainProps.find(p => p.name === 'onSubmit');
+    expect(onSubmit?.required).toBe(true);
+    expect(mainProps.map(p => p.name)).not.toContain('onClick');
+
+    const subNames = subComponents.map(s => s.name);
+    expect(subNames).toContain('ChatViewProvider');
+    expect(subNames).not.toContain('ChatMarkdown');
+
+    // Defaults are read from nested sub-component files (WallyAssistant/views/).
+    const provider = subComponents.find(s => s.name === 'ChatViewProvider');
+    expect(provider?.props.find(p => p.name === 'status')?.defaultValue).toBe('ready');
+  });
+
   it('returns empty for non-existent component', () => {
     const { mainProps, subComponents } = parseComponentProps(
       project,

@@ -15,6 +15,7 @@ Scaffold a new design system component with all required files, proper structure
 
 | Category | Components |
 |----------|-----------|
+| AI | Wally assistant: chat panel, messages, chain of thought |
 | Actions | Buttons, toggles, interactive controls |
 | Data Display | Cards, badges, tables, code display |
 | Inputs | Text inputs, selects, checkboxes, radios |

@@ -1,4 +1,4 @@
-import { type FC, type Ref, useEffect, useRef, useState } from 'react';
+import { type FC, useEffect, useRef, useState } from 'react';
 import {
   createMemoryHistory,
   createRootRoute,
@@ -15,6 +15,7 @@ import type { Meta, StoryFn } from 'storybook-react-rsbuild';
 import { Bell, Home, X } from '../../icons';
 import { AnimatedBackground } from '../AnimatedBackground';
 import { Button } from '../Button';
+import { ChatTrigger } from '../Chat';
 import { Input } from '../Input';
 import { Link } from '../Link';
 import { NavRail, NavRailBody, NavRailItem, NavRailSeparator, NavRailSkeleton } from '../NavRail';
@@ -32,7 +33,13 @@ import { Text } from '../Text';
 import { useTheme } from '../ThemeProvider';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../Tooltip';
 import { TopHeader, TopHeaderActions, TopHeaderLogo, TopHeaderSeparator } from '../TopHeader';
-import { WallyIcon } from '../WallyIcon';
+import {
+  type ChatAssistantMessage,
+  type ChatFeedback,
+  type ChatToolPermission,
+  WallyAssistant,
+} from '../WallyAssistant';
+import { CONVERSATION, useMockWally } from '../WallyAssistant/mocks';
 import { AppShell, type AppShellProps } from './AppShell';
 import { AppShellAside } from './AppShellAside';
 import { AppShellHeader } from './AppShellHeader';
@@ -102,52 +109,9 @@ interface ShellProps {
   loading?: boolean;
   /** Each product fakes a 2s load when opened, showing its panel and content skeletons. */
   simulateProductLoading?: boolean;
-  /** Docks a stand-in assistant in `AppShellAside`, open at first and toggled from the header. */
+  /** Docks the real `WallyAssistant` (driven by `useMockWally`) in `AppShellAside`, open at first and toggled from the header's `ChatTrigger`. */
   aside?: boolean;
 }
-
-interface AssistantToggleProps {
-  ref?: Ref<HTMLButtonElement>;
-  open: boolean;
-  onToggle: () => void;
-}
-
-const AssistantToggle: FC<AssistantToggleProps> = ({ ref, open, onToggle }) => (
-  <Tooltip>
-    <TooltipTrigger asChild>
-      <Button
-        ref={ref}
-        variant='ghost'
-        size='small'
-        color='neutral'
-        aria-label='AI Assistant'
-        aria-pressed={open}
-        onClick={onToggle}
-      >
-        <WallyIcon />
-      </Button>
-    </TooltipTrigger>
-    <TooltipContent>AI Assistant</TooltipContent>
-  </Tooltip>
-);
-
-/** Stand-in for the assistant a host mounts in the aside. */
-const AssistantPanel: FC<{ onClose: () => void }> = ({ onClose }) => (
-  <>
-    <div className='flex items-center gap-8 border-b border-border-primary-light py-8 pr-8 pl-12'>
-      <WallyIcon size='xs' />
-      <Text size='sm' weight='medium' grow>
-        Ask Wally
-      </Text>
-      <Button variant='ghost' size='small' color='neutral' aria-label='Close' onClick={onClose}>
-        <X />
-      </Button>
-    </div>
-    <div className='mt-auto p-12'>
-      <Input aria-label='Message' placeholder='Ask Wally…' />
-    </div>
-  </>
-);
 
 const Shell = ({
   ambient,
@@ -162,14 +126,29 @@ const Shell = ({
   const toggleRef = useRef<HTMLButtonElement>(null);
   const { theme, setTheme } = useTheme();
   const railMode = railModeFor(sidebarMode, activeProduct === 'home');
-  const assistantToggle = aside && (
-    <AssistantToggle
-      ref={toggleRef}
-      open={asideOpen}
-      onToggle={() => setAsideOpen(open => !open)}
-    />
+  const wally = useMockWally({ initial: CONVERSATION });
+  const [feedback, setFeedback] = useState<Record<string, ChatFeedback | null>>({});
+  const [permissions, setPermissions] = useState(CONVERSATION.permissions);
+
+  const handleHomeClick = () => goToProduct('home');
+  const handleAssistantToggleClick = () => setAsideOpen(open => !open);
+  // Fixed (UTC) clock text instead of "N hours ago", so screenshots don't drift.
+  const formatTimestamp = (iso: string) => new Date(iso).toISOString().slice(11, 16);
+  const handleFeedback = (message: ChatAssistantMessage, value: ChatFeedback | null) => {
+    setFeedback(f => ({ ...f, [message.id]: value }));
+  };
+  const handlePermissionChange = (permission: ChatToolPermission, allowed: boolean) => {
+    setPermissions(list => list?.map(x => (x.id === permission.id ? { ...x, allowed } : x)));
+  };
+
+  const messages = wally.snapshot.messages.map(m =>
+    m.role === 'assistant' && m.id in feedback ? { ...m, feedback: feedback[m.id] ?? null } : m,
   );
-  const closeAsideFromPanel = () => {
+
+  const assistantToggle = aside && (
+    <ChatTrigger ref={toggleRef} aria-pressed={asideOpen} onClick={handleAssistantToggleClick} />
+  );
+  const handleCloseClick = () => {
     // Focus inside the panel would drop to <body> once it hides: hand it back to the toggle.
     toggleRef.current?.focus();
     setAsideOpen(false);
@@ -221,7 +200,7 @@ const Shell = ({
               label='Home'
               shortcut={['G', 'H']}
               active={activeProduct === 'home'}
-              onClick={() => goToProduct('home')}
+              onClick={handleHomeClick}
             />
             <RecentDropdown />
 
@@ -250,8 +229,30 @@ const Shell = ({
       </AppShellRemote>
 
       {aside && (
-        <AppShellAside open={asideOpen} aria-label='AI Assistant'>
-          <AssistantPanel onClose={closeAsideFromPanel} />
+        <AppShellAside open={asideOpen} aria-label='Wally'>
+          <WallyAssistant
+            className='min-h-0 flex-1'
+            {...wally.snapshot}
+            messages={messages}
+            permissions={permissions}
+            formatTimestamp={formatTimestamp}
+            onSubmit={wally.send}
+            onStop={wally.stop}
+            onApprovalRespond={wally.respond}
+            onFeedback={handleFeedback}
+            onPermissionChange={handlePermissionChange}
+            headerActions={
+              <Button
+                variant='ghost'
+                color='neutral'
+                size='small'
+                aria-label='Close'
+                onClick={handleCloseClick}
+              >
+                <X />
+              </Button>
+            }
+          />
         </AppShellAside>
       )}
     </AppShell>
@@ -279,7 +280,7 @@ Loading.argTypes = {
   },
 };
 
-/** `AppShellAside` docks a panel right of the content surface — a stand-in assistant here, toggled from the header — that slides in as the canvas narrows, while closing widens the canvas back and hides the region without unmounting what is inside, so text typed into the panel survives a close and reopen. */
+/** `AppShellAside` docks a panel right of the content surface — the real `WallyAssistant` here, driven by the `useMockWally` streaming mock and toggled from the header's `ChatTrigger` — that slides in as the canvas narrows, while closing widens the canvas back and hides the region without unmounting what is inside, so the conversation and text typed into the panel survive a close and reopen. */
 export const WithAside: StoryFn<AppShellProps> = ({ ambient }) => (
   <StoryRouter>
     <Shell ambient={ambient} aside />
@@ -294,6 +295,8 @@ const RevealFlowShell = () => {
   const [revealKey, setRevealKey] = useState(0);
   const { theme, setTheme } = useTheme();
   const railMode = railModeFor(sidebarMode, activeProduct === 'home');
+
+  const handleHomeClick = () => goToProduct('home');
 
   useEffect(() => {
     if (splashDone) return;
@@ -336,7 +339,7 @@ const RevealFlowShell = () => {
               label='Home'
               shortcut={['G', 'H']}
               active={activeProduct === 'home'}
-              onClick={() => goToProduct('home')}
+              onClick={handleHomeClick}
             />
             <RecentDropdown />
 
@@ -395,6 +398,9 @@ const LoginFlowShell = () => {
     return () => clearTimeout(timer);
   }, [splashVisible]);
 
+  const handleHomeClick = () => goToProduct('home');
+  const handleRevealed = () => setRevealed(true);
+
   const handleSignIn = () => {
     setShowShell(true);
   };
@@ -444,7 +450,7 @@ const LoginFlowShell = () => {
 
       {showShell && (
         <div className='absolute inset-0'>
-          <AppShell expandFrom={CARD_DIMENSIONS} onRevealed={() => setRevealed(true)}>
+          <AppShell expandFrom={CARD_DIMENSIONS} onRevealed={handleRevealed}>
             <AppShellHeader>
               <TopHeader>
                 <TopHeaderLogo href='/'>
@@ -464,7 +470,7 @@ const LoginFlowShell = () => {
                     icon={Home}
                     label='Home'
                     active={activeProduct === 'home'}
-                    onClick={() => goToProduct('home')}
+                    onClick={handleHomeClick}
                   />
 
                   <NavRailSeparator />
@@ -512,6 +518,7 @@ const RouterRootLayout: FC = () => {
   const pathname = useRouterState({ select: state => state.location.pathname });
   const activeProduct = deriveProduct(pathname);
   const goToProduct = (product: Product) => navigate({ to: productLandingPath(product) });
+  const handleHomeClick = () => goToProduct('home');
 
   const [sidebarMode, setSidebarMode] = useState<SidebarMode>('adaptive');
   const { theme, setTheme } = useTheme();
@@ -538,7 +545,7 @@ const RouterRootLayout: FC = () => {
               label='Home'
               shortcut={['G', 'H']}
               active={activeProduct === 'home'}
-              onClick={() => goToProduct('home')}
+              onClick={handleHomeClick}
             />
             <NavRailSeparator />
             <ProductNavItems activeProduct={activeProduct} onSelectProduct={goToProduct} />
@@ -571,6 +578,7 @@ const RouterProductRemote: FC = () => {
   const pathname = useRouterState({ select: state => state.location.pathname });
   const { product } = useParams({ strict: false });
   const entry = PRODUCT_CONFIGS[product as Exclude<Product, 'home'>];
+  const handleNavigate = (to: string) => navigate({ to });
 
   if (!entry) return <HomeContent />;
 
@@ -581,7 +589,7 @@ const RouterProductRemote: FC = () => {
       config={entry.config}
       basePath={`/${product}`}
       pathname={pathname}
-      onNavigate={to => navigate({ to })}
+      onNavigate={handleNavigate}
     >
       <RemoteShellPanel resizable />
       <RemoteShellBreadcrumb />
